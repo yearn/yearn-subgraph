@@ -1,13 +1,14 @@
 type Vault @entity {
   id: ID!
-  price: BigInt! # uint256
-  supply: BigInt!
+  getPricePerFullShare: BigInt! # uint256
+  totalSupply: BigInt!
   balance: BigInt!
   available: BigInt!
   token: Bytes!
   symbol: String!
   name: String!
   controller: Bytes!
+  timestamp: BigInt!
   block: BigInt!
 }
 

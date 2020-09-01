@@ -7,9 +7,10 @@ export function handleTransfer(event: Transfer): void {
   let vault = new Vault(id)
   let c = V1Contract.bind(event.address)
 
+  vault.timestamp = event.block.timestamp
   vault.block = event.block.number
-  vault.price = c.getPricePerFullShare()
-  vault.supply = c.totalSupply()
+  vault.getPricePerFullShare = c.getPricePerFullShare()
+  vault.totalSupply = c.totalSupply()
   vault.balance = c.balance()
   vault.available = c.available()
   vault.token = c.token()
