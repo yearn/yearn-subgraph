@@ -1,13 +1,18 @@
-type Approval @entity {
+type Vault @entity {
   id: ID!
-  owner: Bytes! # address
-  spender: Bytes! # address
-  value: BigInt! # uint256
+  price: BigInt! # uint256
 }
 
-type Transfer @entity {
+type Deposit @entity {
   id: ID!
-  from: Bytes! # address
-  to: Bytes! # address
-  value: BigInt! # uint256
+  vault: Bytes!
+  from: Bytes!
+  amount: BigInt!
+}
+
+type Withdrawal @entity {
+  id: ID!
+  vault: Bytes!
+  from: Bytes!
+  amount: BigInt!
 }
