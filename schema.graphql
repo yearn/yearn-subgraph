@@ -1,18 +1,26 @@
 type Vault @entity {
   id: ID!
   price: BigInt! # uint256
+  supply: BigInt!
+  balance: BigInt!
+  available: BigInt!
+  token: Bytes!
+  symbol: String!
+  name: String!
+  controller: Bytes!
+  block: BigInt!
 }
 
-type Deposit @entity {
-  id: ID!
-  vault: Bytes!
-  from: Bytes!
-  amount: BigInt!
-}
+#type Deposit @entity {
+#  id: ID!
+#  vault: Bytes!
+#  from: Bytes!
+#  amount: BigInt!
+#}
 
-type Withdrawal @entity {
-  id: ID!
-  vault: Bytes!
-  from: Bytes!
-  amount: BigInt!
-}
+#type Withdrawal @entity {
+#  id: ID!
+#  vault: Bytes!
+#  from: Bytes!
+#  amount: BigInt!
+#}
