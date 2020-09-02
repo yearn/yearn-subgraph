@@ -1,6 +1,7 @@
-import { Address } from "@graphprotocol/graph-ts"
+import { ethereum } from "@graphprotocol/graph-ts"
 import {V1Contract, Transfer} from "../generated/yUSDVault/V1Contract"
-import { Vault } from "../generated/schema"
+import {V1CContract} from "../generated/V1Controller/V1CContract"
+import { Vault, Transfer as t } from "../generated/schema"
 
 export function handleTransfer(event: Transfer): void {
   let id = event.address.toHexString()
@@ -18,4 +19,14 @@ export function handleTransfer(event: Transfer): void {
   vault.name  = c.name()
   vault.controller = c.controller()
   vault.save()
+
+  let id2 = event.transaction.hash.toHexString()
+  let transfer = new t(id2)
+  transfer.vault = vault.id
+  transfer.from = event.params.from
+  transfer.to = event.params.to
+  transfer.amount = event.params.value
+  transfer.timestamp = event.block.timestamp
+  transfer.save()
+
 }

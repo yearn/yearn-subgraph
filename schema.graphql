@@ -12,12 +12,14 @@ type Vault @entity {
   block: BigInt!
 }
 
-#type Deposit @entity {
-#  id: ID!
-#  vault: Bytes!
-#  from: Bytes!
-#  amount: BigInt!
-#}
+type Transfer @entity {
+  id: ID!
+  vault: Vault!
+  from: Bytes!
+  to: Bytes!
+  amount: BigInt!
+  timestamp: BigInt!
+}
 
 #type Withdrawal @entity {
 #  id: ID!
