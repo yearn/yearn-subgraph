@@ -1,6 +1,6 @@
 type Vault @entity {
   id: ID!
-  getPricePerFullShare: BigInt! # uint256
+  getPricePerFullShare: BigInt!
   totalSupply: BigInt!
   balance: BigInt!
   available: BigInt!
@@ -9,21 +9,39 @@ type Vault @entity {
   name: String!
   controller: Bytes!
   timestamp: BigInt!
-  block: BigInt!
+  blockNumber: BigInt!
 }
 
 type Transfer @entity {
   id: ID!
-  vault: Vault!
   from: Bytes!
   to: Bytes!
   amount: BigInt!
   timestamp: BigInt!
+  blockNumber: BigInt!
+  vaultAddress: Bytes!
+  getPricePerFullShare: BigInt!
+  balance: BigInt!
+  totalSupply: BigInt!
+  available: BigInt!
 }
 
-#type Withdrawal @entity {
-#  id: ID!
-#  vault: Bytes!
-#  from: Bytes!
-#  amount: BigInt!
-#}
+type Deposit @entity {
+  id: ID!
+  vaultAddress: Bytes!
+  account: Bytes!
+  amount: BigInt!
+  shares: BigInt!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+}
+
+type Withdraw @entity {
+  id: ID!
+  vaultAddress: Bytes!
+  account: Bytes!
+  amount: BigInt!
+  shares: BigInt!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+}
