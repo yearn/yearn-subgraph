@@ -31,14 +31,15 @@ function getVault(vaultAddress: Address): Vault {
 
 export function handleTransfer(event: TransferEvent): void {
   let emptyAddress = "0x0000000000000000000000000000000000000000";
-  let transactionAddress = event.transaction.hash.toHexString();
+  let transactionId = event.transaction.hash.toHexString() + '-' + event.transactionLogIndex;
+  let transactionHash = event.transaction.hash;
   let vaultAddress = event.address;
   let timestamp = event.block.timestamp;
   let blockNumber = event.block.number;
   let to = event.params.to;
   let from = event.params.from;
   let value = event.params.value;
-  let transfer = new Transfer(transactionAddress);
+  let transfer = new Transfer(transactionId);
   let vault = getVault(vaultAddress);
   let vaultDeposit = from.toHexString() == emptyAddress;
   let vaultWithdrawal = to.toHexString() == emptyAddress;
@@ -51,7 +52,7 @@ export function handleTransfer(event: TransferEvent): void {
 
   // Vault deposit
   if (vaultDeposit) {
-    let deposit = new Deposit(transactionAddress);
+    let deposit = new Deposit(transactionId);
     let amount = (balance * value) / totalSupply;
     deposit.vaultAddress = vaultAddress;
     deposit.account = to;
@@ -65,7 +66,7 @@ export function handleTransfer(event: TransferEvent): void {
 
   // Vault withdrawal
   if (vaultWithdrawal) {
-    let withdraw = new Withdraw(transactionAddress);
+    let withdraw = new Withdraw(transactionId);
     let amount = (balance * value) / totalSupply;
     withdraw.vaultAddress = vaultAddress;
     withdraw.account = from;
@@ -87,5 +88,6 @@ export function handleTransfer(event: TransferEvent): void {
   transfer.balance = balance;
   transfer.totalSupply = totalSupply;
   transfer.available = vault.available;
+  transfer.transactionHash = transactionHash;
   transfer.save();
 }

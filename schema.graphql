@@ -24,6 +24,7 @@ type Transfer @entity {
   balance: BigInt!
   totalSupply: BigInt!
   available: BigInt!
+  transactionHash: Bytes!
 }
 
 type Deposit @entity {
