@@ -31,7 +31,7 @@ function getVault(vaultAddress: Address): Vault {
 
 export function handleTransfer(event: TransferEvent): void {
   let emptyAddress = "0x0000000000000000000000000000000000000000";
-  let transactionId = event.transaction.hash.toHexString() + '-' + event.transactionLogIndex;
+  let transactionId = event.transaction.hash.toHexString() + '-' + event.transactionLogIndex.toString();
   let transactionHash = event.transaction.hash;
   let vaultAddress = event.address;
   let timestamp = event.block.timestamp;
