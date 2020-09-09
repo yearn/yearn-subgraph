@@ -8,7 +8,6 @@ dataSources:
     source:
       address: "0x5dbcF33D8c2E976c6b560249878e6F1491Bca25c"
       abi: V1Contract
-      startBlock: 10500000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -21,14 +20,11 @@ dataSources:
       abis:
         - name: V1Contract
           file: ./abis/V1Contract.json
+        - name: erc20Contract
+          file: ./abis/erc20Contract.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-      callHandlers:
-        - function: deposit(uint256)
-          handler: handleDeposit
-        - function: withdraw(uint256)
-          handler: handleWithdraw
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: yTUSDVault
@@ -36,7 +32,6 @@ dataSources:
     source:
       address: "0x37d19d1c4E1fa9DC47bD1eA12f742a0887eDa74a"
       abi: V1Contract
-      startBlock: 10500000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -49,14 +44,11 @@ dataSources:
       abis:
         - name: V1Contract
           file: ./abis/V1Contract.json
+        - name: erc20Contract
+          file: ./abis/erc20Contract.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-      callHandlers:
-        - function: deposit(uint256)
-          handler: handleDeposit
-        - function: withdraw(uint256)
-          handler: handleWithdraw
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: yUSDTVault
@@ -64,7 +56,6 @@ dataSources:
     source:
       address: "0x2f08119C6f07c006695E079AAFc638b8789FAf18"
       abi: V1Contract
-      startBlock: 10500000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -77,14 +68,11 @@ dataSources:
       abis:
         - name: V1Contract
           file: ./abis/V1Contract.json
+        - name: erc20Contract
+          file: ./abis/erc20Contract.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-      callHandlers:
-        - function: deposit(uint256)
-          handler: handleDeposit
-        - function: withdraw(uint256)
-          handler: handleWithdraw
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: yYFIault
@@ -92,7 +80,6 @@ dataSources:
     source:
       address: "0xBA2E7Fed597fd0E3e70f5130BcDbbFE06bB94fe1"
       abi: V1Contract
-      startBlock: 10500000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -105,14 +92,11 @@ dataSources:
       abis:
         - name: V1Contract
           file: ./abis/V1Contract.json
+        - name: erc20Contract
+          file: ./abis/erc20Contract.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-      callHandlers:
-        - function: deposit(uint256)
-          handler: handleDeposit
-        - function: withdraw(uint256)
-          handler: handleWithdraw
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: yWSBTCVault
@@ -120,7 +104,6 @@ dataSources:
     source:
       address: "0x7Ff566E1d69DEfF32a7b244aE7276b9f90e9D0f6"
       abi: V1Contract
-      startBlock: 10500000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -133,14 +116,11 @@ dataSources:
       abis:
         - name: V1Contract
           file: ./abis/V1Contract.json
+        - name: erc20Contract
+          file: ./abis/erc20Contract.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-      callHandlers:
-        - function: deposit(uint256)
-          handler: handleDeposit
-        - function: withdraw(uint256)
-          handler: handleWithdraw
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: yDAIVault
@@ -148,7 +128,6 @@ dataSources:
     source:
       address: "0xACd43E627e64355f1861cEC6d3a6688B31a6F952"
       abi: V1Contract
-      startBlock: 10500000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -161,14 +140,11 @@ dataSources:
       abis:
         - name: V1Contract
           file: ./abis/V1Contract.json
+        - name: erc20Contract
+          file: ./abis/erc20Contract.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-      callHandlers:
-        - function: deposit(uint256)
-          handler: handleDeposit
-        - function: withdraw(uint256)
-          handler: handleWithdraw
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: yBUSDVault
@@ -176,7 +152,6 @@ dataSources:
     source:
       address: "0x2994529C0652D127b7842094103715ec5299bBed"
       abi: V1Contract
-      startBlock: 10500000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -189,12 +164,9 @@ dataSources:
       abis:
         - name: V1Contract
           file: ./abis/V1Contract.json
+        - name: erc20Contract
+          file: ./abis/erc20Contract.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-      callHandlers:
-        - function: deposit(uint256)
-          handler: handleDeposit
-        - function: withdraw(uint256)
-          handler: handleWithdraw
       file: ./src/mapping.ts

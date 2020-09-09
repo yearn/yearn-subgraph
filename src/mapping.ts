@@ -2,9 +2,13 @@ import { ethereum } from "@graphprotocol/graph-ts";
 import {
   V1Contract,
   DepositCall,
+  DepositAllCall,
   WithdrawCall,
+  WithdrawAllCall,
   Transfer as TransferEvent,
 } from "../generated/yUSDVault/V1Contract";
+
+import { erc20Contract } from "../generated/yUSDVault/erc20Contract";
 
 import { Address } from "@graphprotocol/graph-ts";
 
@@ -26,59 +30,62 @@ function getVault(vaultAddress: Address): Vault {
 }
 
 export function handleTransfer(event: TransferEvent): void {
+  let emptyAddress = "0x0000000000000000000000000000000000000000";
+  let transactionAddress = event.transaction.hash.toHexString();
   let vaultAddress = event.address;
+  let timestamp = event.block.timestamp;
+  let blockNumber = event.block.number;
+  let to = event.params.to;
+  let from = event.params.from;
+  let value = event.params.value;
+  let transfer = new Transfer(transactionAddress);
   let vault = getVault(vaultAddress);
-  vault.timestamp = event.block.timestamp;
-  vault.blockNumber = event.block.number;
+  let vaultDeposit = from.toHexString() == emptyAddress;
+  let vaultWithdrawal = to.toHexString() == emptyAddress;
+  let totalSupply = vault.totalSupply;
+  let balance = vault.balance;
+
+  vault.timestamp = timestamp;
+  vault.blockNumber = blockNumber;
   vault.save();
 
-  let transactionAddress = event.transaction.hash.toHexString();
-  let transfer = new Transfer(transactionAddress);
-  transfer.from = event.params.from;
-  transfer.to = event.params.to;
-  transfer.amount = event.params.value;
+  // Vault deposit
+  if (vaultDeposit) {
+    let deposit = new Deposit(transactionAddress);
+    let amount = (balance * value) / totalSupply;
+    deposit.vaultAddress = vaultAddress;
+    deposit.account = to;
+    deposit.amount = amount;
+    deposit.shares = value;
+    deposit.timestamp = timestamp;
+    deposit.blockNumber = blockNumber;
+    deposit.getPricePerFullShare = vault.getPricePerFullShare;
+    deposit.save();
+  }
+
+  // Vault withdrawal
+  if (vaultWithdrawal) {
+    let withdraw = new Withdraw(transactionAddress);
+    let amount = (balance * value) / totalSupply;
+    withdraw.vaultAddress = vaultAddress;
+    withdraw.account = from;
+    withdraw.amount = amount;
+    withdraw.shares = value;
+    withdraw.timestamp = timestamp;
+    withdraw.blockNumber = blockNumber;
+    withdraw.getPricePerFullShare = vault.getPricePerFullShare;
+    withdraw.save();
+  }
+
+  transfer.from = from;
+  transfer.to = to;
+  transfer.value = value;
   transfer.timestamp = event.block.timestamp;
   transfer.blockNumber = event.block.number;
   transfer.vaultAddress = vaultAddress;
   transfer.getPricePerFullShare = vault.getPricePerFullShare;
-  transfer.balance = vault.balance;
-  transfer.totalSupply = vault.totalSupply;
+  transfer.balance = balance;
+  transfer.totalSupply = totalSupply;
   transfer.available = vault.available;
   transfer.save();
-}
-
-export function handleDeposit(call: DepositCall): void {
-  let transactionAddress = call.transaction.hash.toHexString();
-  let deposit = new Deposit(transactionAddress);
-  let amount = call.inputs._amount;
-  let account = call.from;
-  let vaultAddress = call.to;
-  let vault = getVault(vaultAddress);
-  let totalSupply = vault.totalSupply;
-  let balance = vault.balance;
-  deposit.timestamp = call.block.timestamp;
-  deposit.blockNumber = call.block.number;
-  deposit.account = account;
-  deposit.vaultAddress = vaultAddress;
-  deposit.amount = amount;
-  deposit.shares = (amount * totalSupply) / balance;
-  deposit.save();
-}
-
-export function handleWithdraw(call: WithdrawCall): void {
-  let transactionAddress = call.transaction.hash.toHexString();
-  let withdraw = new Withdraw(transactionAddress);
-  let account = call.from;
-  let shares = call.inputs._shares;
-  let vaultAddress = call.to;
-  let vault = getVault(vaultAddress);
-  let totalSupply = vault.totalSupply;
-  let balance = vault.balance;
-  withdraw.timestamp = call.block.timestamp;
-  withdraw.blockNumber = call.block.number;
-  withdraw.vaultAddress = vaultAddress;
-  withdraw.account = account;
-  withdraw.shares = shares;
-  withdraw.amount = (balance * shares) / totalSupply;
-  withdraw.save();
 }

@@ -159,6 +159,15 @@
   {
     "constant": false,
     "inputs": [],
+    "name": "depositAll",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
     "name": "earn",
     "outputs": [],
     "payable": false,
@@ -181,6 +190,18 @@
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      { "internalType": "address", "name": "reserve", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "harvest",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -315,6 +336,15 @@
       { "internalType": "uint256", "name": "_shares", "type": "uint256" }
     ],
     "name": "withdraw",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "withdrawAll",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",

@@ -16,7 +16,7 @@ type Transfer @entity {
   id: ID!
   from: Bytes!
   to: Bytes!
-  amount: BigInt!
+  value: BigInt!
   timestamp: BigInt!
   blockNumber: BigInt!
   vaultAddress: Bytes!
@@ -34,6 +34,7 @@ type Deposit @entity {
   shares: BigInt!
   timestamp: BigInt!
   blockNumber: BigInt!
+  getPricePerFullShare: BigInt!
 }
 
 type Withdraw @entity {
@@ -44,4 +45,5 @@ type Withdraw @entity {
   shares: BigInt!
   timestamp: BigInt!
   blockNumber: BigInt!
+  getPricePerFullShare: BigInt!
 }
