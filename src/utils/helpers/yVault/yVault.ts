@@ -1,15 +1,14 @@
 import { Vault, DepositEvent, WithdrawEvent, Transfer } from "../../../../generated/schema";
-import { V1Contract } from "../../../../generated/yUSDVault/V1Contract";
-import { Address } from "@graphprotocol/graph-ts";
+import { V1Contract } from "../../../../generated/yBUSDVault/V1Contract";
+import { Address, log } from "@graphprotocol/graph-ts";
 import { getOrCreateToken } from "./token";
 
 export function getOrCreateVault(vaultAddress: Address): Vault {
-  let id = vaultAddress.toHexString();
+  let vault = Vault.load(vaultAddress.toHexString());
   let vaultContract = V1Contract.bind(vaultAddress);
-  let vault = Vault.load(id);
 
   if (vault == null) {
-    let vault = new Vault(id);
+    vault = new Vault(vaultAddress.toHexString());
   }
 
   // Might be worth using the "try_" version of these calls in the future.

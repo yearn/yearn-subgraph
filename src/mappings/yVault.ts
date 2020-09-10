@@ -1,4 +1,3 @@
-import { ethereum } from "@graphprotocol/graph-ts";
 import { Transfer } from "../../generated/yUSDVault/V1Contract";
 import {
   getOrCreateVault,
@@ -15,7 +14,7 @@ export function handleTransfer(event: Transfer): void {
     .concat("-")
     .concat(event.transaction.hash.toHexString())
     .concat("-")
-    .concat(event.transactionLogIndex.toString());
+    .concat(event.logIndex.toString());
 
   let vaultAddress = event.address;
   let vault = getOrCreateVault(vaultAddress);
