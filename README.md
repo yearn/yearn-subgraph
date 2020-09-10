@@ -1,7 +1,7 @@
-# yearn.finance Subgraph 
+# yearn.finance Subgraph
 
-https://thegraph.com/explorer/subgraph/thegismar/subgraph-y
-https://api.thegraph.com/subgraphs/name/thegismar/subgraph-y
+https://thegraph.com/explorer/subgraph/juanmardefago/yearn-dev
+https://api.thegraph.com/subgraphs/name/juanmardefago/yearn-dev
 
 Currently, all yVaults can be queried for:
 
