@@ -2,6 +2,8 @@ export {
   getOrCreateVault,
   getOrCreateVaultTransfer,
   getOrCreateVaultWithdrawEvent,
+  getOrCreateVaultBurnEvent,
+  getOrCreateVaultMintEvent,
   getOrCreateVaultDepositEvent
 } from "./yVault/yVault";
 

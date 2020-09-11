@@ -30,8 +30,22 @@ type Account @entity {
   "Ethereum address of the user"
   id: ID!
 
+  vaultBalances: [AccountVaultBalance!]! @derivedFrom(field: "account")
+
   "Vault events <Withdraw - Deposit> that are related to this account"
   vaultEvents: [VaultEvent!]! @derivedFrom(field: "account")
+}
+
+type AccountVaultBalance @entity {
+  id: ID!
+
+  vault: Vault!
+
+  account: Account!
+
+  token: Token!
+
+  balance: BigInt!
 }
 
 type Token @entity {
@@ -73,6 +87,46 @@ type Transfer @entity {
 }
 
 interface VaultEvent {
+  id: ID!
+
+  vault: Vault!
+
+  account: Account!
+
+  amount: BigInt!
+
+  shares: BigInt!
+
+  timestamp: BigInt!
+
+  blockNumber: BigInt!
+
+  transactionHash: Bytes!
+
+  getPricePerFullShare: BigInt!
+}
+
+type MintEvent implements VaultEvent @entity {
+  id: ID!
+
+  vault: Vault!
+
+  account: Account!
+
+  amount: BigInt!
+
+  shares: BigInt!
+
+  timestamp: BigInt!
+
+  blockNumber: BigInt!
+
+  transactionHash: Bytes!
+
+  getPricePerFullShare: BigInt!
+}
+
+type BurnEvent implements VaultEvent @entity {
   id: ID!
 
   vault: Vault!
