@@ -46,6 +46,16 @@ type AccountVaultBalance @entity {
   token: Token!
 
   balance: BigInt!
+
+  totalDeposited: BigInt!
+
+  totalWithdrawn: BigInt!
+
+  shareBalance: BigInt!
+
+  totalSharesMinted: BigInt!
+
+  totalSharesBurned: BigInt!
 }
 
 type Token @entity {
@@ -87,46 +97,6 @@ type Transfer @entity {
 }
 
 interface VaultEvent {
-  id: ID!
-
-  vault: Vault!
-
-  account: Account!
-
-  amount: BigInt!
-
-  shares: BigInt!
-
-  timestamp: BigInt!
-
-  blockNumber: BigInt!
-
-  transactionHash: Bytes!
-
-  getPricePerFullShare: BigInt!
-}
-
-type MintEvent implements VaultEvent @entity {
-  id: ID!
-
-  vault: Vault!
-
-  account: Account!
-
-  amount: BigInt!
-
-  shares: BigInt!
-
-  timestamp: BigInt!
-
-  blockNumber: BigInt!
-
-  transactionHash: Bytes!
-
-  getPricePerFullShare: BigInt!
-}
-
-type BurnEvent implements VaultEvent @entity {
   id: ID!
 
   vault: Vault!

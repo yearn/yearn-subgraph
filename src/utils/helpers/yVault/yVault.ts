@@ -2,8 +2,6 @@ import {
   Vault,
   DepositEvent,
   WithdrawEvent,
-  MintEvent,
-  BurnEvent,
   Transfer
 } from "../../../../generated/schema";
 import { V1Contract } from "../../../../generated/yBUSDVault/V1Contract";
@@ -72,30 +70,4 @@ export function getOrCreateVaultWithdrawEvent(
   }
 
   return event as WithdrawEvent;
-}
-
-export function getOrCreateVaultBurnEvent(
-  id: String,
-  createIfNotFound: boolean = true
-): BurnEvent {
-  let event = BurnEvent.load(id);
-
-  if (event == null && createIfNotFound) {
-    event = new BurnEvent(id);
-  }
-
-  return event as BurnEvent;
-}
-
-export function getOrCreateVaultMintEvent(
-  id: String,
-  createIfNotFound: boolean = true
-): MintEvent {
-  let event = MintEvent.load(id);
-
-  if (event == null && createIfNotFound) {
-    event = new MintEvent(id);
-  }
-
-  return event as MintEvent;
 }

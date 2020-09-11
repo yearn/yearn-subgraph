@@ -2,8 +2,6 @@ export {
   getOrCreateVault,
   getOrCreateVaultTransfer,
   getOrCreateVaultWithdrawEvent,
-  getOrCreateVaultBurnEvent,
-  getOrCreateVaultMintEvent,
   getOrCreateVaultDepositEvent
 } from "./yVault/yVault";
 
@@ -12,5 +10,6 @@ export {
 } from "./yVault/token";
 
 export {
-  getOrCreateAccount
+  getOrCreateAccount,
+  getOrCreateAccountVaultBalance
 } from "./yVault/account";

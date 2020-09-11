@@ -6,53 +6,10 @@ import {
   getOrCreateVaultTransfer,
   getOrCreateVaultDepositEvent,
   getOrCreateVaultWithdrawEvent,
-  getOrCreateVaultMintEvent,
-  getOrCreateVaultBurnEvent,
+  getOrCreateAccountVaultBalance,
   getOrCreateAccount
 } from "../utils/helpers";
 import { ZERO_ADDRESS } from "../utils/constants";
-
-function handleMintEvent(
-  event: Transfer,
-  amount: BigInt,
-  accountId: String,
-  vault: Vault,
-  transactionId: String
-): void {
-  let burn = getOrCreateVaultBurnEvent(transactionId);
-
-  burn.vault = vault.id;
-  burn.account = accountId;
-  burn.amount = amount;
-  burn.shares = event.params.value;
-  burn.timestamp = event.block.timestamp;
-  burn.blockNumber = event.block.number;
-  burn.transactionHash = event.transaction.hash;
-  burn.getPricePerFullShare = vault.getPricePerFullShare;
-
-  burn.save();
-}
-
-function handleBurnEvent(
-  event: Transfer,
-  amount: BigInt,
-  accountId: String,
-  vault: Vault,
-  transactionId: String
-): void {
-  let mint = getOrCreateVaultMintEvent(transactionId);
-
-  mint.vault = vault.id;
-  mint.account = accountId;
-  mint.amount = amount;
-  mint.shares = event.params.value;
-  mint.timestamp = event.block.timestamp;
-  mint.blockNumber = event.block.number;
-  mint.transactionHash = event.transaction.hash;
-  mint.getPricePerFullShare = vault.getPricePerFullShare;
-
-  mint.save();
-}
 
 function handleDepositEvent(
   event: Transfer,
@@ -133,29 +90,48 @@ export function handleTransfer(event: Transfer): void {
 
   let amount = (vault.balance * event.params.value) / vault.totalSupply;
 
-  // Vault mint
+  // Vault deposit
   if (event.params.from.toHexString() == ZERO_ADDRESS) {
-    handleMintEvent(event, amount, toAccount.id, vault, transactionId);
+    handleDepositEvent(event, amount, toAccount.id, vault, transactionId);
+    // We should fact check that the amount deposited is exactly the same as calculated
+    // If it's not, we should use a callHandler for deposit(_amount)
+    let toAccountBalance = getOrCreateAccountVaultBalance(
+      toAccount.id.concat("-").concat(vault.id)
+    );
+
+    toAccountBalance.account = toAccount.id;
+    toAccountBalance.vault = vault.id;
+    toAccountBalance.token = vault.token;
+    toAccountBalance.totalDeposited = toAccountBalance.totalDeposited + amount;
+    toAccountBalance.totalSharesMinted =
+      toAccountBalance.totalSharesMinted + event.params.value;
+    toAccountBalance.balance = toAccountBalance.balance + amount;
+    toAccountBalance.shareBalance =
+      toAccountBalance.shareBalance + event.params.value;
+
+    toAccountBalance.save();
   }
 
-  // Vault burn
+  // Vault withdraw
   if (event.params.to.toHexString() == ZERO_ADDRESS) {
-    handleBurnEvent(event, amount, fromAccount.id, vault, transactionId);
-  }
+    handleWithdrawEvent(event, amount, fromAccount.id, vault, transactionId);
+    // We should fact check that the amount withdrawn is exactly the same as calculated
+    // If it's not, we should use a callHandler for withdraw(_amount)
+    let fromAccountBalance = getOrCreateAccountVaultBalance(
+      fromAccount.id.concat("-").concat(vault.id)
+    );
 
-  // Vault Deposit
-  if (
-    event.params.from.toHexString() != ZERO_ADDRESS &&
-    event.params.to.toHexString() == event.address.toHexString()
-  ) {
-    handleDepositEvent(event, amount, fromAccount.id, vault, transactionId);
-  }
+    fromAccountBalance.account = fromAccount.id;
+    fromAccountBalance.vault = vault.id;
+    fromAccountBalance.token = vault.token;
+    fromAccountBalance.totalWithdrawn =
+      fromAccountBalance.totalWithdrawn + amount;
+    fromAccountBalance.totalSharesBurned =
+      fromAccountBalance.totalSharesBurned + event.params.value;
+    fromAccountBalance.balance = fromAccountBalance.balance - amount;
+    fromAccountBalance.shareBalance =
+      fromAccountBalance.shareBalance - event.params.value;
 
-  // Vault Withdraw
-  if (
-    event.params.to.toHexString() != ZERO_ADDRESS &&
-    event.params.from.toHexString() == event.address.toHexString()
-  ) {
-    handleWithdrawEvent(event, amount, toAccount.id, vault, transactionId);
+    fromAccountBalance.save();
   }
 }
