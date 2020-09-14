@@ -24,6 +24,14 @@ type Vault @entity {
   blockNumber: BigInt!
 
   events: [VaultEvent!]! @derivedFrom(field: "vault")
+
+  transferEvents: [Transfer!]! @derivedFrom(field: "vault")
+
+  depositEvents: [DepositEvent!]! @derivedFrom(field: "vault")
+
+  withdrawEvents: [WithdrawEvent!]! @derivedFrom(field: "vault")
+
+  balances: [AccountVaultBalance!]! @derivedFrom(field: "vault")
 }
 
 type Account @entity {
@@ -34,6 +42,12 @@ type Account @entity {
 
   "Vault events <Withdraw - Deposit> that are related to this account"
   vaultEvents: [VaultEvent!]! @derivedFrom(field: "account")
+
+  "Vault events <Transfer> that are sent to this account"
+  receivedTransferEvents: [Transfer!]! @derivedFrom(field: "to")
+
+  "Vault events <Transfer> that are sent from this account"
+  sentTransferEvents: [Transfer!]! @derivedFrom(field: "from")
 }
 
 type AccountVaultBalance @entity {
@@ -51,11 +65,19 @@ type AccountVaultBalance @entity {
 
   totalWithdrawn: BigInt!
 
+  totalSent: BigInt!
+
+  totalReceived: BigInt!
+
   shareBalance: BigInt!
 
   totalSharesMinted: BigInt!
 
   totalSharesBurned: BigInt!
+
+  totalSharesSent: BigInt!
+
+  totalSharesReceived: BigInt!
 }
 
 type Token @entity {
@@ -78,6 +100,8 @@ type Transfer @entity {
   to: Account!
 
   value: BigInt!
+
+  amount: BigInt!
 
   vault: Vault!
 

@@ -26,9 +26,13 @@ export function getOrCreateAccountVaultBalance(
     balance.balance = BIGINT_ZERO;
     balance.totalDeposited = BIGINT_ZERO;
     balance.totalWithdrawn = BIGINT_ZERO;
+    balance.totalSent = BIGINT_ZERO;
+    balance.totalReceived = BIGINT_ZERO;
     balance.shareBalance = BIGINT_ZERO;
     balance.totalSharesMinted = BIGINT_ZERO;
     balance.totalSharesBurned = BIGINT_ZERO;
+    balance.totalSharesSent = BIGINT_ZERO;
+    balance.totalSharesReceived = BIGINT_ZERO;
   }
 
   return balance as AccountVaultBalance;
