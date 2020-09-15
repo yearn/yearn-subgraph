@@ -20,15 +20,24 @@ export function getOrCreateVault(vaultAddress: Address): Vault {
   let tokenAddress = vaultContract.token();
   let token = getOrCreateToken(tokenAddress);
 
-  vault.balance = vaultContract.balance();
-  vault.getPricePerFullShare = vaultContract.getPricePerFullShare();
-  vault.totalSupply = vaultContract.totalSupply();
-  vault.balance = vaultContract.balance();
-  vault.available = vaultContract.available();
+  let balance = vaultContract.try_balance();
+  let pricePerFullShare = vaultContract.try_getPricePerFullShare();
+  let totalSupply = vaultContract.try_totalSupply();
+  let available = vaultContract.try_available();
+  let symbol = vaultContract.try_symbol();
+  let name = vaultContract.try_name();
+  let controller = vaultContract.try_controller();
+
+  vault.balance = !balance.reverted ? balance.value : vault.balance;
+  vault.getPricePerFullShare = !pricePerFullShare.reverted
+    ? pricePerFullShare.value
+    : vault.getPricePerFullShare;
+  vault.totalSupply = !totalSupply.reverted ? totalSupply.value : vault.totalSupply;
+  vault.available = !available.reverted ? available.value : vault.available;
   vault.token = token.id;
-  vault.symbol = vaultContract.symbol();
-  vault.name = vaultContract.name();
-  vault.controller = vaultContract.controller();
+  vault.symbol = !symbol.reverted ? symbol.value : vault.symbol;
+  vault.name = !name.reverted ? name.value : vault.name;
+  vault.controller = !controller.reverted ? controller.value : vault.controller;
 
   return vault as Vault;
 }
