@@ -2,7 +2,9 @@ export {
   getOrCreateVault,
   getOrCreateVaultTransfer,
   getOrCreateVaultWithdrawEvent,
-  getOrCreateVaultDepositEvent
+  getOrCreateVaultDepositEvent,
+  getOrCreateStrategy,
+  getOrCreateController
 } from "./yVault/yVault";
 
 export {

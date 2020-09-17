@@ -1,12 +1,17 @@
 type Vault @entity {
   id: ID!
 
-  getPricePerFullShare: BigInt!
+  pricePerFullShare: BigInt!
 
   totalSupply: BigInt!
 
-  balance: BigInt!
+  "Balance of the Vault contract in <Token> + balance of the Strategy contract in <Token>"
+  vaultBalance: BigInt!
 
+  "Balance specifically held in the strategy"
+  strategyBalance: BigInt!
+
+  "How much the vault allows to be borrowed"
   available: BigInt!
 
   token: Token!
@@ -15,13 +20,29 @@ type Vault @entity {
 
   name: String!
 
-  controller: Bytes!
+  currentController: Controller!
+
+  currentStrategy: Strategy!
 
   "Timestamp of the latest data update"
   timestamp: BigInt!
 
   "Block number of the latest data update"
   blockNumber: BigInt!
+
+  "totalDeposited - totalWithdrawn"
+  netDeposits: BigInt!
+
+  totalDeposited: BigInt!
+
+  totalWithdrawn: BigInt!
+
+  "totalSharesMinted - totalSharesBurned"
+  totalActiveShares: BigInt!
+
+  totalSharesMinted: BigInt!
+
+  totalSharesBurned: BigInt!
 
   events: [VaultEvent!]! @derivedFrom(field: "vault")
 
@@ -32,6 +53,11 @@ type Vault @entity {
   withdrawEvents: [WithdrawEvent!]! @derivedFrom(field: "vault")
 
   balances: [AccountVaultBalance!]! @derivedFrom(field: "vault")
+
+  strategies: [Strategy!]! @derivedFrom(field: "vault")
+
+  controllers: [Controller!]! @derivedFrom(field: "vault")
+
 }
 
 type Account @entity {
@@ -105,7 +131,7 @@ type Transfer @entity {
 
   vault: Vault!
 
-  getPricePerFullShare: BigInt!
+  pricePerFullShare: BigInt!
 
   balance: BigInt!
 
@@ -137,7 +163,7 @@ interface VaultEvent {
 
   transactionHash: Bytes!
 
-  getPricePerFullShare: BigInt!
+  pricePerFullShare: BigInt!
 }
 
 type DepositEvent implements VaultEvent @entity {
@@ -157,7 +183,7 @@ type DepositEvent implements VaultEvent @entity {
 
   transactionHash: Bytes!
 
-  getPricePerFullShare: BigInt!
+  pricePerFullShare: BigInt!
 }
 
 type WithdrawEvent implements VaultEvent @entity {
@@ -177,5 +203,19 @@ type WithdrawEvent implements VaultEvent @entity {
 
   transactionHash: Bytes!
 
-  getPricePerFullShare: BigInt!
+  pricePerFullShare: BigInt!
+}
+
+type Strategy @entity {
+  "Ethereum address"
+  id: ID!
+
+  vault: Vault!
+}
+
+type Controller @entity {
+  "Ethereum address"
+  id: ID!
+
+  vault: Vault!
 }

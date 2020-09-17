@@ -7,7 +7,9 @@ import {
   getOrCreateVaultDepositEvent,
   getOrCreateVaultWithdrawEvent,
   getOrCreateAccountVaultBalance,
-  getOrCreateAccount
+  getOrCreateAccount,
+  getOrCreateController,
+  getOrCreateStrategy
 } from "../utils/helpers";
 import { ZERO_ADDRESS } from "../utils/constants";
 
@@ -27,7 +29,7 @@ function handleDepositEvent(
   deposit.timestamp = event.block.timestamp;
   deposit.blockNumber = event.block.number;
   deposit.transactionHash = event.transaction.hash;
-  deposit.getPricePerFullShare = vault.getPricePerFullShare;
+  deposit.pricePerFullShare = vault.pricePerFullShare;
 
   deposit.save();
 }
@@ -48,7 +50,7 @@ function handleWithdrawEvent(
   withdraw.timestamp = event.block.timestamp;
   withdraw.blockNumber = event.block.number;
   withdraw.transactionHash = event.transaction.hash;
-  withdraw.getPricePerFullShare = vault.getPricePerFullShare;
+  withdraw.pricePerFullShare = vault.pricePerFullShare;
 
   withdraw.save();
 }
@@ -70,8 +72,8 @@ function handleTransferEvent(
   transfer.amount = amount;
   transfer.timestamp = event.block.timestamp;
   transfer.blockNumber = event.block.number;
-  transfer.getPricePerFullShare = vault.getPricePerFullShare;
-  transfer.balance = vault.balance;
+  transfer.pricePerFullShare = vault.pricePerFullShare;
+  transfer.balance = vault.vaultBalance;
   transfer.totalSupply = vault.totalSupply;
   transfer.available = vault.available;
   transfer.transactionHash = event.transaction.hash;
@@ -94,11 +96,7 @@ export function handleTransfer(event: Transfer): void {
   vault.timestamp = event.block.timestamp;
   vault.blockNumber = event.block.number;
 
-  vault.save();
-  fromAccount.save();
-  toAccount.save();
-
-  let amount = (vault.balance * event.params.value) / vault.totalSupply;
+  let amount = (vault.vaultBalance * event.params.value) / vault.totalSupply;
   let toAccountBalance = getOrCreateAccountVaultBalance(
     toAccount.id.concat("-").concat(vault.id)
   );
@@ -162,6 +160,9 @@ export function handleTransfer(event: Transfer): void {
     toAccountBalance.shareBalance =
       toAccountBalance.shareBalance + event.params.value;
 
+    vault.totalDeposited = vault.totalDeposited + amount;
+    vault.totalSharesMinted = vault.totalSharesMinted + event.params.value;
+
     toAccountBalance.save();
   }
 
@@ -182,6 +183,16 @@ export function handleTransfer(event: Transfer): void {
     fromAccountBalance.shareBalance =
       fromAccountBalance.shareBalance - event.params.value;
 
+    vault.totalWithdrawn = vault.totalWithdrawn + amount;
+    vault.totalSharesBurned = vault.totalSharesBurned + event.params.value;
+
     fromAccountBalance.save();
   }
+
+  vault.netDeposits = vault.totalDeposited - vault.totalWithdrawn;
+  vault.totalActiveShares = vault.totalSharesMinted - vault.totalSharesBurned;
+
+  vault.save();
+  fromAccount.save();
+  toAccount.save();
 }

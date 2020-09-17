@@ -15,12 +15,19 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Vault
-        - Deposit
-        - Withdraw
+        - DepositEvent
+        - WithdrawEvent
         - Transfer
+        - AccountVaultBalance
+        - Account
+        - Token
       abis:
         - name: V1Contract
           file: ./abis/V1Contract.json
+        - name: Controller
+          file: ./abis/Controller.json
+        - name: Strategy
+          file: ./abis/Strategy.json
         - name: ERC20
           file: ./abis/ERC20.json
       eventHandlers:
@@ -40,12 +47,19 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Vault
-        - Deposit
-        - Withdraw
+        - DepositEvent
+        - WithdrawEvent
         - Transfer
+        - AccountVaultBalance
+        - Account
+        - Token
       abis:
         - name: V1Contract
           file: ./abis/V1Contract.json
+        - name: Controller
+          file: ./abis/Controller.json
+        - name: Strategy
+          file: ./abis/Strategy.json
         - name: ERC20
           file: ./abis/ERC20.json
       eventHandlers:
@@ -65,12 +79,19 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Vault
-        - Deposit
-        - Withdraw
+        - DepositEvent
+        - WithdrawEvent
         - Transfer
+        - AccountVaultBalance
+        - Account
+        - Token
       abis:
         - name: V1Contract
           file: ./abis/V1Contract.json
+        - name: Controller
+          file: ./abis/Controller.json
+        - name: Strategy
+          file: ./abis/Strategy.json
         - name: ERC20
           file: ./abis/ERC20.json
       eventHandlers:
@@ -90,12 +111,19 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Vault
-        - Deposit
-        - Withdraw
+        - DepositEvent
+        - WithdrawEvent
         - Transfer
+        - AccountVaultBalance
+        - Account
+        - Token
       abis:
         - name: V1Contract
           file: ./abis/V1Contract.json
+        - name: Controller
+          file: ./abis/Controller.json
+        - name: Strategy
+          file: ./abis/Strategy.json
         - name: ERC20
           file: ./abis/ERC20.json
       eventHandlers:
@@ -115,12 +143,19 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Vault
-        - Deposit
-        - Withdraw
+        - DepositEvent
+        - WithdrawEvent
         - Transfer
+        - AccountVaultBalance
+        - Account
+        - Token
       abis:
         - name: V1Contract
           file: ./abis/V1Contract.json
+        - name: Controller
+          file: ./abis/Controller.json
+        - name: Strategy
+          file: ./abis/Strategy.json
         - name: ERC20
           file: ./abis/ERC20.json
       eventHandlers:
@@ -140,12 +175,19 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Vault
-        - Deposit
-        - Withdraw
+        - DepositEvent
+        - WithdrawEvent
         - Transfer
+        - AccountVaultBalance
+        - Account
+        - Token
       abis:
         - name: V1Contract
           file: ./abis/V1Contract.json
+        - name: Controller
+          file: ./abis/Controller.json
+        - name: Strategy
+          file: ./abis/Strategy.json
         - name: ERC20
           file: ./abis/ERC20.json
       eventHandlers:
@@ -165,15 +207,51 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Vault
-        - Deposit
-        - Withdraw
+        - DepositEvent
+        - WithdrawEvent
         - Transfer
+        - AccountVaultBalance
+        - Account
+        - Token
       abis:
         - name: V1Contract
           file: ./abis/V1Contract.json
+        - name: Controller
+          file: ./abis/Controller.json
+        - name: Strategy
+          file: ./abis/Strategy.json
         - name: ERC20
           file: ./abis/ERC20.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
       file: ./src/mapping.ts
+templates:
+  - name: Strategy
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: Strategy
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/mapping.ts
+      entities:
+        - Vault
+        - DepositEvent
+        - WithdrawEvent
+        - Transfer
+        - AccountVaultBalance
+        - Account
+        - Token
+      abis:
+        - name: Strategy
+          file: ./abis/Strategy.json
+        - name: V1Contract
+          file: ./abis/V1Contract.json
+        - name: Controller
+          file: ./abis/Controller.json
+      callHandlers:
+        - function: harvest()
+          handler: handleHarvest
