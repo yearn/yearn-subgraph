@@ -1,5 +1,5 @@
 import { Account, AccountVaultBalance } from "../../../../generated/schema";
-import { BIGINT_ZERO } from "../../constants";
+import { BIGINT_ZERO, BIGDECIMAL_ZERO } from "../../constants";
 
 export function getOrCreateAccount(
   id: String,
@@ -23,16 +23,29 @@ export function getOrCreateAccountVaultBalance(
   if (balance == null && createIfNotFound) {
     balance = new AccountVaultBalance(id);
 
-    balance.balance = BIGINT_ZERO;
-    balance.totalDeposited = BIGINT_ZERO;
-    balance.totalWithdrawn = BIGINT_ZERO;
-    balance.totalSent = BIGINT_ZERO;
-    balance.totalReceived = BIGINT_ZERO;
-    balance.shareBalance = BIGINT_ZERO;
-    balance.totalSharesMinted = BIGINT_ZERO;
-    balance.totalSharesBurned = BIGINT_ZERO;
-    balance.totalSharesSent = BIGINT_ZERO;
-    balance.totalSharesReceived = BIGINT_ZERO;
+    // Initiallize all decimal parsed values as BigDecimal 0
+    balance.netDeposits = BIGDECIMAL_ZERO;
+    balance.totalDeposited = BIGDECIMAL_ZERO;
+    balance.totalWithdrawn = BIGDECIMAL_ZERO;
+    balance.totalSent = BIGDECIMAL_ZERO;
+    balance.totalReceived = BIGDECIMAL_ZERO;
+    balance.shareBalance = BIGDECIMAL_ZERO;
+    balance.totalSharesMinted = BIGDECIMAL_ZERO;
+    balance.totalSharesBurned = BIGDECIMAL_ZERO;
+    balance.totalSharesSent = BIGDECIMAL_ZERO;
+    balance.totalSharesReceived = BIGDECIMAL_ZERO;
+
+    // Initialize all raw values as BigInt 0
+    balance.netDepositsRaw = BIGINT_ZERO;
+    balance.totalDepositedRaw = BIGINT_ZERO;
+    balance.totalWithdrawnRaw = BIGINT_ZERO;
+    balance.totalSentRaw = BIGINT_ZERO;
+    balance.totalReceivedRaw = BIGINT_ZERO;
+    balance.shareBalanceRaw = BIGINT_ZERO;
+    balance.totalSharesMintedRaw = BIGINT_ZERO;
+    balance.totalSharesBurnedRaw = BIGINT_ZERO;
+    balance.totalSharesSentRaw = BIGINT_ZERO;
+    balance.totalSharesReceivedRaw = BIGINT_ZERO;
   }
 
   return balance as AccountVaultBalance;

@@ -3,22 +3,33 @@ type Vault @entity {
 
   pricePerFullShare: BigInt!
 
-  totalSupply: BigInt!
+  totalSupply: BigDecimal!
 
-  "Balance of the Vault contract in <Token> + balance of the Strategy contract in <Token>"
-  vaultBalance: BigInt!
+  totalSupplyRaw: BigInt!
 
-  "Balance specifically held in the strategy"
-  strategyBalance: BigInt!
+  "Balance of the Vault contract of underlying Token + balance of the Strategy contract of underlying Token"
+  vaultBalance: BigDecimal!
+
+  "Balance of underlying Token specifically held in the strategy"
+  strategyBalance: BigDecimal!
 
   "How much the vault allows to be borrowed"
-  available: BigInt!
+  available: BigDecimal!
 
-  token: Token!
+  "Balance of the Vault contract of underlying Token + balance of the Strategy contract of underlying Token"
+  vaultBalanceRaw: BigInt!
 
-  symbol: String!
+  "Balance of underlying Token specifically held in the strategy"
+  strategyBalanceRaw: BigInt!
 
-  name: String!
+  "How much the vault allows to be borrowed"
+  availableRaw: BigInt!
+
+  "Token accepted as deposit on the Vault"
+  underlyingToken: Token!
+
+  "yToken minted as shares by the Vault"
+  shareToken: Token!
 
   currentController: Controller!
 
@@ -30,19 +41,31 @@ type Vault @entity {
   "Block number of the latest data update"
   blockNumber: BigInt!
 
-  "totalDeposited - totalWithdrawn"
-  netDeposits: BigInt!
+  "totalDeposited - totalWithdrawn. Considers all deposits of underlying made by external accounts"
+  netDeposits: BigDecimal!
 
-  totalDeposited: BigInt!
+  totalDeposited: BigDecimal!
 
-  totalWithdrawn: BigInt!
+  totalWithdrawn: BigDecimal!
 
   "totalSharesMinted - totalSharesBurned"
-  totalActiveShares: BigInt!
+  totalActiveShares: BigDecimal!
 
-  totalSharesMinted: BigInt!
+  totalSharesMinted: BigDecimal!
 
-  totalSharesBurned: BigInt!
+  totalSharesBurned: BigDecimal!
+
+  netDepositsRaw: BigInt!
+
+  totalDepositedRaw: BigInt!
+
+  totalWithdrawnRaw: BigInt!
+
+  totalActiveSharesRaw: BigInt!
+
+  totalSharesMintedRaw: BigInt!
+
+  totalSharesBurnedRaw: BigInt!
 
   events: [VaultEvent!]! @derivedFrom(field: "vault")
 
@@ -83,27 +106,63 @@ type AccountVaultBalance @entity {
 
   account: Account!
 
-  token: Token!
+  "Token used on deposits/withdrawals"
+  underlyingToken: Token!
 
-  balance: BigInt!
+  "Token received as shares"
+  shareToken: Token!
 
-  totalDeposited: BigInt!
+  "Net deposits of a given Account within a given Vault. Transfers between accounts are taken into consideration for this metric"
+  netDeposits: BigDecimal!
 
-  totalWithdrawn: BigInt!
+  "Total tokens deposited by this Account in Vault"
+  totalDeposited: BigDecimal!
 
-  totalSent: BigInt!
+  "Total tokens withdrawn by this Account in Vault"
+  totalWithdrawn: BigDecimal!
 
-  totalReceived: BigInt!
+  "Total tokens sent to another account by this Account in Vault"
+  totalSent: BigDecimal!
 
-  shareBalance: BigInt!
+  "Total tokens received from another account by this Account in Vault"
+  totalReceived: BigDecimal!
 
-  totalSharesMinted: BigInt!
+  "Shares are the token minted by the Vault"
+  shareBalance: BigDecimal!
 
-  totalSharesBurned: BigInt!
+  totalSharesMinted: BigDecimal!
 
-  totalSharesSent: BigInt!
+  totalSharesBurned: BigDecimal!
 
-  totalSharesReceived: BigInt!
+  totalSharesSent: BigDecimal!
+
+  totalSharesReceived: BigDecimal!
+
+  "Net deposits of a given Account within a given Vault. Transfers between accounts are taken into consideration for this metric"
+  netDepositsRaw: BigInt!
+
+  "Total tokens deposited by this Account in Vault"
+  totalDepositedRaw: BigInt!
+
+  "Total tokens withdrawn by this Account in Vault"
+  totalWithdrawnRaw: BigInt!
+
+  "Total tokens sent to another account by this Account in Vault"
+  totalSentRaw: BigInt!
+
+  "Total tokens received from another account by this Account in Vault"
+  totalReceivedRaw: BigInt!
+
+  "Shares are the token minted by the Vault"
+  shareBalanceRaw: BigInt!
+
+  totalSharesMintedRaw: BigInt!
+
+  totalSharesBurnedRaw: BigInt!
+
+  totalSharesSentRaw: BigInt!
+
+  totalSharesReceivedRaw: BigInt!
 }
 
 type Token @entity {
@@ -133,7 +192,7 @@ type Transfer @entity {
 
   pricePerFullShare: BigInt!
 
-  balance: BigInt!
+  vaultBalance: BigInt!
 
   totalSupply: BigInt!
 
@@ -211,6 +270,8 @@ type Strategy @entity {
   id: ID!
 
   vault: Vault!
+
+  activeOnVaults: [Vault!] @derivedFrom(field: "currentStrategy")
 }
 
 type Controller @entity {
@@ -218,4 +279,6 @@ type Controller @entity {
   id: ID!
 
   vault: Vault!
+
+  activeOnVaults: [Vault!] @derivedFrom(field: "currentController")
 }

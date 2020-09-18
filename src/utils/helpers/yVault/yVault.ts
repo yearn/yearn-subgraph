@@ -12,7 +12,8 @@ import { Strategy as StrategyContract } from "../../../../generated/yBUSDVault/S
 import { Strategy as StrategyABI } from "../../../../generated/templates";
 import { Address, log } from "@graphprotocol/graph-ts";
 import { getOrCreateToken } from "./token";
-import { BIGINT_ZERO } from "../../constants";
+import { BIGINT_ZERO, BIGDECIMAL_ZERO } from "../../constants";
+import { toDecimal } from "../../decimals";
 
 export function getOrCreateVault(vaultAddress: Address): Vault {
   let vault = Vault.load(vaultAddress.toHexString());
@@ -21,43 +22,53 @@ export function getOrCreateVault(vaultAddress: Address): Vault {
   if (vault == null) {
     vault = new Vault(vaultAddress.toHexString());
 
-    vault.netDeposits = BIGINT_ZERO;
-    vault.totalDeposited = BIGINT_ZERO;
-    vault.totalWithdrawn = BIGINT_ZERO;
-    vault.totalActiveShares = BIGINT_ZERO;
-    vault.totalSharesMinted = BIGINT_ZERO;
-    vault.totalSharesBurned = BIGINT_ZERO;
-    vault.vaultBalance = BIGINT_ZERO;
-    vault.strategyBalance = BIGINT_ZERO;
+    // Initialize parsed values as BigDecimal 0
+    vault.netDeposits = BIGDECIMAL_ZERO;
+    vault.totalDeposited = BIGDECIMAL_ZERO;
+    vault.totalWithdrawn = BIGDECIMAL_ZERO;
+    vault.totalActiveShares = BIGDECIMAL_ZERO;
+    vault.totalSharesMinted = BIGDECIMAL_ZERO;
+    vault.totalSharesBurned = BIGDECIMAL_ZERO;
+    vault.vaultBalance = BIGDECIMAL_ZERO;
+    vault.strategyBalance = BIGDECIMAL_ZERO;
+    vault.totalSupply = BIGDECIMAL_ZERO;
+    vault.available = BIGDECIMAL_ZERO;
+
+    // Initialize raw values as BigInt 0
     vault.pricePerFullShare = BIGINT_ZERO;
-    vault.totalSupply = BIGINT_ZERO;
-    vault.available = BIGINT_ZERO;
-    vault.name = "";
-    vault.symbol = "";
+    vault.netDepositsRaw = BIGINT_ZERO;
+    vault.totalDepositedRaw = BIGINT_ZERO;
+    vault.totalWithdrawnRaw = BIGINT_ZERO;
+    vault.totalActiveSharesRaw = BIGINT_ZERO;
+    vault.totalSharesMintedRaw = BIGINT_ZERO;
+    vault.totalSharesBurnedRaw = BIGINT_ZERO;
+    vault.vaultBalanceRaw = BIGINT_ZERO;
+    vault.strategyBalanceRaw = BIGINT_ZERO;
+    vault.totalSupplyRaw = BIGINT_ZERO;
+    vault.availableRaw = BIGINT_ZERO;
   }
 
   // Might be worth using the "try_" version of these calls in the future.
-  let tokenAddress = vaultContract.token();
-  let token = getOrCreateToken(tokenAddress);
+  let underlyingTokenAddress = vaultContract.token();
+  let underlyingToken = getOrCreateToken(underlyingTokenAddress);
+  // The vault itself is an ERC20
+  let shareToken = getOrCreateToken(vaultAddress);
 
   let balance = vaultContract.try_balance();
   let pricePerFullShare = vaultContract.try_getPricePerFullShare();
   let totalSupply = vaultContract.try_totalSupply();
   let available = vaultContract.try_available();
-  let symbol = vaultContract.try_symbol();
-  let name = vaultContract.try_name();
 
-  vault.vaultBalance = !balance.reverted ? balance.value : vault.vaultBalance;
+  vault.vaultBalanceRaw = !balance.reverted ? balance.value : vault.vaultBalanceRaw;
   vault.pricePerFullShare = !pricePerFullShare.reverted
     ? pricePerFullShare.value
     : vault.pricePerFullShare;
-  vault.totalSupply = !totalSupply.reverted
+  vault.totalSupplyRaw = !totalSupply.reverted
     ? totalSupply.value
-    : vault.totalSupply;
-  vault.available = !available.reverted ? available.value : vault.available;
-  vault.token = token.id;
-  vault.symbol = !symbol.reverted ? symbol.value : vault.symbol;
-  vault.name = !name.reverted ? name.value : vault.name;
+    : vault.totalSupplyRaw;
+  vault.availableRaw = !available.reverted ? available.value : vault.availableRaw;
+  vault.underlyingToken = underlyingToken.id;
+  vault.shareToken = underlyingToken.id;
 
   // Saving controller and strategy as entities to have a historical list of
   // all controllers and entities the vault has. Also allows for dynamic
@@ -73,7 +84,7 @@ export function getOrCreateVault(vaultAddress: Address): Vault {
     controllerAddress as Address
   );
 
-  let strategyAddress = controllerContract.strategies(tokenAddress);
+  let strategyAddress = controllerContract.strategies(underlyingTokenAddress);
   let strategy = getOrCreateStrategy(strategyAddress);
   strategy.vault = vault.id;
   strategy.save();
@@ -82,9 +93,14 @@ export function getOrCreateVault(vaultAddress: Address): Vault {
   let strategyBalance = strategyContract.try_balanceOf();
 
   vault.currentStrategy = strategy.id;
-  vault.strategyBalance = !strategyBalance.reverted
+  vault.strategyBalanceRaw = !strategyBalance.reverted
     ? strategyBalance.value
-    : vault.strategyBalance;
+    : vault.strategyBalanceRaw;
+
+  vault.strategyBalance = toDecimal(vault.strategyBalanceRaw, underlyingToken.decimals);
+  vault.vaultBalance = toDecimal(vault.vaultBalanceRaw, underlyingToken.decimals);
+  vault.totalSupply = toDecimal(vault.totalSupplyRaw, underlyingToken.decimals);
+  vault.available = toDecimal(vault.availableRaw, underlyingToken.decimals);
 
   return vault as Vault;
 }
