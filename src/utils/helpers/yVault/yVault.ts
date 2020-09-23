@@ -68,7 +68,7 @@ export function getOrCreateVault(vaultAddress: Address): Vault {
     : vault.totalSupplyRaw;
   vault.availableRaw = !available.reverted ? available.value : vault.availableRaw;
   vault.underlyingToken = underlyingToken.id;
-  vault.shareToken = underlyingToken.id;
+  vault.shareToken = shareToken.id;
 
   // Saving controller and strategy as entities to have a historical list of
   // all controllers and entities the vault has. Also allows for dynamic
