@@ -1,7 +1,9 @@
 type Vault @entity {
   id: ID!
 
-  pricePerFullShare: BigInt!
+  pricePerFullShare: BigDecimal!
+
+  pricePerFullShareRaw: BigInt!
 
   totalSupply: BigDecimal!
 
@@ -66,6 +68,10 @@ type Vault @entity {
   totalSharesMintedRaw: BigInt!
 
   totalSharesBurnedRaw: BigInt!
+
+  totalEarnings: BigDecimal!
+
+  totalEarningsRaw: BigInt!
 
   events: [VaultEvent!]! @derivedFrom(field: "vault")
 
@@ -265,11 +271,57 @@ type WithdrawEvent implements VaultEvent @entity {
   pricePerFullShare: BigInt!
 }
 
+type HarvestEvent @entity {
+  id: ID!
+
+  vault: Vault!
+
+  caller: Bytes!
+
+  pricePerFullShareBefore: BigDecimal!
+
+  pricePerFullShareAfter: BigDecimal!
+
+  pricePerFullShareBeforeRaw: BigInt!
+
+  pricePerFullShareAfterRaw: BigInt!
+
+  blockNumber: BigInt!
+
+  timestamp: BigInt!
+
+  transactionHash: Bytes!
+
+  vaultBalanceBefore: BigDecimal!
+
+  vaultBalanceAfter: BigDecimal!
+
+  strategyBalanceBefore: BigDecimal!
+
+  strategyBalanceAfter: BigDecimal!
+
+  vaultBalanceBeforeRaw: BigInt!
+
+  vaultBalanceAfterRaw: BigInt!
+
+  strategyBalanceBeforeRaw: BigInt!
+
+  strategyBalanceAfterRaw: BigInt!
+
+  earnings: BigDecimal!
+
+  earningsRaw: BigInt!
+}
+
 type Strategy @entity {
   "Ethereum address"
   id: ID!
 
   vault: Vault!
+
+  totalEarnings: BigDecimal!
+
+  totalEarningsRaw: BigInt!
 
   activeOnVaults: [Vault!] @derivedFrom(field: "currentStrategy")
 }

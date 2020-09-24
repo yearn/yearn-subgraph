@@ -31,7 +31,7 @@ function handleDepositEvent(
   deposit.timestamp = event.block.timestamp;
   deposit.blockNumber = event.block.number;
   deposit.transactionHash = event.transaction.hash;
-  deposit.pricePerFullShare = vault.pricePerFullShare;
+  deposit.pricePerFullShare = vault.pricePerFullShareRaw;
 
   deposit.save();
 }
@@ -52,7 +52,7 @@ function handleWithdrawEvent(
   withdraw.timestamp = event.block.timestamp;
   withdraw.blockNumber = event.block.number;
   withdraw.transactionHash = event.transaction.hash;
-  withdraw.pricePerFullShare = vault.pricePerFullShare;
+  withdraw.pricePerFullShare = vault.pricePerFullShareRaw;
 
   withdraw.save();
 }
@@ -74,7 +74,7 @@ function handleTransferEvent(
   transfer.amount = amount;
   transfer.timestamp = event.block.timestamp;
   transfer.blockNumber = event.block.number;
-  transfer.pricePerFullShare = vault.pricePerFullShare;
+  transfer.pricePerFullShare = vault.pricePerFullShareRaw;
   transfer.vaultBalance = vault.vaultBalanceRaw;
   transfer.totalSupply = vault.totalSupplyRaw;
   transfer.available = vault.availableRaw;
