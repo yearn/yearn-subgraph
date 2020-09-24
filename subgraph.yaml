@@ -15,8 +15,9 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Vault
-        - DepositEvent
-        - WithdrawEvent
+        - Deposit
+        - Withdraw
+        - Harvest
         - Transfer
         - AccountVaultBalance
         - Account
@@ -32,7 +33,7 @@ dataSources:
           file: ./abis/ERC20.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
+          handler: handleShareTransfer
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: yTUSDVault
@@ -47,8 +48,9 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Vault
-        - DepositEvent
-        - WithdrawEvent
+        - Deposit
+        - Withdraw
+        - Harvest
         - Transfer
         - AccountVaultBalance
         - Account
@@ -64,7 +66,7 @@ dataSources:
           file: ./abis/ERC20.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
+          handler: handleShareTransfer
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: yUSDTVault
@@ -79,8 +81,9 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Vault
-        - DepositEvent
-        - WithdrawEvent
+        - Deposit
+        - Withdraw
+        - Harvest
         - Transfer
         - AccountVaultBalance
         - Account
@@ -96,7 +99,7 @@ dataSources:
           file: ./abis/ERC20.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
+          handler: handleShareTransfer
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: yYFIault
@@ -111,8 +114,9 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Vault
-        - DepositEvent
-        - WithdrawEvent
+        - Deposit
+        - Withdraw
+        - Harvest
         - Transfer
         - AccountVaultBalance
         - Account
@@ -128,7 +132,7 @@ dataSources:
           file: ./abis/ERC20.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
+          handler: handleShareTransfer
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: yWSBTCVault
@@ -143,8 +147,9 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Vault
-        - DepositEvent
-        - WithdrawEvent
+        - Deposit
+        - Withdraw
+        - Harvest
         - Transfer
         - AccountVaultBalance
         - Account
@@ -160,7 +165,7 @@ dataSources:
           file: ./abis/ERC20.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
+          handler: handleShareTransfer
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: yDAIVault
@@ -175,8 +180,9 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Vault
-        - DepositEvent
-        - WithdrawEvent
+        - Deposit
+        - Withdraw
+        - Harvest
         - Transfer
         - AccountVaultBalance
         - Account
@@ -192,7 +198,7 @@ dataSources:
           file: ./abis/ERC20.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
+          handler: handleShareTransfer
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: yBUSDVault
@@ -207,8 +213,9 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - Vault
-        - DepositEvent
-        - WithdrawEvent
+        - Deposit
+        - Withdraw
+        - Harvest
         - Transfer
         - AccountVaultBalance
         - Account
@@ -224,7 +231,7 @@ dataSources:
           file: ./abis/ERC20.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
-          handler: handleTransfer
+          handler: handleShareTransfer
       file: ./src/mapping.ts
 templates:
   - name: Strategy
@@ -239,8 +246,9 @@ templates:
       file: ./src/mapping.ts
       entities:
         - Vault
-        - DepositEvent
-        - WithdrawEvent
+        - Deposit
+        - Withdraw
+        - Harvest
         - Transfer
         - AccountVaultBalance
         - Account

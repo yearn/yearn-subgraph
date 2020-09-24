@@ -4,8 +4,8 @@ import { BigInt, Address } from "@graphprotocol/graph-ts";
 import {
   getOrCreateVault,
   getOrCreateVaultTransfer,
-  getOrCreateVaultDepositEvent,
-  getOrCreateVaultWithdrawEvent,
+  getOrCreateVaultDeposit,
+  getOrCreateVaultWithdraw,
   getOrCreateAccountVaultBalance,
   getOrCreateAccount,
   getOrCreateToken,
@@ -15,14 +15,14 @@ import {
 import { ZERO_ADDRESS } from "../utils/constants";
 import { toDecimal } from "../utils/decimals";
 
-function handleDepositEvent(
+function handleDeposit(
   event: Transfer,
   amount: BigInt,
   accountId: String,
   vault: Vault,
   transactionId: String
 ): void {
-  let deposit = getOrCreateVaultDepositEvent(transactionId);
+  let deposit = getOrCreateVaultDeposit(transactionId);
 
   deposit.vault = vault.id;
   deposit.account = accountId;
@@ -36,14 +36,14 @@ function handleDepositEvent(
   deposit.save();
 }
 
-function handleWithdrawEvent(
+function handleWithdraw(
   event: Transfer,
   amount: BigInt,
   accountId: String,
   vault: Vault,
   transactionId: String
 ): void {
-  let withdraw = getOrCreateVaultWithdrawEvent(transactionId);
+  let withdraw = getOrCreateVaultWithdraw(transactionId);
 
   withdraw.vault = vault.id;
   withdraw.account = accountId;
@@ -57,7 +57,7 @@ function handleWithdrawEvent(
   withdraw.save();
 }
 
-function handleTransferEvent(
+function handleTransfer(
   event: Transfer,
   amount: BigInt,
   fromId: String,
@@ -83,7 +83,7 @@ function handleTransferEvent(
   transfer.save();
 }
 
-export function handleTransfer(event: Transfer): void {
+export function handleShareTransfer(event: Transfer): void {
   let transactionId = event.address
     .toHexString()
     .concat("-")
@@ -116,7 +116,7 @@ export function handleTransfer(event: Transfer): void {
     event.params.from.toHexString() != ZERO_ADDRESS &&
     event.params.to.toHexString() != ZERO_ADDRESS
   ) {
-    handleTransferEvent(
+    handleTransfer(
       event,
       amount,
       fromAccount.id,
@@ -191,7 +191,7 @@ export function handleTransfer(event: Transfer): void {
 
   // Vault deposit
   if (event.params.from.toHexString() == ZERO_ADDRESS) {
-    handleDepositEvent(event, amount, toAccount.id, vault, transactionId);
+    handleDeposit(event, amount, toAccount.id, vault, transactionId);
     // We should fact check that the amount deposited is exactly the same as calculated
     // If it's not, we should use a callHandler for deposit(_amount)
 
@@ -242,7 +242,7 @@ export function handleTransfer(event: Transfer): void {
 
   // Vault withdraw
   if (event.params.to.toHexString() == ZERO_ADDRESS) {
-    handleWithdrawEvent(event, amount, fromAccount.id, vault, transactionId);
+    handleWithdraw(event, amount, fromAccount.id, vault, transactionId);
     // We should fact check that the amount withdrawn is exactly the same as calculated
     // If it's not, we should use a callHandler for withdraw(_amount)
 

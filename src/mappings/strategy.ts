@@ -3,10 +3,10 @@ import { Address } from "@graphprotocol/graph-ts";
 import {
   getOrCreateVault,
   getOrCreateStrategy,
-  getOrCreateHarvestEvent,
+  getOrCreateHarvest,
   getOrCreateToken
 } from "../utils/helpers";
-import { ZERO_ADDRESS } from "../utils/constants";
+import { ZERO_ADDRESS, BIGINT_ONE } from "../utils/constants";
 import { toDecimal } from "../utils/decimals";
 
 export function handleHarvest(call: HarvestCall): void {
@@ -15,7 +15,7 @@ export function handleHarvest(call: HarvestCall): void {
     .toHexString()
     .concat("-")
     .concat(call.transaction.hash.toHexString());
-  let harvest = getOrCreateHarvestEvent(transactionId);
+  let harvest = getOrCreateHarvest(transactionId);
   let vaultAddress = Address.fromString(strategy.vault);
 
   // get entity without updating it, to handle "Before" cases
@@ -27,6 +27,7 @@ export function handleHarvest(call: HarvestCall): void {
 
   harvest.caller = call.from;
   harvest.vault = vaultAfter.id;
+  harvest.strategy = strategy.id;
   harvest.pricePerFullShareBefore = vaultBefore.pricePerFullShare;
   harvest.pricePerFullShareAfter = vaultAfter.pricePerFullShare;
   harvest.pricePerFullShareBeforeRaw = vaultBefore.pricePerFullShareRaw;
@@ -49,6 +50,7 @@ export function handleHarvest(call: HarvestCall): void {
 
   vaultAfter.totalEarningsRaw = vaultAfter.totalEarningsRaw + earningsRaw;
   vaultAfter.totalEarnings = toDecimal(vaultAfter.totalEarningsRaw, underlyingToken.decimals);
+  vaultAfter.totalHarvestCalls = vaultAfter.totalHarvestCalls + BIGINT_ONE;
 
   strategy.totalEarningsRaw = strategy.totalEarningsRaw + earningsRaw;
   strategy.totalEarnings = toDecimal(strategy.totalEarningsRaw, underlyingToken.decimals);

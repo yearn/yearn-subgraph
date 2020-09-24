@@ -75,11 +75,13 @@ type Vault @entity {
 
   events: [VaultEvent!]! @derivedFrom(field: "vault")
 
-  transferEvents: [Transfer!]! @derivedFrom(field: "vault")
+  transfers: [Transfer!]! @derivedFrom(field: "vault")
 
-  depositEvents: [DepositEvent!]! @derivedFrom(field: "vault")
+  deposits: [Deposit!]! @derivedFrom(field: "vault")
 
-  withdrawEvents: [WithdrawEvent!]! @derivedFrom(field: "vault")
+  withdrawals: [Withdraw!]! @derivedFrom(field: "vault")
+
+  harvests: [Harvest!]! @derivedFrom(field: "vault")
 
   balances: [AccountVaultBalance!]! @derivedFrom(field: "vault")
 
@@ -95,14 +97,17 @@ type Account @entity {
 
   vaultBalances: [AccountVaultBalance!]! @derivedFrom(field: "account")
 
-  "Vault events <Withdraw - Deposit> that are related to this account"
-  vaultEvents: [VaultEvent!]! @derivedFrom(field: "account")
+  "Deposits that are related to this account"
+  deposits: [Deposit!]! @derivedFrom(field: "account")
 
-  "Vault events <Transfer> that are sent to this account"
-  receivedTransferEvents: [Transfer!]! @derivedFrom(field: "to")
+  "Withdrawals that are related to this account"
+  withdrawals: [Deposit!]! @derivedFrom(field: "account")
 
-  "Vault events <Transfer> that are sent from this account"
-  sentTransferEvents: [Transfer!]! @derivedFrom(field: "from")
+  "Transfers that are sent to this account"
+  receivedTransfers: [Transfer!]! @derivedFrom(field: "to")
+
+  "Transfers that are sent from this account"
+  sentTransfers: [Transfer!]! @derivedFrom(field: "from")
 }
 
 type AccountVaultBalance @entity {
@@ -211,7 +216,7 @@ type Transfer @entity {
   transactionHash: Bytes!
 }
 
-interface VaultEvent {
+type Deposit @entity {
   id: ID!
 
   vault: Vault!
@@ -231,7 +236,7 @@ interface VaultEvent {
   pricePerFullShare: BigInt!
 }
 
-type DepositEvent implements VaultEvent @entity {
+type Withdraw @entity {
   id: ID!
 
   vault: Vault!
@@ -251,30 +256,12 @@ type DepositEvent implements VaultEvent @entity {
   pricePerFullShare: BigInt!
 }
 
-type WithdrawEvent implements VaultEvent @entity {
+type Harvest @entity {
   id: ID!
 
   vault: Vault!
 
-  account: Account!
-
-  amount: BigInt!
-
-  shares: BigInt!
-
-  timestamp: BigInt!
-
-  blockNumber: BigInt!
-
-  transactionHash: Bytes!
-
-  pricePerFullShare: BigInt!
-}
-
-type HarvestEvent @entity {
-  id: ID!
-
-  vault: Vault!
+  strategy: Strategy!
 
   caller: Bytes!
 
@@ -322,6 +309,8 @@ type Strategy @entity {
   totalEarnings: BigDecimal!
 
   totalEarningsRaw: BigInt!
+
+  harvests: [Harvest!]! @derivedFrom(field: "strategy")
 
   activeOnVaults: [Vault!] @derivedFrom(field: "currentStrategy")
 }

@@ -1,11 +1,11 @@
 import {
   Vault,
-  DepositEvent,
-  WithdrawEvent,
+  Deposit,
+  Withdraw,
   Transfer,
   Controller,
   Strategy,
-  HarvestEvent
+  Harvest
 } from "../../../../generated/schema";
 import { V1Contract } from "../../../../generated/yBUSDVault/V1Contract";
 import { Controller as ControllerContract } from "../../../../generated/yBUSDVault/Controller";
@@ -53,6 +53,7 @@ export function getOrCreateVault(
     vault.totalSupplyRaw = BIGINT_ZERO;
     vault.availableRaw = BIGINT_ZERO;
     vault.totalEarningsRaw = BIGINT_ZERO;
+    vault.totalHarvestCalls = BIGINT_ZERO;
   }
 
   if (update) {
@@ -144,43 +145,43 @@ export function getOrCreateVaultTransfer(
   return transfer as Transfer;
 }
 
-export function getOrCreateVaultDepositEvent(
+export function getOrCreateVaultDeposit(
   id: String,
   createIfNotFound: boolean = true
-): DepositEvent {
-  let event = DepositEvent.load(id);
+): Deposit {
+  let event = Deposit.load(id);
 
   if (event == null && createIfNotFound) {
-    event = new DepositEvent(id);
+    event = new Deposit(id);
   }
 
-  return event as DepositEvent;
+  return event as Deposit;
 }
 
-export function getOrCreateVaultWithdrawEvent(
+export function getOrCreateVaultWithdraw(
   id: String,
   createIfNotFound: boolean = true
-): WithdrawEvent {
-  let event = WithdrawEvent.load(id);
+): Withdraw {
+  let event = Withdraw.load(id);
 
   if (event == null && createIfNotFound) {
-    event = new WithdrawEvent(id);
+    event = new Withdraw(id);
   }
 
-  return event as WithdrawEvent;
+  return event as Withdraw;
 }
 
-export function getOrCreateHarvestEvent(
+export function getOrCreateHarvest(
   id: String,
   createIfNotFound: boolean = true
-): HarvestEvent {
-  let event = HarvestEvent.load(id);
+): Harvest {
+  let event = Harvest.load(id);
 
   if (event == null && createIfNotFound) {
-    event = new HarvestEvent(id);
+    event = new Harvest(id);
   }
 
-  return event as HarvestEvent;
+  return event as Harvest;
 }
 
 export function getOrCreateController(
