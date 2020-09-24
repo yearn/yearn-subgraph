@@ -73,7 +73,7 @@ type Vault @entity {
 
   totalEarningsRaw: BigInt!
 
-  events: [VaultEvent!]! @derivedFrom(field: "vault")
+  totalHarvestCalls: BigInt!
 
   transfers: [Transfer!]! @derivedFrom(field: "vault")
 
@@ -88,7 +88,6 @@ type Vault @entity {
   strategies: [Strategy!]! @derivedFrom(field: "vault")
 
   controllers: [Controller!]! @derivedFrom(field: "vault")
-
 }
 
 type Account @entity {
