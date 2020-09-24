@@ -1,6 +1,7 @@
 type Vault @entity {
   id: ID!
 
+  "Amount of underlying token that a full share of <yToken> represents"
   pricePerFullShare: BigDecimal!
 
   pricePerFullShareRaw: BigInt!
