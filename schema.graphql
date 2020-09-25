@@ -38,11 +38,8 @@ type Vault @entity {
 
   currentStrategy: Strategy!
 
-  "Timestamp of the latest data update"
-  timestamp: BigInt!
-
-  "Block number of the latest data update"
-  blockNumber: BigInt!
+  "Transaction metadata for the last update"
+  transaction: Transaction!
 
   "totalDeposited - totalWithdrawn. Considers all deposits of underlying made by external accounts"
   netDeposits: BigDecimal!
@@ -80,7 +77,7 @@ type Vault @entity {
 
   deposits: [Deposit!]! @derivedFrom(field: "vault")
 
-  withdrawals: [Withdraw!]! @derivedFrom(field: "vault")
+  withdrawals: [Withdrawal!]! @derivedFrom(field: "vault")
 
   harvests: [Harvest!]! @derivedFrom(field: "vault")
 
@@ -209,11 +206,7 @@ type Transfer @entity {
 
   available: BigInt!
 
-  timestamp: BigInt!
-
-  blockNumber: BigInt!
-
-  transactionHash: Bytes!
+  transaction: Transaction!
 }
 
 type Deposit @entity {
@@ -227,16 +220,18 @@ type Deposit @entity {
 
   shares: BigInt!
 
-  timestamp: BigInt!
-
-  blockNumber: BigInt!
-
-  transactionHash: Bytes!
-
   pricePerFullShare: BigInt!
+
+  vaultBalance: BigInt!
+
+  totalSupply: BigInt!
+
+  available: BigInt!
+
+  transaction: Transaction!
 }
 
-type Withdraw @entity {
+type Withdrawal @entity {
   id: ID!
 
   vault: Vault!
@@ -247,13 +242,15 @@ type Withdraw @entity {
 
   shares: BigInt!
 
-  timestamp: BigInt!
-
-  blockNumber: BigInt!
-
-  transactionHash: Bytes!
-
   pricePerFullShare: BigInt!
+
+  vaultBalance: BigInt!
+
+  totalSupply: BigInt!
+
+  available: BigInt!
+
+  transaction: Transaction!
 }
 
 type Harvest @entity {
@@ -272,12 +269,6 @@ type Harvest @entity {
   pricePerFullShareBeforeRaw: BigInt!
 
   pricePerFullShareAfterRaw: BigInt!
-
-  blockNumber: BigInt!
-
-  timestamp: BigInt!
-
-  transactionHash: Bytes!
 
   vaultBalanceBefore: BigDecimal!
 
@@ -298,6 +289,8 @@ type Harvest @entity {
   earnings: BigDecimal!
 
   earningsRaw: BigInt!
+
+  transaction: Transaction!
 }
 
 type Strategy @entity {
@@ -322,4 +315,27 @@ type Controller @entity {
   vault: Vault!
 
   activeOnVaults: [Vault!] @derivedFrom(field: "currentController")
+}
+
+type Transaction @entity {
+  "ID = Transaction Hash"
+  id: ID!
+
+  timestamp: BigInt!
+
+  blockNumber: BigInt!
+
+  "Duplicated field to allow for byte search with transactionHash_contains"
+  transactionHash: Bytes!
+
+  deposits: [Deposit!]! @derivedFrom(field: "transaction")
+
+  withdrawals: [Withdrawal!]! @derivedFrom(field: "transaction")
+
+  transfers: [Transfer!]! @derivedFrom(field: "transaction")
+
+  harvests: [Harvest!]! @derivedFrom(field: "transaction")
+
+  "List of Vaults that last updated on this transaction"
+  vaultsUpdated: [Vault!]! @derivedFrom(field: "transaction")
 }

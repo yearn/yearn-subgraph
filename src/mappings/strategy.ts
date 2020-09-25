@@ -4,7 +4,8 @@ import {
   getOrCreateVault,
   getOrCreateStrategy,
   getOrCreateHarvest,
-  getOrCreateToken
+  getOrCreateToken,
+  getOrCreateTransaction
 } from "../utils/helpers";
 import { ZERO_ADDRESS, BIGINT_ONE } from "../utils/constants";
 import { toDecimal } from "../utils/decimals";
@@ -25,6 +26,12 @@ export function handleHarvest(call: HarvestCall): void {
 
   let underlyingToken = getOrCreateToken(Address.fromString(vaultBefore.underlyingToken));
 
+  let transaction = getOrCreateTransaction(call.transaction.hash.toHexString())
+  transaction.blockNumber = call.block.number;
+  transaction.timestamp = call.block.timestamp;
+  transaction.transactionHash = call.transaction.hash;
+  transaction.save();
+
   harvest.caller = call.from;
   harvest.vault = vaultAfter.id;
   harvest.strategy = strategy.id;
@@ -32,9 +39,7 @@ export function handleHarvest(call: HarvestCall): void {
   harvest.pricePerFullShareAfter = vaultAfter.pricePerFullShare;
   harvest.pricePerFullShareBeforeRaw = vaultBefore.pricePerFullShareRaw;
   harvest.pricePerFullShareAfterRaw = vaultAfter.pricePerFullShareRaw;
-  harvest.blockNumber = call.block.number;
-  harvest.timestamp = call.block.timestamp;
-  harvest.transactionHash = call.transaction.hash;
+  harvest.transaction = call.transaction.hash.toHexString();
   harvest.vaultBalanceBefore = vaultBefore.vaultBalance;
   harvest.vaultBalanceAfter = vaultAfter.vaultBalance;
   harvest.strategyBalanceBefore = vaultBefore.strategyBalance;

@@ -1,11 +1,12 @@
 import {
   Vault,
   Deposit,
-  Withdraw,
+  Withdrawal,
   Transfer,
   Controller,
   Strategy,
-  Harvest
+  Harvest,
+  Transaction
 } from "../../../../generated/schema";
 import { V1Contract } from "../../../../generated/yBUSDVault/V1Contract";
 import { Controller as ControllerContract } from "../../../../generated/yBUSDVault/Controller";
@@ -136,52 +137,52 @@ export function getOrCreateVaultTransfer(
   id: String,
   createIfNotFound: boolean = true
 ): Transfer {
-  let transfer = Transfer.load(id);
+  let action = Transfer.load(id);
 
-  if (transfer == null && createIfNotFound) {
-    transfer = new Transfer(id);
+  if (action == null && createIfNotFound) {
+    action = new Transfer(id);
   }
 
-  return transfer as Transfer;
+  return action as Transfer;
 }
 
 export function getOrCreateVaultDeposit(
   id: String,
   createIfNotFound: boolean = true
 ): Deposit {
-  let event = Deposit.load(id);
+  let action = Deposit.load(id);
 
-  if (event == null && createIfNotFound) {
-    event = new Deposit(id);
+  if (action == null && createIfNotFound) {
+    action = new Deposit(id);
   }
 
-  return event as Deposit;
+  return action as Deposit;
 }
 
-export function getOrCreateVaultWithdraw(
+export function getOrCreateVaultWithdrawal(
   id: String,
   createIfNotFound: boolean = true
-): Withdraw {
-  let event = Withdraw.load(id);
+): Withdrawal {
+  let action = Withdrawal.load(id);
 
-  if (event == null && createIfNotFound) {
-    event = new Withdraw(id);
+  if (action == null && createIfNotFound) {
+    action = new Withdrawal(id);
   }
 
-  return event as Withdraw;
+  return action as Withdrawal;
 }
 
 export function getOrCreateHarvest(
   id: String,
   createIfNotFound: boolean = true
 ): Harvest {
-  let event = Harvest.load(id);
+  let action = Harvest.load(id);
 
-  if (event == null && createIfNotFound) {
-    event = new Harvest(id);
+  if (action == null && createIfNotFound) {
+    action = new Harvest(id);
   }
 
-  return event as Harvest;
+  return action as Harvest;
 }
 
 export function getOrCreateController(
@@ -216,4 +217,17 @@ export function getOrCreateStrategy(
   }
 
   return strategy as Strategy;
+}
+
+export function getOrCreateTransaction(
+  id: String,
+  createIfNotFound: boolean = true
+): Transaction {
+  let transaction = Transaction.load(id);
+
+  if (transaction == null && createIfNotFound) {
+    transaction = new Transaction(id);
+  }
+
+  return transaction as Transaction;
 }

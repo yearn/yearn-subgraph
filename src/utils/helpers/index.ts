@@ -1,11 +1,12 @@
 export {
   getOrCreateVault,
   getOrCreateVaultTransfer,
-  getOrCreateVaultWithdraw,
+  getOrCreateVaultWithdrawal,
   getOrCreateVaultDeposit,
   getOrCreateStrategy,
   getOrCreateController,
-  getOrCreateHarvest
+  getOrCreateHarvest,
+  getOrCreateTransaction
 } from "./yVault/yVault";
 
 export {

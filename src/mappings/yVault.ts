@@ -5,12 +5,13 @@ import {
   getOrCreateVault,
   getOrCreateVaultTransfer,
   getOrCreateVaultDeposit,
-  getOrCreateVaultWithdraw,
+  getOrCreateVaultWithdrawal,
   getOrCreateAccountVaultBalance,
   getOrCreateAccount,
   getOrCreateToken,
   getOrCreateController,
-  getOrCreateStrategy
+  getOrCreateStrategy,
+  getOrCreateTransaction
 } from "../utils/helpers";
 import { ZERO_ADDRESS, BIGINT_ZERO } from "../utils/constants";
 import { toDecimal } from "../utils/decimals";
@@ -28,31 +29,33 @@ function handleDeposit(
   deposit.account = accountId;
   deposit.amount = amount;
   deposit.shares = event.params.value;
-  deposit.timestamp = event.block.timestamp;
-  deposit.blockNumber = event.block.number;
-  deposit.transactionHash = event.transaction.hash;
   deposit.pricePerFullShare = vault.pricePerFullShareRaw;
+  deposit.vaultBalance = vault.vaultBalanceRaw;
+  deposit.totalSupply = vault.totalSupplyRaw;
+  deposit.available = vault.availableRaw;
+  deposit.transaction = event.transaction.hash.toHexString();
 
   deposit.save();
 }
 
-function handleWithdraw(
+function handleWithdrawal(
   event: Transfer,
   amount: BigInt,
   accountId: String,
   vault: Vault,
   transactionId: String
 ): void {
-  let withdraw = getOrCreateVaultWithdraw(transactionId);
+  let withdraw = getOrCreateVaultWithdrawal(transactionId);
 
   withdraw.vault = vault.id;
   withdraw.account = accountId;
   withdraw.amount = amount;
   withdraw.shares = event.params.value;
-  withdraw.timestamp = event.block.timestamp;
-  withdraw.blockNumber = event.block.number;
-  withdraw.transactionHash = event.transaction.hash;
   withdraw.pricePerFullShare = vault.pricePerFullShareRaw;
+  withdraw.vaultBalance = vault.vaultBalanceRaw;
+  withdraw.totalSupply = vault.totalSupplyRaw;
+  withdraw.available = vault.availableRaw;
+  withdraw.transaction = event.transaction.hash.toHexString();
 
   withdraw.save();
 }
@@ -72,13 +75,11 @@ function handleTransfer(
   transfer.to = toId;
   transfer.value = event.params.value;
   transfer.amount = amount;
-  transfer.timestamp = event.block.timestamp;
-  transfer.blockNumber = event.block.number;
   transfer.pricePerFullShare = vault.pricePerFullShareRaw;
   transfer.vaultBalance = vault.vaultBalanceRaw;
   transfer.totalSupply = vault.totalSupplyRaw;
   transfer.available = vault.availableRaw;
-  transfer.transactionHash = event.transaction.hash;
+  transfer.transaction = event.transaction.hash.toHexString();
 
   transfer.save();
 }
@@ -100,9 +101,6 @@ export function handleShareTransfer(event: Transfer): void {
   );
   let shareToken = getOrCreateToken(Address.fromString(vault.shareToken));
 
-  vault.timestamp = event.block.timestamp;
-  vault.blockNumber = event.block.number;
-
   let amount: BigInt;
 
   if (vault.totalSupplyRaw != BIGINT_ZERO) {
@@ -117,6 +115,14 @@ export function handleShareTransfer(event: Transfer): void {
   let fromAccountBalance = getOrCreateAccountVaultBalance(
     fromAccount.id.concat("-").concat(vault.id)
   );
+
+  let transaction = getOrCreateTransaction(event.transaction.hash.toHexString())
+  transaction.blockNumber = event.block.number;
+  transaction.timestamp = event.block.timestamp;
+  transaction.transactionHash = event.transaction.hash;
+  transaction.save();
+
+  vault.transaction = transaction.id;
 
   // Vault transfer between valid accounts
   if (
@@ -249,7 +255,7 @@ export function handleShareTransfer(event: Transfer): void {
 
   // Vault withdraw
   if (event.params.to.toHexString() == ZERO_ADDRESS) {
-    handleWithdraw(event, amount, fromAccount.id, vault, transactionId);
+    handleWithdrawal(event, amount, fromAccount.id, vault, transactionId);
     // We should fact check that the amount withdrawn is exactly the same as calculated
     // If it's not, we should use a callHandler for withdraw(_amount)
 

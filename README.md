@@ -49,11 +49,8 @@ type Vault @entity {
 
   currentStrategy: Strategy!
 
-  "Timestamp of the latest data update"
-  timestamp: BigInt!
-
-  "Block number of the latest data update"
-  blockNumber: BigInt!
+  "Transaction metadata for the last update"
+  transaction: Transaction!
 
   "totalDeposited - totalWithdrawn. Considers all deposits of underlying made by external accounts"
   netDeposits: BigDecimal!
@@ -91,7 +88,7 @@ type Vault @entity {
 
   deposits: [Deposit!]! @derivedFrom(field: "vault")
 
-  withdrawals: [Withdraw!]! @derivedFrom(field: "vault")
+  withdrawals: [Withdrawal!]! @derivedFrom(field: "vault")
 
   harvests: [Harvest!]! @derivedFrom(field: "vault")
 
@@ -248,12 +245,6 @@ type Harvest @entity {
 
   pricePerFullShareAfterRaw: BigInt!
 
-  blockNumber: BigInt!
-
-  timestamp: BigInt!
-
-  transactionHash: Bytes!
-
   vaultBalanceBefore: BigDecimal!
 
   vaultBalanceAfter: BigDecimal!
@@ -273,6 +264,8 @@ type Harvest @entity {
   earnings: BigDecimal!
 
   earningsRaw: BigInt!
+
+  transaction: Transaction!
 }
 ```
 
@@ -305,5 +298,34 @@ type Controller @entity {
   vault: Vault!
 
   activeOnVaults: [Vault!] @derivedFrom(field: "currentController")
+}
+```
+
+#### Transaction
+
+This entity tracks metadata for specific transactions, as well as some derived data for all the deposits, withdrawals, transfers, harvests performed on it, as well as tracking a list of all the vaults that were last updated on that transaction.
+
+```graphql
+type Transaction @entity {
+  "ID = Transaction Hash"
+  id: ID!
+
+  timestamp: BigInt!
+
+  blockNumber: BigInt!
+
+  "Duplicated field to allow for byte search with transactionHash_contains"
+  transactionHash: Bytes!
+
+  deposits: [Deposit!]! @derivedFrom(field: "transaction")
+
+  withdrawals: [Withdrawal!]! @derivedFrom(field: "transaction")
+
+  transfers: [Transfer!]! @derivedFrom(field: "transaction")
+
+  harvests: [Harvest!]! @derivedFrom(field: "transaction")
+
+  "List of Vaults that last updated on this transaction"
+  vaultsUpdated: [Vault!]! @derivedFrom(field: "transaction")
 }
 ```
