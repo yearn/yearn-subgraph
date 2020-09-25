@@ -12,7 +12,7 @@ import {
   getOrCreateController,
   getOrCreateStrategy
 } from "../utils/helpers";
-import { ZERO_ADDRESS } from "../utils/constants";
+import { ZERO_ADDRESS, BIGINT_ZERO } from "../utils/constants";
 import { toDecimal } from "../utils/decimals";
 
 function handleDeposit(
@@ -103,7 +103,14 @@ export function handleShareTransfer(event: Transfer): void {
   vault.timestamp = event.block.timestamp;
   vault.blockNumber = event.block.number;
 
-  let amount = (vault.vaultBalanceRaw * event.params.value) / vault.totalSupplyRaw;
+  let amount: BigInt;
+
+  if (vault.totalSupplyRaw != BIGINT_ZERO) {
+    amount =
+      (vault.vaultBalanceRaw * event.params.value) / vault.totalSupplyRaw;
+  } else {
+    amount = (event.params.value * vault.pricePerFullShareRaw) / BigInt.fromI32(10).pow(18);
+  }
   let toAccountBalance = getOrCreateAccountVaultBalance(
     toAccount.id.concat("-").concat(vault.id)
   );

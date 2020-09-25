@@ -233,6 +233,72 @@ dataSources:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleShareTransfer
       file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: yWETHVault
+    network: mainnet
+    source:
+      address: "0xe1237aa7f535b0cc33fd973d66cbf830354d16c7"
+      abi: V1Contract
+      startBlock: 10774489
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Vault
+        - Deposit
+        - Withdraw
+        - Harvest
+        - Transfer
+        - AccountVaultBalance
+        - Account
+        - Token
+      abis:
+        - name: V1Contract
+          file: ./abis/V1Contract.json
+        - name: Controller
+          file: ./abis/Controller.json
+        - name: Strategy
+          file: ./abis/Strategy.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleShareTransfer
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: yUSDCVault
+    network: mainnet
+    source:
+      address: "0x597ad1e0c13bfe8025993d9e79c69e1c0233522e"
+      abi: V1Contract
+      startBlock: 10532708
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Vault
+        - Deposit
+        - Withdraw
+        - Harvest
+        - Transfer
+        - AccountVaultBalance
+        - Account
+        - Token
+      abis:
+        - name: V1Contract
+          file: ./abis/V1Contract.json
+        - name: Controller
+          file: ./abis/Controller.json
+        - name: Strategy
+          file: ./abis/Strategy.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleShareTransfer
+      file: ./src/mapping.ts
 templates:
   - name: Strategy
     kind: ethereum/contract

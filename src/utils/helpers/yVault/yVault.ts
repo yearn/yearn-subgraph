@@ -122,9 +122,9 @@ export function getOrCreateVault(
       vault.totalSupplyRaw,
       underlyingToken.decimals
     );
+    // Uses the default decimals since it's a floating point representation
     vault.pricePerFullShare = toDecimal(
-      vault.pricePerFullShareRaw,
-      underlyingToken.decimals
+      vault.pricePerFullShareRaw
     );
     vault.available = toDecimal(vault.availableRaw, underlyingToken.decimals);
   }
