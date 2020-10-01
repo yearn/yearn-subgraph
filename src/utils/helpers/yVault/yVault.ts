@@ -87,16 +87,36 @@ export function getOrCreateVault(
     // Saving controller and strategy as entities to have a historical list of
     // all controllers and entities the vault has. Also allows for dynamic
     // indexing of the Strategy ABI
-    let controllerAddress = vaultContract.controller();
-    let controller = getOrCreateController(controllerAddress);
-    controller.vault = vault.id;
-    controller.save();
+    let controllerAddress = vaultContract.try_controller();
+    let controllerContract: ControllerContract;
 
-    vault.currentController = controller.id;
+    if (!controllerAddress.reverted) {
+      let controller = getOrCreateController(controllerAddress.value);
+      controller.vault = vault.id;
+      controller.save();
 
-    let controllerContract = ControllerContract.bind(
-      controllerAddress as Address
-    );
+      vault.currentController = controller.id;
+      controllerContract = ControllerContract.bind(
+        controllerAddress.value as Address
+      );
+    } else {
+      let wrappedVaultAddress = vaultContract.try_vault();
+      if (!wrappedVaultAddress.reverted) {
+        // get a non-updated version of it, since we only need the controller.
+        let wrappedVault = getOrCreateVault(wrappedVaultAddress.value, false);
+
+        vault.currentController = wrappedVault.currentController;
+
+        controllerContract = ControllerContract.bind(
+          Address.fromString(wrappedVault.currentController)
+        );
+      } else {
+        log.critical(
+          "Vault doesn't have a controller nor a wrapped vault. Vault ID: {}",
+          [vault.id]
+        );
+      }
+    }
 
     let strategyAddress = controllerContract.strategies(underlyingTokenAddress);
     let strategy = getOrCreateStrategy(strategyAddress);
@@ -124,9 +144,7 @@ export function getOrCreateVault(
       underlyingToken.decimals
     );
     // Uses the default decimals since it's a floating point representation
-    vault.pricePerFullShare = toDecimal(
-      vault.pricePerFullShareRaw
-    );
+    vault.pricePerFullShare = toDecimal(vault.pricePerFullShareRaw);
     vault.available = toDecimal(vault.availableRaw, underlyingToken.decimals);
   }
 
