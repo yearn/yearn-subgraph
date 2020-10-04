@@ -9,7 +9,7 @@
     "remove-local": "graph remove --node http://localhost:8020/ iearn-finance/yearn-finance",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 iearn-finance/yearn-finance",
     "lint:check": "eslint src --rulesdir . && prettier --check **/*.json *.md",
-    "lint:fix": "eslint src --rulesdir . --fix && prettier --check **/*.json **/*.md --config .prettierrc.json --write"
+    "lint:fix": "eslint src --rulesdir . --fix && prettier --config .prettierrc.json --write  **/*.js **/*.md"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.18.0",
