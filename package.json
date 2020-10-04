@@ -4,10 +4,10 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ juanmardefago/yearn-dev",
-    "create-local": "graph create --node http://localhost:8020/ juanmardefago/yearn-dev",
-    "remove-local": "graph remove --node http://localhost:8020/ juanmardefago/yearn-dev",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 juanmardefago/yearn-dev",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ iearn-finance/yearn-finance",
+    "create-local": "graph create --node http://localhost:8020/ iearn-finance/yearn-finance",
+    "remove-local": "graph remove --node http://localhost:8020/ iearn-finance/yearn-finance",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 iearn-finance/yearn-finance",
     "lint:check": "eslint src --rulesdir . && prettier --check **/*.json *.md",
     "lint:fix": "eslint src --rulesdir . --fix && prettier --check **/*.json **/*.md --config .prettierrc.json --write"
   },
