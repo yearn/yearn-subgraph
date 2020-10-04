@@ -138,9 +138,11 @@ export function getOrCreateVaultTransfer(
   id: String,
   createIfNotFound: boolean = true,
 ): Transfer {
+  // @ts-ignore: assign wrapper object to primitive
   let action = Transfer.load(id);
 
   if (action == null && createIfNotFound) {
+    // @ts-ignore: assign wrapper object to primitive
     action = new Transfer(id);
   }
 
@@ -151,9 +153,11 @@ export function getOrCreateVaultDeposit(
   id: String,
   createIfNotFound: boolean = true,
 ): Deposit {
+  // @ts-ignore: assign wrapper object to primitive
   let action = Deposit.load(id);
 
   if (action == null && createIfNotFound) {
+    // @ts-ignore: assign wrapper object to primitive
     action = new Deposit(id);
   }
 
@@ -164,9 +168,11 @@ export function getOrCreateVaultWithdrawal(
   id: String,
   createIfNotFound: boolean = true,
 ): Withdrawal {
+  // @ts-ignore: assign wrapper object to primitive
   let action = Withdrawal.load(id);
 
   if (action == null && createIfNotFound) {
+    // @ts-ignore: assign wrapper object to primitive
     action = new Withdrawal(id);
   }
 
@@ -177,9 +183,11 @@ export function getOrCreateHarvest(
   id: String,
   createIfNotFound: boolean = true,
 ): Harvest {
+  // @ts-ignore: assign wrapper object to primitive
   let action = Harvest.load(id);
 
   if (action == null && createIfNotFound) {
+    // @ts-ignore: assign wrapper object to primitive
     action = new Harvest(id);
   }
 
@@ -224,9 +232,11 @@ export function getOrCreateTransaction(
   id: String,
   createIfNotFound: boolean = true,
 ): Transaction {
+  // @ts-ignore: assign wrapper object to primitive
   let transaction = Transaction.load(id);
 
   if (transaction == null && createIfNotFound) {
+    // @ts-ignore: assign wrapper object to primitive
     transaction = new Transaction(id);
   }
 

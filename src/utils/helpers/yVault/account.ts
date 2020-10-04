@@ -5,9 +5,11 @@ export function getOrCreateAccount(
   id: String,
   createIfNotFound: boolean = true,
 ): Account {
+  // @ts-ignore: assign wrapper object to primitive
   let account = Account.load(id);
 
   if (account == null && createIfNotFound) {
+    // @ts-ignore: assign wrapper object to primitive
     account = new Account(id);
   }
 
@@ -18,9 +20,11 @@ export function getOrCreateAccountVaultBalance(
   id: String,
   createIfNotFound: boolean = true,
 ): AccountVaultBalance {
+  // @ts-ignore: assign wrapper object to primitive
   let balance = AccountVaultBalance.load(id);
 
   if (balance == null && createIfNotFound) {
+    // @ts-ignore: assign wrapper object to primitive
     balance = new AccountVaultBalance(id);
 
     // Initiallize all decimal parsed values as BigDecimal 0
