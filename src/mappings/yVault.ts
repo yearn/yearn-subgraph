@@ -27,6 +27,7 @@ function handleDeposit(
   let deposit = getOrCreateVaultDeposit(transactionId);
 
   deposit.vault = vault.id;
+  // @ts-ignore: assign wrapper object to primitive
   deposit.account = accountId;
   deposit.amount = amount;
   deposit.shares = event.params.value;
@@ -49,6 +50,7 @@ function handleWithdrawal(
   let withdraw = getOrCreateVaultWithdrawal(transactionId);
 
   withdraw.vault = vault.id;
+  // @ts-ignore: assign wrapper object to primitive
   withdraw.account = accountId;
   withdraw.amount = amount;
   withdraw.shares = event.params.value;
@@ -72,7 +74,9 @@ function handleTransfer(
   let transfer = getOrCreateVaultTransfer(transactionId);
 
   transfer.vault = vault.id;
+  // @ts-ignore: assign wrapper object to primitive
   transfer.from = fromId;
+  // @ts-ignore: assign wrapper object to primitive
   transfer.to = toId;
   transfer.value = event.params.value;
   transfer.amount = amount;
