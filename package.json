@@ -1,5 +1,5 @@
 {
-  "name": "subgraph-y",
+  "name": "yearn-subgraph",
   "license": "MIT",
   "scripts": {
     "codegen": "graph codegen",
