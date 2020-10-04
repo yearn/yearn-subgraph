@@ -1,9 +1,9 @@
-import { Account, AccountVaultBalance } from "../../../../generated/schema";
-import { BIGINT_ZERO, BIGDECIMAL_ZERO } from "../../constants";
+import { Account, AccountVaultBalance } from '../../../../generated/schema';
+import { BIGDECIMAL_ZERO, BIGINT_ZERO } from '../../constants';
 
 export function getOrCreateAccount(
   id: String,
-  createIfNotFound: boolean = true
+  createIfNotFound: boolean = true,
 ): Account {
   let account = Account.load(id);
 
@@ -16,7 +16,7 @@ export function getOrCreateAccount(
 
 export function getOrCreateAccountVaultBalance(
   id: String,
-  createIfNotFound: boolean = true
+  createIfNotFound: boolean = true,
 ): AccountVaultBalance {
   let balance = AccountVaultBalance.load(id);
 

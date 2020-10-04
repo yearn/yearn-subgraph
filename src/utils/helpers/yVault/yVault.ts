@@ -1,26 +1,24 @@
-import {
-  Vault,
-  Deposit,
-  Withdrawal,
-  Transfer,
-  Controller,
-  Strategy,
-  Harvest,
-  Transaction
-} from "../../../../generated/schema";
-import { V1Contract } from "../../../../generated/yBUSDVault/V1Contract";
-import { Controller as ControllerContract } from "../../../../generated/yBUSDVault/Controller";
-import { Strategy as StrategyContract } from "../../../../generated/yBUSDVault/Strategy";
-import { Strategy as StrategyABI } from "../../../../generated/templates";
-import { Address, log } from "@graphprotocol/graph-ts";
-import { getOrCreateToken } from "./token";
-import { BIGINT_ZERO, BIGDECIMAL_ZERO } from "../../constants";
-import { toDecimal } from "../../decimals";
+import { Address, log } from '@graphprotocol/graph-ts';
 
-export function getOrCreateVault(
-  vaultAddress: Address,
-  update: boolean = true
-): Vault {
+import {
+  Controller,
+  Deposit,
+  Harvest,
+  Strategy,
+  Transaction,
+  Transfer,
+  Vault,
+  Withdrawal,
+} from '../../../../generated/schema';
+import { Strategy as StrategyABI } from '../../../../generated/templates';
+import { Controller as ControllerContract } from '../../../../generated/yBUSDVault/Controller';
+import { Strategy as StrategyContract } from '../../../../generated/yBUSDVault/Strategy';
+import { V1Contract } from '../../../../generated/yBUSDVault/V1Contract';
+import { BIGDECIMAL_ZERO, BIGINT_ZERO } from '../../constants';
+import { toDecimal } from '../../decimals';
+import { getOrCreateToken } from './token';
+
+export function getOrCreateVault(vaultAddress: Address, update: boolean = true): Vault {
   let vault = Vault.load(vaultAddress.toHexString());
   let vaultContract = V1Contract.bind(vaultAddress);
 
@@ -69,18 +67,14 @@ export function getOrCreateVault(
     let totalSupply = vaultContract.try_totalSupply();
     let available = vaultContract.try_available();
 
-    vault.vaultBalanceRaw = !balance.reverted
-      ? balance.value
-      : vault.vaultBalanceRaw;
+    vault.vaultBalanceRaw = !balance.reverted ? balance.value : vault.vaultBalanceRaw;
     vault.pricePerFullShareRaw = !pricePerFullShare.reverted
       ? pricePerFullShare.value
       : vault.pricePerFullShareRaw;
     vault.totalSupplyRaw = !totalSupply.reverted
       ? totalSupply.value
       : vault.totalSupplyRaw;
-    vault.availableRaw = !available.reverted
-      ? available.value
-      : vault.availableRaw;
+    vault.availableRaw = !available.reverted ? available.value : vault.availableRaw;
     vault.underlyingToken = underlyingToken.id;
     vault.shareToken = shareToken.id;
 
@@ -96,9 +90,7 @@ export function getOrCreateVault(
       controller.save();
 
       vault.currentController = controller.id;
-      controllerContract = ControllerContract.bind(
-        controllerAddress.value as Address
-      );
+      controllerContract = ControllerContract.bind(controllerAddress.value as Address);
     } else {
       let wrappedVaultAddress = vaultContract.try_vault();
       if (!wrappedVaultAddress.reverted) {
@@ -108,12 +100,12 @@ export function getOrCreateVault(
         vault.currentController = wrappedVault.currentController;
 
         controllerContract = ControllerContract.bind(
-          Address.fromString(wrappedVault.currentController)
+          Address.fromString(wrappedVault.currentController),
         );
       } else {
         log.critical(
           "Vault doesn't have a controller nor a wrapped vault. Vault ID: {}",
-          [vault.id]
+          [vault.id],
         );
       }
     }
@@ -131,18 +123,9 @@ export function getOrCreateVault(
       ? strategyBalance.value
       : vault.strategyBalanceRaw;
 
-    vault.strategyBalance = toDecimal(
-      vault.strategyBalanceRaw,
-      underlyingToken.decimals
-    );
-    vault.vaultBalance = toDecimal(
-      vault.vaultBalanceRaw,
-      underlyingToken.decimals
-    );
-    vault.totalSupply = toDecimal(
-      vault.totalSupplyRaw,
-      underlyingToken.decimals
-    );
+    vault.strategyBalance = toDecimal(vault.strategyBalanceRaw, underlyingToken.decimals);
+    vault.vaultBalance = toDecimal(vault.vaultBalanceRaw, underlyingToken.decimals);
+    vault.totalSupply = toDecimal(vault.totalSupplyRaw, underlyingToken.decimals);
     // Uses the default decimals since it's a floating point representation
     vault.pricePerFullShare = toDecimal(vault.pricePerFullShareRaw);
     vault.available = toDecimal(vault.availableRaw, underlyingToken.decimals);
@@ -153,7 +136,7 @@ export function getOrCreateVault(
 
 export function getOrCreateVaultTransfer(
   id: String,
-  createIfNotFound: boolean = true
+  createIfNotFound: boolean = true,
 ): Transfer {
   let action = Transfer.load(id);
 
@@ -166,7 +149,7 @@ export function getOrCreateVaultTransfer(
 
 export function getOrCreateVaultDeposit(
   id: String,
-  createIfNotFound: boolean = true
+  createIfNotFound: boolean = true,
 ): Deposit {
   let action = Deposit.load(id);
 
@@ -179,7 +162,7 @@ export function getOrCreateVaultDeposit(
 
 export function getOrCreateVaultWithdrawal(
   id: String,
-  createIfNotFound: boolean = true
+  createIfNotFound: boolean = true,
 ): Withdrawal {
   let action = Withdrawal.load(id);
 
@@ -192,7 +175,7 @@ export function getOrCreateVaultWithdrawal(
 
 export function getOrCreateHarvest(
   id: String,
-  createIfNotFound: boolean = true
+  createIfNotFound: boolean = true,
 ): Harvest {
   let action = Harvest.load(id);
 
@@ -205,7 +188,7 @@ export function getOrCreateHarvest(
 
 export function getOrCreateController(
   address: Address,
-  createIfNotFound: boolean = true
+  createIfNotFound: boolean = true,
 ): Controller {
   let id = address.toHexString();
   let controller = Controller.load(id);
@@ -219,7 +202,7 @@ export function getOrCreateController(
 
 export function getOrCreateStrategy(
   address: Address,
-  createIfNotFound: boolean = true
+  createIfNotFound: boolean = true,
 ): Strategy {
   let id = address.toHexString();
   let strategy = Strategy.load(id);
@@ -230,7 +213,7 @@ export function getOrCreateStrategy(
     strategy.totalEarnings = BIGDECIMAL_ZERO;
     strategy.totalEarningsRaw = BIGINT_ZERO;
 
-    //dynamically index strategies
+    // dynamically index strategies
     StrategyABI.create(address);
   }
 
@@ -239,7 +222,7 @@ export function getOrCreateStrategy(
 
 export function getOrCreateTransaction(
   id: String,
-  createIfNotFound: boolean = true
+  createIfNotFound: boolean = true,
 ): Transaction {
   let transaction = Transaction.load(id);
 
