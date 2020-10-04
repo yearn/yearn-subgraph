@@ -1,6 +1,8 @@
 [
   {
-    "inputs": [{ "internalType": "address", "name": "_rewards", "type": "address" }],
+    "inputs": [
+      { "internalType": "address", "name": "_rewards", "type": "address" }
+    ],
     "payable": false,
     "stateMutability": "nonpayable",
     "type": "constructor"
@@ -31,7 +33,9 @@
   },
   {
     "constant": true,
-    "inputs": [{ "internalType": "address", "name": "_token", "type": "address" }],
+    "inputs": [
+      { "internalType": "address", "name": "_token", "type": "address" }
+    ],
     "name": "balanceOf",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "payable": false,
@@ -70,7 +74,9 @@
       { "internalType": "uint256", "name": "parts", "type": "uint256" }
     ],
     "name": "getExpectedReturn",
-    "outputs": [{ "internalType": "uint256", "name": "expected", "type": "uint256" }],
+    "outputs": [
+      { "internalType": "uint256", "name": "expected", "type": "uint256" }
+    ],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -162,7 +168,9 @@
   },
   {
     "constant": false,
-    "inputs": [{ "internalType": "address", "name": "_governance", "type": "address" }],
+    "inputs": [
+      { "internalType": "address", "name": "_governance", "type": "address" }
+    ],
     "name": "setGovernance",
     "outputs": [],
     "payable": false,
@@ -171,7 +179,9 @@
   },
   {
     "constant": false,
-    "inputs": [{ "internalType": "address", "name": "_onesplit", "type": "address" }],
+    "inputs": [
+      { "internalType": "address", "name": "_onesplit", "type": "address" }
+    ],
     "name": "setOneSplit",
     "outputs": [],
     "payable": false,
@@ -180,7 +190,9 @@
   },
   {
     "constant": false,
-    "inputs": [{ "internalType": "address", "name": "_rewards", "type": "address" }],
+    "inputs": [
+      { "internalType": "address", "name": "_rewards", "type": "address" }
+    ],
     "name": "setRewards",
     "outputs": [],
     "payable": false,
@@ -189,7 +201,9 @@
   },
   {
     "constant": false,
-    "inputs": [{ "internalType": "uint256", "name": "_split", "type": "uint256" }],
+    "inputs": [
+      { "internalType": "uint256", "name": "_split", "type": "uint256" }
+    ],
     "name": "setSplit",
     "outputs": [],
     "payable": false,
@@ -198,7 +212,9 @@
   },
   {
     "constant": false,
-    "inputs": [{ "internalType": "address", "name": "_strategist", "type": "address" }],
+    "inputs": [
+      { "internalType": "address", "name": "_strategist", "type": "address" }
+    ],
     "name": "setStrategist",
     "outputs": [],
     "payable": false,
@@ -279,7 +295,9 @@
   },
   {
     "constant": false,
-    "inputs": [{ "internalType": "address", "name": "_token", "type": "address" }],
+    "inputs": [
+      { "internalType": "address", "name": "_token", "type": "address" }
+    ],
     "name": "withdrawAll",
     "outputs": [],
     "payable": false,

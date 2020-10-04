@@ -1,21 +1,20 @@
-import { Address } from '@graphprotocol/graph-ts';
-
-import { HarvestCall } from '../../generated/yUSDVault/V1Contract';
-import { BIGINT_ONE, ZERO_ADDRESS } from '../utils/constants';
-import { toDecimal } from '../utils/decimals';
+import { HarvestCall } from "../../generated/yUSDVault/V1Contract";
+import { Address } from "@graphprotocol/graph-ts";
 import {
-  getOrCreateHarvest,
-  getOrCreateStrategy,
-  getOrCreateToken,
-  getOrCreateTransaction,
   getOrCreateVault,
-} from '../utils/helpers';
+  getOrCreateStrategy,
+  getOrCreateHarvest,
+  getOrCreateToken,
+  getOrCreateTransaction
+} from "../utils/helpers";
+import { ZERO_ADDRESS, BIGINT_ONE } from "../utils/constants";
+import { toDecimal } from "../utils/decimals";
 
 export function handleHarvest(call: HarvestCall): void {
   let strategy = getOrCreateStrategy(call.to);
   let transactionId = call.to
     .toHexString()
-    .concat('-')
+    .concat("-")
     .concat(call.transaction.hash.toHexString());
   let harvest = getOrCreateHarvest(transactionId);
   let vaultAddress = Address.fromString(strategy.vault);
@@ -27,7 +26,7 @@ export function handleHarvest(call: HarvestCall): void {
 
   let underlyingToken = getOrCreateToken(Address.fromString(vaultBefore.underlyingToken));
 
-  let transaction = getOrCreateTransaction(call.transaction.hash.toHexString());
+  let transaction = getOrCreateTransaction(call.transaction.hash.toHexString())
   transaction.blockNumber = call.block.number;
   transaction.timestamp = call.block.timestamp;
   transaction.transactionHash = call.transaction.hash;
@@ -55,10 +54,7 @@ export function handleHarvest(call: HarvestCall): void {
   harvest.earnings = toDecimal(earningsRaw, underlyingToken.decimals);
 
   vaultAfter.totalEarningsRaw = vaultAfter.totalEarningsRaw + earningsRaw;
-  vaultAfter.totalEarnings = toDecimal(
-    vaultAfter.totalEarningsRaw,
-    underlyingToken.decimals,
-  );
+  vaultAfter.totalEarnings = toDecimal(vaultAfter.totalEarningsRaw, underlyingToken.decimals);
   vaultAfter.totalHarvestCalls = vaultAfter.totalHarvestCalls + BIGINT_ONE;
 
   strategy.totalEarningsRaw = strategy.totalEarningsRaw + earningsRaw;
