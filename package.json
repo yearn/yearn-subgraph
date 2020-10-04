@@ -7,10 +7,28 @@
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ juanmardefago/yearn-dev",
     "create-local": "graph create --node http://localhost:8020/ juanmardefago/yearn-dev",
     "remove-local": "graph remove --node http://localhost:8020/ juanmardefago/yearn-dev",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 juanmardefago/yearn-dev"
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 juanmardefago/yearn-dev",
+    "lint:check": "eslint src --rulesdir . && prettier --check **/*.json *.md",
+    "lint:fix": "eslint src --rulesdir . --fix && prettier --check **/*.json **/*.md --config .prettierrc.json --write"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.18.0",
     "@graphprotocol/graph-ts": "0.18.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.3.0",
+    "@typescript-eslint/parser": "^4.3.0",
+    "eslint": "^7.10.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-simple-import-sort": "^5.0.3",
+    "husky": "^4.3.0",
+    "prettier": "^2.1.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint:fix"
+    }
   }
 }
