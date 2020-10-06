@@ -1,7 +1,7 @@
 import { Address } from '@graphprotocol/graph-ts';
 
 import { HarvestCall } from '../../generated/yUSDVault/V1Contract';
-import { BIGINT_ONE, ZERO_ADDRESS } from '../utils/constants';
+import { BIGINT_ONE } from '../utils/constants';
 import { toDecimal } from '../utils/decimals';
 import {
   getOrCreateHarvest,

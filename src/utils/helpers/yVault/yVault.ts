@@ -18,6 +18,115 @@ import { BIGDECIMAL_ZERO, BIGINT_ZERO } from '../../constants';
 import { toDecimal } from '../../decimals';
 import { getOrCreateToken } from './token';
 
+export function getOrCreateVaultTransfer(
+  id: String,
+  createIfNotFound: boolean = true,
+): Transfer {
+  // @ts-ignore: assign wrapper object to primitive
+  let action = Transfer.load(id);
+
+  if (action == null && createIfNotFound) {
+    // @ts-ignore: assign wrapper object to primitive
+    action = new Transfer(id);
+  }
+
+  return action as Transfer;
+}
+
+export function getOrCreateVaultDeposit(
+  id: String,
+  createIfNotFound: boolean = true,
+): Deposit {
+  // @ts-ignore: assign wrapper object to primitive
+  let action = Deposit.load(id);
+
+  if (action == null && createIfNotFound) {
+    // @ts-ignore: assign wrapper object to primitive
+    action = new Deposit(id);
+  }
+
+  return action as Deposit;
+}
+
+export function getOrCreateVaultWithdrawal(
+  id: String,
+  createIfNotFound: boolean = true,
+): Withdrawal {
+  // @ts-ignore: assign wrapper object to primitive
+  let action = Withdrawal.load(id);
+
+  if (action == null && createIfNotFound) {
+    // @ts-ignore: assign wrapper object to primitive
+    action = new Withdrawal(id);
+  }
+
+  return action as Withdrawal;
+}
+
+export function getOrCreateHarvest(
+  id: String,
+  createIfNotFound: boolean = true,
+): Harvest {
+  // @ts-ignore: assign wrapper object to primitive
+  let action = Harvest.load(id);
+
+  if (action == null && createIfNotFound) {
+    // @ts-ignore: assign wrapper object to primitive
+    action = new Harvest(id);
+  }
+
+  return action as Harvest;
+}
+
+export function getOrCreateController(
+  address: Address,
+  createIfNotFound: boolean = true,
+): Controller {
+  let id = address.toHexString();
+  let controller = Controller.load(id);
+
+  if (controller == null && createIfNotFound) {
+    controller = new Controller(id);
+  }
+
+  return controller as Controller;
+}
+
+export function getOrCreateStrategy(
+  address: Address,
+  createIfNotFound: boolean = true,
+): Strategy {
+  let id = address.toHexString();
+  let strategy = Strategy.load(id);
+
+  if (strategy == null && createIfNotFound) {
+    strategy = new Strategy(id);
+
+    strategy.totalEarnings = BIGDECIMAL_ZERO;
+    strategy.totalEarningsRaw = BIGINT_ZERO;
+
+    // dynamically index strategies
+    StrategyABI.create(address);
+  }
+
+  return strategy as Strategy;
+}
+
+export function getOrCreateTransaction(
+  id: String,
+  createIfNotFound: boolean = true,
+): Transaction {
+  // @ts-ignore: assign wrapper object to primitive
+  let transaction = Transaction.load(id);
+
+  if (transaction == null && createIfNotFound) {
+    // @ts-ignore: assign wrapper object to primitive
+    transaction = new Transaction(id);
+  }
+
+  return transaction as Transaction;
+}
+
 export function getOrCreateVault(vaultAddress: Address, update: boolean = true): Vault {
   let vault = Vault.load(vaultAddress.toHexString());
   let vaultContract = V1Contract.bind(vaultAddress);
@@ -132,113 +241,4 @@ export function getOrCreateVault(vaultAddress: Address, update: boolean = true):
   }
 
   return vault as Vault;
-}
-
-export function getOrCreateVaultTransfer(
-  id: String,
-  createIfNotFound: boolean = true,
-): Transfer {
-  // @ts-ignore: assign wrapper object to primitive
-  let action = Transfer.load(id);
-
-  if (action == null && createIfNotFound) {
-    // @ts-ignore: assign wrapper object to primitive
-    action = new Transfer(id);
-  }
-
-  return action as Transfer;
-}
-
-export function getOrCreateVaultDeposit(
-  id: String,
-  createIfNotFound: boolean = true,
-): Deposit {
-  // @ts-ignore: assign wrapper object to primitive
-  let action = Deposit.load(id);
-
-  if (action == null && createIfNotFound) {
-    // @ts-ignore: assign wrapper object to primitive
-    action = new Deposit(id);
-  }
-
-  return action as Deposit;
-}
-
-export function getOrCreateVaultWithdrawal(
-  id: String,
-  createIfNotFound: boolean = true,
-): Withdrawal {
-  // @ts-ignore: assign wrapper object to primitive
-  let action = Withdrawal.load(id);
-
-  if (action == null && createIfNotFound) {
-    // @ts-ignore: assign wrapper object to primitive
-    action = new Withdrawal(id);
-  }
-
-  return action as Withdrawal;
-}
-
-export function getOrCreateHarvest(
-  id: String,
-  createIfNotFound: boolean = true,
-): Harvest {
-  // @ts-ignore: assign wrapper object to primitive
-  let action = Harvest.load(id);
-
-  if (action == null && createIfNotFound) {
-    // @ts-ignore: assign wrapper object to primitive
-    action = new Harvest(id);
-  }
-
-  return action as Harvest;
-}
-
-export function getOrCreateController(
-  address: Address,
-  createIfNotFound: boolean = true,
-): Controller {
-  let id = address.toHexString();
-  let controller = Controller.load(id);
-
-  if (controller == null && createIfNotFound) {
-    controller = new Controller(id);
-  }
-
-  return controller as Controller;
-}
-
-export function getOrCreateStrategy(
-  address: Address,
-  createIfNotFound: boolean = true,
-): Strategy {
-  let id = address.toHexString();
-  let strategy = Strategy.load(id);
-
-  if (strategy == null && createIfNotFound) {
-    strategy = new Strategy(id);
-
-    strategy.totalEarnings = BIGDECIMAL_ZERO;
-    strategy.totalEarningsRaw = BIGINT_ZERO;
-
-    // dynamically index strategies
-    StrategyABI.create(address);
-  }
-
-  return strategy as Strategy;
-}
-
-export function getOrCreateTransaction(
-  id: String,
-  createIfNotFound: boolean = true,
-): Transaction {
-  // @ts-ignore: assign wrapper object to primitive
-  let transaction = Transaction.load(id);
-
-  if (transaction == null && createIfNotFound) {
-    // @ts-ignore: assign wrapper object to primitive
-    transaction = new Transaction(id);
-  }
-
-  return transaction as Transaction;
 }
