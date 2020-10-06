@@ -50,18 +50,18 @@ export function handleHarvest(call: HarvestCall): void {
   harvest.strategyBalanceBeforeRaw = vaultBefore.strategyBalanceRaw;
   harvest.strategyBalanceAfterRaw = vaultAfter.strategyBalanceRaw;
 
-  let earningsRaw = harvest.vaultBalanceAfterRaw - harvest.vaultBalanceBeforeRaw;
+  let earningsRaw = harvest.vaultBalanceAfterRaw.minus(harvest.vaultBalanceBeforeRaw);
   harvest.earningsRaw = earningsRaw;
   harvest.earnings = toDecimal(earningsRaw, underlyingToken.decimals);
 
-  vaultAfter.totalEarningsRaw = vaultAfter.totalEarningsRaw + earningsRaw;
+  vaultAfter.totalEarningsRaw = vaultAfter.totalEarningsRaw.plus(earningsRaw);
   vaultAfter.totalEarnings = toDecimal(
     vaultAfter.totalEarningsRaw,
     underlyingToken.decimals,
   );
-  vaultAfter.totalHarvestCalls = vaultAfter.totalHarvestCalls + BIGINT_ONE;
+  vaultAfter.totalHarvestCalls = vaultAfter.totalHarvestCalls.plus(BIGINT_ONE);
 
-  strategy.totalEarningsRaw = strategy.totalEarningsRaw + earningsRaw;
+  strategy.totalEarningsRaw = strategy.totalEarningsRaw.plus(earningsRaw);
   strategy.totalEarnings = toDecimal(strategy.totalEarningsRaw, underlyingToken.decimals);
 
   vaultAfter.save();
