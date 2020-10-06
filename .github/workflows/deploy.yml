@@ -1,7 +1,7 @@
-name: Build
+name: Deploy
 
 on:
-  pull_request:
+  push:
     branches:
       - master
 
@@ -65,3 +65,4 @@ jobs:
           run: |
             yarn codegen
             yarn build
+            yarn deploy
