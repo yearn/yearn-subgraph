@@ -129,7 +129,7 @@ type Transfer @entity {
   transaction: Transaction!
 }
 
-type Deposit @entity {
+interface Action @entity {
   id: ID!
   vault: Vault!
   account: Account!
@@ -142,7 +142,20 @@ type Deposit @entity {
   transaction: Transaction!
 }
 
-type Withdrawal @entity {
+type Deposit implements Action @entity {
+  id: ID!
+  vault: Vault!
+  account: Account!
+  amount: BigInt!
+  shares: BigInt!
+  pricePerFullShare: BigInt!
+  vaultBalance: BigInt!
+  totalSupply: BigInt!
+  available: BigInt!
+  transaction: Transaction!
+}
+
+type Withdrawal implements Action @entity {
   id: ID!
   vault: Vault!
   account: Account!
