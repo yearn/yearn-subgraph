@@ -2,21 +2,13 @@ type Vault @entity {
   id: ID!
   "Amount of underlying token that a full share of <yToken> represents"
   pricePerFullShare: BigDecimal!
-  pricePerFullShareRaw: BigInt!
   totalSupply: BigDecimal!
-  totalSupplyRaw: BigInt!
   "Balance of the Vault contract of underlying Token + balance of the Strategy contract of underlying Token"
   vaultBalance: BigDecimal!
   "Balance of underlying Token specifically held in the strategy"
   strategyBalance: BigDecimal!
   "How much the vault allows to be borrowed"
   available: BigDecimal!
-  "Balance of the Vault contract of underlying Token + balance of the Strategy contract of underlying Token"
-  vaultBalanceRaw: BigInt!
-  "Balance of underlying Token specifically held in the strategy"
-  strategyBalanceRaw: BigInt!
-  "How much the vault allows to be borrowed"
-  availableRaw: BigInt!
   "Token accepted as deposit on the Vault"
   underlyingToken: Token!
   "yToken minted as shares by the Vault"
@@ -33,13 +25,21 @@ type Vault @entity {
   totalActiveShares: BigDecimal!
   totalSharesMinted: BigDecimal!
   totalSharesBurned: BigDecimal!
+  totalEarnings: BigDecimal!
+  pricePerFullShareRaw: BigInt!
+  totalSupplyRaw: BigInt!
+  "Balance of the Vault contract of underlying Token + balance of the Strategy contract of underlying Token"
+  vaultBalanceRaw: BigInt!
+  "Balance of underlying Token specifically held in the strategy"
+  strategyBalanceRaw: BigInt!
+  "How much the vault allows to be borrowed"
+  availableRaw: BigInt!
   netDepositsRaw: BigInt!
   totalDepositedRaw: BigInt!
   totalWithdrawnRaw: BigInt!
   totalActiveSharesRaw: BigInt!
   totalSharesMintedRaw: BigInt!
   totalSharesBurnedRaw: BigInt!
-  totalEarnings: BigDecimal!
   totalEarningsRaw: BigInt!
   totalHarvestCalls: BigInt!
   transfers: [Transfer!]! @derivedFrom(field: "vault")
@@ -175,17 +175,17 @@ type Harvest @entity {
   caller: Bytes!
   pricePerFullShareBefore: BigDecimal!
   pricePerFullShareAfter: BigDecimal!
-  pricePerFullShareBeforeRaw: BigInt!
-  pricePerFullShareAfterRaw: BigInt!
   vaultBalanceBefore: BigDecimal!
   vaultBalanceAfter: BigDecimal!
   strategyBalanceBefore: BigDecimal!
   strategyBalanceAfter: BigDecimal!
+  earnings: BigDecimal!
+  pricePerFullShareBeforeRaw: BigInt!
+  pricePerFullShareAfterRaw: BigInt!
   vaultBalanceBeforeRaw: BigInt!
   vaultBalanceAfterRaw: BigInt!
   strategyBalanceBeforeRaw: BigInt!
   strategyBalanceAfterRaw: BigInt!
-  earnings: BigDecimal!
   earningsRaw: BigInt!
   transaction: Transaction!
 }
@@ -212,12 +212,13 @@ type Transaction @entity {
   id: ID!
   timestamp: BigInt!
   blockNumber: BigInt!
-  "Duplicated field to allow for byte search with transactionHash_contains"
+  # duplicated field to allow for byte search with transactionHash_contains
   transactionHash: Bytes!
   deposits: [Deposit!]! @derivedFrom(field: "transaction")
   withdrawals: [Withdrawal!]! @derivedFrom(field: "transaction")
   transfers: [Transfer!]! @derivedFrom(field: "transaction")
   harvests: [Harvest!]! @derivedFrom(field: "transaction")
+  # TODO: rename
   "List of Vaults that last updated on this transaction"
   vaultsUpdated: [Vault!]! @derivedFrom(field: "transaction")
 }
