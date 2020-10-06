@@ -6,7 +6,7 @@ on:
       - master
 
 env:
-  ACCESS_TOKEN:  ${{ secrets.ACCESS_TOKEN }}
+  ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
   GRAPH_PATH: ${{ secrets.GRAPH_PATH }}
 
 jobs:
@@ -61,7 +61,7 @@ jobs:
           run: yarn --frozen-lockfile
           if: steps.yarn-cache.outputs.cache-hit != 'true'
 
-        - name: Build graph
+        - name: Deploy graph
           run: |
             yarn codegen
             yarn build

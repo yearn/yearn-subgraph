@@ -6,7 +6,7 @@ on:
       - master
 
 env:
-  ACCESS_TOKEN:  ${{ secrets.ACCESS_TOKEN }}
+  ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
   GRAPH_PATH: ${{ secrets.GRAPH_PATH }}
 
 jobs:
