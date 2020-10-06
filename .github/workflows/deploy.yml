@@ -1,0 +1,68 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+  GRAPH_PATH: ${{ secrets.GRAPH_PATH }}
+
+jobs:
+
+  graph:
+      runs-on: ubuntu-latest
+
+      steps:
+
+        - name: Check ACCESS_TOKEN
+          run: |
+            if [ -z "$ACCESS_TOKEN" ] ; then
+              echo "Missing ENV variable ACCESS_TOKEN"
+              exit 1
+            fi
+
+        - name: Check GRAPH_PATH
+          run: |
+            if [ -z "$GRAPH_PATH" ] ; then
+              echo "Missing ENV variable GRAPH_PATH"
+              exit 1
+            fi
+
+        - name: Check out github repository
+          uses: actions/checkout@v2
+          with:
+            fetch-depth: 1
+
+        - name: Install node
+          uses: actions/setup-node@v1
+          with:
+            node-version: '12.x'
+
+        - name: Set yarn cache directory path
+          id: yarn-cache-dir-path
+          run: echo "::set-output name=dir::$(yarn cache dir)"
+
+        - name: Restore yarn cache
+          uses: actions/cache@v2
+          id: yarn-cache
+          with:
+            # mind node_modules backup
+            path: |
+              **/node_modules
+              ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+            restore-keys: |
+              ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+              ${{ runner.os }}-yarn-
+
+        - name: Install dependencies
+          run: yarn --frozen-lockfile
+          if: steps.yarn-cache.outputs.cache-hit != 'true'
+
+        - name: Deploy graph
+          run: |
+            yarn codegen
+            yarn build
+            yarn deploy

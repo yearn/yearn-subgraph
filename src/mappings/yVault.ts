@@ -1,14 +1,12 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts';
 
 import { Vault } from '../../generated/schema';
-import { Transfer, V1Contract } from '../../generated/yUSDVault/V1Contract';
+import { Transfer } from '../../generated/yUSDVault/V1Contract';
 import { BIGINT_ZERO, ZERO_ADDRESS } from '../utils/constants';
 import { toDecimal } from '../utils/decimals';
 import {
   getOrCreateAccount,
   getOrCreateAccountVaultBalance,
-  getOrCreateController,
-  getOrCreateStrategy,
   getOrCreateToken,
   getOrCreateTransaction,
   getOrCreateVault,
@@ -98,7 +96,7 @@ export function handleShareTransfer(event: Transfer): void {
     .concat(event.logIndex.toString());
 
   let vault = getOrCreateVault(event.address);
-  let vaultContract = V1Contract.bind(event.address);
+  // let vaultContract = V1Contract.bind(event.address);
   let fromAccount = getOrCreateAccount(event.params.from.toHexString());
   let toAccount = getOrCreateAccount(event.params.to.toHexString());
   let underlyingToken = getOrCreateToken(Address.fromString(vault.underlyingToken));
