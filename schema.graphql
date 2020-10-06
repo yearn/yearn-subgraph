@@ -1,341 +1,210 @@
 type Vault @entity {
   id: ID!
-
   "Amount of underlying token that a full share of <yToken> represents"
   pricePerFullShare: BigDecimal!
-
   pricePerFullShareRaw: BigInt!
-
   totalSupply: BigDecimal!
-
   totalSupplyRaw: BigInt!
-
   "Balance of the Vault contract of underlying Token + balance of the Strategy contract of underlying Token"
   vaultBalance: BigDecimal!
-
   "Balance of underlying Token specifically held in the strategy"
   strategyBalance: BigDecimal!
-
   "How much the vault allows to be borrowed"
   available: BigDecimal!
-
   "Balance of the Vault contract of underlying Token + balance of the Strategy contract of underlying Token"
   vaultBalanceRaw: BigInt!
-
   "Balance of underlying Token specifically held in the strategy"
   strategyBalanceRaw: BigInt!
-
   "How much the vault allows to be borrowed"
   availableRaw: BigInt!
-
   "Token accepted as deposit on the Vault"
   underlyingToken: Token!
-
   "yToken minted as shares by the Vault"
   shareToken: Token!
-
   currentController: Controller!
-
   currentStrategy: Strategy!
-
   "Transaction metadata for the last update"
   transaction: Transaction!
-
   "totalDeposited - totalWithdrawn. Considers all deposits of underlying made by external accounts"
   netDeposits: BigDecimal!
-
   totalDeposited: BigDecimal!
-
   totalWithdrawn: BigDecimal!
-
   "totalSharesMinted - totalSharesBurned"
   totalActiveShares: BigDecimal!
-
   totalSharesMinted: BigDecimal!
-
   totalSharesBurned: BigDecimal!
-
   netDepositsRaw: BigInt!
-
   totalDepositedRaw: BigInt!
-
   totalWithdrawnRaw: BigInt!
-
   totalActiveSharesRaw: BigInt!
-
   totalSharesMintedRaw: BigInt!
-
   totalSharesBurnedRaw: BigInt!
-
   totalEarnings: BigDecimal!
-
   totalEarningsRaw: BigInt!
-
   totalHarvestCalls: BigInt!
-
   transfers: [Transfer!]! @derivedFrom(field: "vault")
-
   deposits: [Deposit!]! @derivedFrom(field: "vault")
-
   withdrawals: [Withdrawal!]! @derivedFrom(field: "vault")
-
   harvests: [Harvest!]! @derivedFrom(field: "vault")
-
   balances: [AccountVaultBalance!]! @derivedFrom(field: "vault")
-
   strategies: [Strategy!]! @derivedFrom(field: "vault")
-
   controllers: [Controller!]! @derivedFrom(field: "vault")
 }
 
 type Account @entity {
   "Ethereum address of the user"
   id: ID!
-
   vaultBalances: [AccountVaultBalance!]! @derivedFrom(field: "account")
-
   "Deposits that are related to this account"
   deposits: [Deposit!]! @derivedFrom(field: "account")
-
   "Withdrawals that are related to this account"
   withdrawals: [Deposit!]! @derivedFrom(field: "account")
-
   "Transfers that are sent to this account"
   receivedTransfers: [Transfer!]! @derivedFrom(field: "to")
-
   "Transfers that are sent from this account"
   sentTransfers: [Transfer!]! @derivedFrom(field: "from")
 }
 
 type AccountVaultBalance @entity {
   id: ID!
-
   vault: Vault!
-
   account: Account!
-
   "Token used on deposits/withdrawals"
   underlyingToken: Token!
-
   "Token received as shares"
   shareToken: Token!
-
   "Net deposits of a given Account within a given Vault. Transfers between accounts are taken into consideration for this metric"
   netDeposits: BigDecimal!
-
   "Total tokens deposited by this Account in Vault"
   totalDeposited: BigDecimal!
-
   "Total tokens withdrawn by this Account in Vault"
   totalWithdrawn: BigDecimal!
-
   "Total tokens sent to another account by this Account in Vault"
   totalSent: BigDecimal!
-
   "Total tokens received from another account by this Account in Vault"
   totalReceived: BigDecimal!
-
   "Shares are the token minted by the Vault"
   shareBalance: BigDecimal!
-
   totalSharesMinted: BigDecimal!
-
   totalSharesBurned: BigDecimal!
-
   totalSharesSent: BigDecimal!
-
   totalSharesReceived: BigDecimal!
-
   "Net deposits of a given Account within a given Vault. Transfers between accounts are taken into consideration for this metric"
   netDepositsRaw: BigInt!
-
   "Total tokens deposited by this Account in Vault"
   totalDepositedRaw: BigInt!
-
   "Total tokens withdrawn by this Account in Vault"
   totalWithdrawnRaw: BigInt!
-
   "Total tokens sent to another account by this Account in Vault"
   totalSentRaw: BigInt!
-
   "Total tokens received from another account by this Account in Vault"
   totalReceivedRaw: BigInt!
-
   "Shares are the token minted by the Vault"
   shareBalanceRaw: BigInt!
-
   totalSharesMintedRaw: BigInt!
-
   totalSharesBurnedRaw: BigInt!
-
   totalSharesSentRaw: BigInt!
-
   totalSharesReceivedRaw: BigInt!
 }
 
 type Token @entity {
   id: ID!
-
   address: Bytes!
-
   decimals: Int!
-
   name: String!
-
   symbol: String!
 }
 
 type Transfer @entity {
   id: ID!
-
   from: Account!
-
   to: Account!
-
   value: BigInt!
-
   amount: BigInt!
-
   vault: Vault!
-
   pricePerFullShare: BigInt!
-
   vaultBalance: BigInt!
-
   totalSupply: BigInt!
-
   available: BigInt!
-
   transaction: Transaction!
 }
 
 type Deposit @entity {
   id: ID!
-
   vault: Vault!
-
   account: Account!
-
   amount: BigInt!
-
   shares: BigInt!
-
   pricePerFullShare: BigInt!
-
   vaultBalance: BigInt!
-
   totalSupply: BigInt!
-
   available: BigInt!
-
   transaction: Transaction!
 }
 
 type Withdrawal @entity {
   id: ID!
-
   vault: Vault!
-
   account: Account!
-
   amount: BigInt!
-
   shares: BigInt!
-
   pricePerFullShare: BigInt!
-
   vaultBalance: BigInt!
-
   totalSupply: BigInt!
-
   available: BigInt!
-
   transaction: Transaction!
 }
 
 type Harvest @entity {
   id: ID!
-
   vault: Vault!
-
   strategy: Strategy!
-
   caller: Bytes!
-
   pricePerFullShareBefore: BigDecimal!
-
   pricePerFullShareAfter: BigDecimal!
-
   pricePerFullShareBeforeRaw: BigInt!
-
   pricePerFullShareAfterRaw: BigInt!
-
   vaultBalanceBefore: BigDecimal!
-
   vaultBalanceAfter: BigDecimal!
-
   strategyBalanceBefore: BigDecimal!
-
   strategyBalanceAfter: BigDecimal!
-
   vaultBalanceBeforeRaw: BigInt!
-
   vaultBalanceAfterRaw: BigInt!
-
   strategyBalanceBeforeRaw: BigInt!
-
   strategyBalanceAfterRaw: BigInt!
-
   earnings: BigDecimal!
-
   earningsRaw: BigInt!
-
   transaction: Transaction!
 }
 
 type Strategy @entity {
   "Ethereum address"
   id: ID!
-
   vault: Vault!
-
   totalEarnings: BigDecimal!
-
   totalEarningsRaw: BigInt!
-
   harvests: [Harvest!]! @derivedFrom(field: "strategy")
-
   activeOnVaults: [Vault!] @derivedFrom(field: "currentStrategy")
 }
 
 type Controller @entity {
   "Ethereum address"
   id: ID!
-
   vault: Vault!
-
   activeOnVaults: [Vault!] @derivedFrom(field: "currentController")
 }
 
 type Transaction @entity {
   "ID = Transaction Hash"
   id: ID!
-
   timestamp: BigInt!
-
   blockNumber: BigInt!
-
   "Duplicated field to allow for byte search with transactionHash_contains"
   transactionHash: Bytes!
-
   deposits: [Deposit!]! @derivedFrom(field: "transaction")
-
   withdrawals: [Withdrawal!]! @derivedFrom(field: "transaction")
-
   transfers: [Transfer!]! @derivedFrom(field: "transaction")
-
   harvests: [Harvest!]! @derivedFrom(field: "transaction")
-
   "List of Vaults that last updated on this transaction"
   vaultsUpdated: [Vault!]! @derivedFrom(field: "transaction")
 }
