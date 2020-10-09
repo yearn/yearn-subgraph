@@ -18,7 +18,7 @@ type Vault @entity {
   currentStrategy: Strategy!
   "Transaction metadata for the last update"
   transaction: Transaction!
-  TODO:
+  # TODO:
   "balance: totalDeposited - totalWithdrawn: all deposits of underlying made by external accounts"
   netDeposits: BigDecimal!
   totalDeposited: BigDecimal!
@@ -31,13 +31,13 @@ type Vault @entity {
   # raw
   pricePerFullShareRaw: BigInt!
   totalSupplyRaw: BigInt!
-  TODO:
+  # TODO:
   "Balance of the Vault contract of underlying Token + balance of the Strategy contract of underlying Token"
   vaultBalanceRaw: BigInt!
-  TODO:
+  # TODO:
   "Balance of underlying Token specifically held in the strategy"
   strategyBalanceRaw: BigInt!
-  TODO:
+  # TODO:
   "How much the vault allows to be borrowed"
   availableRaw: BigInt!
   netDepositsRaw: BigInt!
