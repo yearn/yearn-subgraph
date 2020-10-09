@@ -1,37 +1,43 @@
 type Vault @entity {
   id: ID!
-  "Amount of underlying token that a full share of <yToken> represents"
+  "Amount of underlying token per 1 share"
   pricePerFullShare: BigDecimal!
+  "Total shares supply"
   totalSupply: BigDecimal!
-  "Balance of the Vault contract of underlying Token + balance of the Strategy contract of underlying Token"
+  "Full vault underlying token balance (vault + strategy)"
   vaultBalance: BigDecimal!
-  "Balance of underlying Token specifically held in the strategy"
+  "Strategy underlying token balance"
   strategyBalance: BigDecimal!
+  # TODO:
   "How much the vault allows to be borrowed"
   available: BigDecimal!
-  "Token accepted as deposit on the Vault"
+  "Deposit token"
   underlyingToken: Token!
-  "yToken minted as shares by the Vault"
   shareToken: Token!
   currentController: Controller!
   currentStrategy: Strategy!
   "Transaction metadata for the last update"
   transaction: Transaction!
-  "totalDeposited - totalWithdrawn. Considers all deposits of underlying made by external accounts"
+  TODO:
+  "balance: totalDeposited - totalWithdrawn: all deposits of underlying made by external accounts"
   netDeposits: BigDecimal!
   totalDeposited: BigDecimal!
   totalWithdrawn: BigDecimal!
-  "totalSharesMinted - totalSharesBurned"
+  "totalActiveShares: totalSharesMinted - totalSharesBurned"
   totalActiveShares: BigDecimal!
   totalSharesMinted: BigDecimal!
   totalSharesBurned: BigDecimal!
   totalEarnings: BigDecimal!
+  # raw
   pricePerFullShareRaw: BigInt!
   totalSupplyRaw: BigInt!
+  TODO:
   "Balance of the Vault contract of underlying Token + balance of the Strategy contract of underlying Token"
   vaultBalanceRaw: BigInt!
+  TODO:
   "Balance of underlying Token specifically held in the strategy"
   strategyBalanceRaw: BigInt!
+  TODO:
   "How much the vault allows to be borrowed"
   availableRaw: BigInt!
   netDepositsRaw: BigInt!
@@ -42,6 +48,7 @@ type Vault @entity {
   totalSharesBurnedRaw: BigInt!
   totalEarningsRaw: BigInt!
   totalHarvestCalls: BigInt!
+  # derived fields
   transfers: [Transfer!]! @derivedFrom(field: "vault")
   deposits: [Deposit!]! @derivedFrom(field: "vault")
   withdrawals: [Withdrawal!]! @derivedFrom(field: "vault")
@@ -52,16 +59,16 @@ type Vault @entity {
 }
 
 type Account @entity {
-  "Ethereum address of the user"
+  "User ethereum address"
   id: ID!
   vaultBalances: [AccountVaultBalance!]! @derivedFrom(field: "account")
-  "Deposits that are related to this account"
+  "Account deposits"
   deposits: [Deposit!]! @derivedFrom(field: "account")
-  "Withdrawals that are related to this account"
+  "Account withdrawals"
   withdrawals: [Deposit!]! @derivedFrom(field: "account")
-  "Transfers that are sent to this account"
+  "Incoming transfers"
   receivedTransfers: [Transfer!]! @derivedFrom(field: "to")
-  "Transfers that are sent from this account"
+  "Outgoing transfers"
   sentTransfers: [Transfer!]! @derivedFrom(field: "from")
 }
 
@@ -69,9 +76,8 @@ type AccountVaultBalance @entity {
   id: ID!
   vault: Vault!
   account: Account!
-  "Token used on deposits/withdrawals"
+  "Deposit/withdrawal token"
   underlyingToken: Token!
-  "Token received as shares"
   shareToken: Token!
   "Net deposits of a given Account within a given Vault. Transfers between accounts are taken into consideration for this metric"
   netDeposits: BigDecimal!
