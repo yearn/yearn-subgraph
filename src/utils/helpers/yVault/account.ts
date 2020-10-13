@@ -29,8 +29,8 @@ export function getOrCreateAccountVaultBalance(
 
     // Initiallize all decimal parsed values as BigDecimal 0
     balance.netDeposits = BIGDECIMAL_ZERO;
-    balance.totalDeposited = BIGDECIMAL_ZERO;
-    balance.totalWithdrawn = BIGDECIMAL_ZERO;
+    balance.totalDeposit = BIGDECIMAL_ZERO;
+    balance.totalWithdrawal = BIGDECIMAL_ZERO;
     balance.totalSent = BIGDECIMAL_ZERO;
     balance.totalReceived = BIGDECIMAL_ZERO;
     balance.shareBalance = BIGDECIMAL_ZERO;
@@ -41,8 +41,8 @@ export function getOrCreateAccountVaultBalance(
 
     // Initialize all raw values as BigInt 0
     balance.netDepositsRaw = BIGINT_ZERO;
-    balance.totalDepositedRaw = BIGINT_ZERO;
-    balance.totalWithdrawnRaw = BIGINT_ZERO;
+    balance.totalDepositRaw = BIGINT_ZERO;
+    balance.totalWithdrawalRaw = BIGINT_ZERO;
     balance.totalSentRaw = BIGINT_ZERO;
     balance.totalReceivedRaw = BIGINT_ZERO;
     balance.shareBalanceRaw = BIGINT_ZERO;

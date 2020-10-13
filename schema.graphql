@@ -20,10 +20,10 @@ type Vault @entity {
   "Transaction metadata for the last update"
   transaction: Transaction!
   # TODO:
-  "balance: totalDeposited - totalWithdrawn: all deposits of underlying made by external accounts"
+  "balance: totalDeposit - totalWithdrawal: all deposits of underlying made by external accounts"
   netDeposits: BigDecimal!
-  totalDeposited: BigDecimal!
-  totalWithdrawn: BigDecimal!
+  totalDeposit: BigDecimal!
+  totalWithdrawal: BigDecimal!
   "totalActiveShares: totalSharesMinted - totalSharesBurned"
   totalActiveShares: BigDecimal!
   totalSharesMinted: BigDecimal!
@@ -42,8 +42,8 @@ type Vault @entity {
   "How much the vault allows to be borrowed"
   availableRaw: BigInt!
   netDepositsRaw: BigInt!
-  totalDepositedRaw: BigInt!
-  totalWithdrawnRaw: BigInt!
+  totalDepositRaw: BigInt!
+  totalWithdrawalRaw: BigInt!
   totalActiveSharesRaw: BigInt!
   totalSharesMintedRaw: BigInt!
   totalSharesBurnedRaw: BigInt!
@@ -84,9 +84,9 @@ type AccountVaultBalance @entity {
   "Net deposits of a given Account within a given Vault. Transfers between accounts are taken into consideration for this metric"
   netDeposits: BigDecimal!
   "Total tokens deposited by this Account in Vault"
-  totalDeposited: BigDecimal!
+  totalDeposit: BigDecimal!
   "Total tokens withdrawn by this Account in Vault"
-  totalWithdrawn: BigDecimal!
+  totalWithdrawal: BigDecimal!
   "Total tokens sent to another account by this Account in Vault"
   totalSent: BigDecimal!
   "Total tokens received from another account by this Account in Vault"
@@ -100,9 +100,9 @@ type AccountVaultBalance @entity {
   "Net deposits of a given Account within a given Vault. Transfers between accounts are taken into consideration for this metric"
   netDepositsRaw: BigInt!
   "Total tokens deposited by this Account in Vault"
-  totalDepositedRaw: BigInt!
+  totalDepositRaw: BigInt!
   "Total tokens withdrawn by this Account in Vault"
-  totalWithdrawnRaw: BigInt!
+  totalWithdrawalRaw: BigInt!
   "Total tokens sent to another account by this Account in Vault"
   totalSentRaw: BigInt!
   "Total tokens received from another account by this Account in Vault"

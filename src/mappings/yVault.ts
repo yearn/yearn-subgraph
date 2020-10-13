@@ -209,7 +209,7 @@ export function handleShareTransfer(event: Transfer): void {
     toAccountBalance.vault = vault.id;
     toAccountBalance.shareToken = vault.id;
     toAccountBalance.underlyingToken = vault.underlyingToken;
-    toAccountBalance.totalDepositedRaw = toAccountBalance.totalDepositedRaw.plus(amount);
+    toAccountBalance.totalDepositRaw = toAccountBalance.totalDepositRaw.plus(amount);
     toAccountBalance.totalSharesMintedRaw = toAccountBalance.totalSharesMintedRaw.plus(
       event.params.value,
     );
@@ -218,8 +218,8 @@ export function handleShareTransfer(event: Transfer): void {
       event.params.value,
     );
 
-    toAccountBalance.totalDeposited = toDecimal(
-      toAccountBalance.totalDepositedRaw,
+    toAccountBalance.totalDeposit = toDecimal(
+      toAccountBalance.totalDepositRaw,
       underlyingToken.decimals,
     );
     toAccountBalance.totalSharesMinted = toDecimal(
@@ -235,10 +235,10 @@ export function handleShareTransfer(event: Transfer): void {
       shareToken.decimals,
     );
 
-    vault.totalDepositedRaw = vault.totalDepositedRaw.plus(amount);
+    vault.totalDepositRaw = vault.totalDepositRaw.plus(amount);
     vault.totalSharesMintedRaw = vault.totalSharesMintedRaw.plus(event.params.value);
 
-    vault.totalDeposited = toDecimal(vault.totalDepositedRaw, underlyingToken.decimals);
+    vault.totalDeposit = toDecimal(vault.totalDepositRaw, underlyingToken.decimals);
     vault.totalSharesMinted = toDecimal(vault.totalSharesMintedRaw, shareToken.decimals);
 
     toAccountBalance.save();
@@ -254,7 +254,7 @@ export function handleShareTransfer(event: Transfer): void {
     fromAccountBalance.vault = vault.id;
     fromAccountBalance.shareToken = vault.id;
     fromAccountBalance.underlyingToken = vault.underlyingToken;
-    fromAccountBalance.totalWithdrawnRaw = fromAccountBalance.totalWithdrawnRaw.plus(
+    fromAccountBalance.totalWithdrawalRaw = fromAccountBalance.totalWithdrawalRaw.plus(
       amount,
     );
     fromAccountBalance.totalSharesBurnedRaw = fromAccountBalance.totalSharesBurnedRaw.plus(
@@ -265,8 +265,8 @@ export function handleShareTransfer(event: Transfer): void {
       event.params.value,
     );
 
-    fromAccountBalance.totalWithdrawn = toDecimal(
-      fromAccountBalance.totalWithdrawnRaw,
+    fromAccountBalance.totalWithdrawal = toDecimal(
+      fromAccountBalance.totalWithdrawalRaw,
       underlyingToken.decimals,
     );
     fromAccountBalance.totalSharesBurned = toDecimal(
@@ -282,16 +282,16 @@ export function handleShareTransfer(event: Transfer): void {
       shareToken.decimals,
     );
 
-    vault.totalWithdrawnRaw = vault.totalWithdrawnRaw.plus(amount);
+    vault.totalWithdrawalRaw = vault.totalWithdrawalRaw.plus(amount);
     vault.totalSharesBurnedRaw = vault.totalSharesBurnedRaw.plus(event.params.value);
 
-    vault.totalWithdrawn = toDecimal(vault.totalWithdrawnRaw, underlyingToken.decimals);
+    vault.totalWithdrawal = toDecimal(vault.totalWithdrawalRaw, underlyingToken.decimals);
     vault.totalSharesBurned = toDecimal(vault.totalSharesBurnedRaw, shareToken.decimals);
 
     fromAccountBalance.save();
   }
 
-  vault.netDepositsRaw = vault.totalDepositedRaw.minus(vault.totalWithdrawnRaw);
+  vault.netDepositsRaw = vault.totalDepositRaw.minus(vault.totalWithdrawalRaw);
   vault.totalActiveSharesRaw = vault.totalSharesMintedRaw.minus(
     vault.totalSharesBurnedRaw,
   );

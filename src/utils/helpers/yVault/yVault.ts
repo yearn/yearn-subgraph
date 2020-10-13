@@ -137,8 +137,8 @@ export function getOrCreateVault(vaultAddress: Address, update: boolean = true):
     // Initialize parsed values as BigDecimal 0
     vault.pricePerFullShare = BIGDECIMAL_ZERO;
     vault.netDeposits = BIGDECIMAL_ZERO;
-    vault.totalDeposited = BIGDECIMAL_ZERO;
-    vault.totalWithdrawn = BIGDECIMAL_ZERO;
+    vault.totalDeposit = BIGDECIMAL_ZERO;
+    vault.totalWithdrawal = BIGDECIMAL_ZERO;
     vault.totalActiveShares = BIGDECIMAL_ZERO;
     vault.totalSharesMinted = BIGDECIMAL_ZERO;
     vault.totalSharesBurned = BIGDECIMAL_ZERO;
@@ -151,8 +151,8 @@ export function getOrCreateVault(vaultAddress: Address, update: boolean = true):
     // Initialize raw values as BigInt 0
     vault.pricePerFullShareRaw = BIGINT_ZERO;
     vault.netDepositsRaw = BIGINT_ZERO;
-    vault.totalDepositedRaw = BIGINT_ZERO;
-    vault.totalWithdrawnRaw = BIGINT_ZERO;
+    vault.totalDepositRaw = BIGINT_ZERO;
+    vault.totalWithdrawalRaw = BIGINT_ZERO;
     vault.totalActiveSharesRaw = BIGINT_ZERO;
     vault.totalSharesMintedRaw = BIGINT_ZERO;
     vault.totalSharesBurnedRaw = BIGINT_ZERO;
