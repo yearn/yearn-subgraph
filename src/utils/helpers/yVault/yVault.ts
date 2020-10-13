@@ -198,7 +198,7 @@ export function getOrCreateVault(vaultAddress: Address, update: boolean = true):
       controller.vault = vault.id;
       controller.save();
 
-      vault.currentController = controller.id;
+      vault.controller = controller.id;
       controllerContract = ControllerContract.bind(controllerAddress.value as Address);
     } else {
       let wrappedVaultAddress = vaultContract.try_vault();
@@ -206,10 +206,9 @@ export function getOrCreateVault(vaultAddress: Address, update: boolean = true):
         // get a non-updated version of it, since we only need the controller.
         let wrappedVault = getOrCreateVault(wrappedVaultAddress.value, false);
 
-        vault.currentController = wrappedVault.currentController;
-
+        vault.controller = wrappedVault.controller;
         controllerContract = ControllerContract.bind(
-          Address.fromString(wrappedVault.currentController),
+          Address.fromString(wrappedVault.controller),
         );
       } else {
         log.critical(
@@ -227,7 +226,7 @@ export function getOrCreateVault(vaultAddress: Address, update: boolean = true):
     let strategyContract = StrategyContract.bind(strategyAddress as Address);
     let strategyBalance = strategyContract.try_balanceOf();
 
-    vault.currentStrategy = strategy.id;
+    vault.strategy = strategy.id;
     vault.strategyBalanceRaw = !strategyBalance.reverted
       ? strategyBalance.value
       : vault.strategyBalanceRaw;

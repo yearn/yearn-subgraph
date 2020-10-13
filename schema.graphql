@@ -14,8 +14,8 @@ type Vault @entity {
   "Deposit token"
   underlyingToken: Token!
   shareToken: Token!
-  currentController: Controller!
-  currentStrategy: Strategy!
+  controller: Controller!
+  strategy: Strategy!
   "Transaction metadata for the last update"
   transaction: Transaction!
   # TODO:
@@ -203,14 +203,14 @@ type Strategy @entity {
   totalEarnings: BigDecimal!
   totalEarningsRaw: BigInt!
   harvests: [Harvest!]! @derivedFrom(field: "strategy")
-  activeOnVaults: [Vault!] @derivedFrom(field: "currentStrategy")
+  activeOnVaults: [Vault!] @derivedFrom(field: "strategy")
 }
 
 type Controller @entity {
   "Ethereum address"
   id: ID!
   vault: Vault!
-  activeOnVaults: [Vault!] @derivedFrom(field: "currentController")
+  activeOnVaults: [Vault!] @derivedFrom(field: "controller")
 }
 
 type Transaction @entity {
