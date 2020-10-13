@@ -11,8 +11,9 @@ type Vault @entity {
   # TODO:
   "How much the vault allows to be borrowed"
   available: BigDecimal!
-  "Deposit token"
+  "Deposit token info"
   underlyingToken: Token!
+  "Share token info"
   shareToken: Token!
   controller: Controller!
   strategy: Strategy!
@@ -76,8 +77,9 @@ type AccountVaultBalance @entity {
   id: ID!
   vault: Vault!
   account: Account!
-  "Deposit/withdrawal token"
+  "Deposit token info"
   underlyingToken: Token!
+  "Share token info"
   shareToken: Token!
   "Net deposits of a given Account within a given Vault. Transfers between accounts are taken into consideration for this metric"
   netDeposits: BigDecimal!
