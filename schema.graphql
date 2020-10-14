@@ -14,8 +14,8 @@ type Vault @entity {
 
   vaultBalanceUpdates: [VaultBalanceUpdate!]! @derivedFrom(field: "vault")
 
-  vaultUpdates: [VaultUpdate!]! @derivedFrom(field: "vault")
-  strategyUpdates: [StrategyUpdate!]! @derivedFrom(field: "strategy")
+  vaultUpdates: [VaultUpdate!]!
+  strategyUpdates: [StrategyUpdate!]!
 
   # derived fields
   transfers: [Transfer!]! @derivedFrom(field: "vault")
@@ -24,7 +24,7 @@ type Vault @entity {
   harvests: [Harvest!]! @derivedFrom(field: "vault")
   balances: [AccountVaultBalance!]! @derivedFrom(field: "vault")
   strategies: [Strategy!]! @derivedFrom(field: "vault")
-  controllers: [Controller!]! @derivedFrom(field: "vault")
+  # controllers: [Controller!]! @derivedFrom(field: "vault")
 }
 
 # used to track balance of both user and vault
@@ -194,8 +194,8 @@ type Strategy @entity {
 type Controller @entity {
   id: ID!
 
-  vaults: [Vault!] @derivedFrom(field: "controller")
-  strategies: [Strategy!] @derivedFrom(field: "controller")
+  vaults: [Vault!]! @derivedFrom(field: "controller")
+  strategies: [Strategy!]! @derivedFrom(field: "controller")
 }
 
 type Transaction @entity {
