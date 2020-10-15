@@ -1,7 +1,7 @@
 type Vault @entity {
   id: ID!
-  "Deposit token info"
-  underlyingToken: Token!
+  "Deposit (want) token info"
+  token: Token!
   "Share token (ytoken) info"
   shareToken: Token!
   "Current controller"
@@ -108,7 +108,8 @@ type AccountVaultBalance @entity {
   id: ID!
   vault: Vault!
   account: Account!
-  underlyingToken: Token!
+  "Deposit (want) token info"
+  token: Token!
   shareToken: Token!
 
   # add AccountBalanceUpdate
