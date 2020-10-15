@@ -32,27 +32,27 @@ interface BalanceUpdate @entity {
   id: ID!
   transaction: Transaction!
 
-  netDepositsRaw: BigInt!
-  totalDepositsRaw: BigInt!
-  totalWithdrawalsRaw: BigInt!
-  totalSharesMintedRaw: BigInt!
-  totalSharesBurnedRaw: BigInt!
+  netDeposits: BigInt!
+  totalDeposits: BigInt!
+  totalWithdrawals: BigInt!
+  totalSharesMinted: BigInt!
+  totalSharesBurned: BigInt!
 }
 
 type VaultBalanceUpdate implements BalanceUpdate @entity {
   id: ID!
   transaction: Transaction!
 
-  netDepositsRaw: BigInt!
-  totalDepositsRaw: BigInt!
-  totalWithdrawalsRaw: BigInt!
-  totalSharesMintedRaw: BigInt!
-  totalSharesBurnedRaw: BigInt!
+  netDeposits: BigInt!
+  totalDeposits: BigInt!
+  totalWithdrawals: BigInt!
+  totalSharesMinted: BigInt!
+  totalSharesBurned: BigInt!
 
   vault: Vault!
 
-  totalActiveSharesRaw: BigInt!
-  totalEarningsRaw: BigInt!
+  totalActiveShares: BigInt!
+  totalEarnings: BigInt!
   totalHarvestCalls: BigInt!
 }
 
@@ -60,19 +60,19 @@ type AccountBalanceUpdate implements BalanceUpdate @entity {
   id: ID!
   transaction: Transaction!
 
-  netDepositsRaw: BigInt!
-  totalDepositsRaw: BigInt!
-  totalWithdrawalsRaw: BigInt!
-  totalSharesMintedRaw: BigInt!
-  totalSharesBurnedRaw: BigInt!
+  netDeposits: BigInt!
+  totalDeposits: BigInt!
+  totalWithdrawals: BigInt!
+  totalSharesMinted: BigInt!
+  totalSharesBurned: BigInt!
 
   account: Account!
 
-  totalSharesSentRaw: BigInt!
-  totalSharesReceivedRaw: BigInt!
-  totalSentRaw: BigInt!
-  totalReceivedRaw: BigInt!
-  shareBalanceRaw: BigInt!
+  totalSharesSent: BigInt!
+  totalSharesReceived: BigInt!
+  totalSent: BigInt!
+  totalReceived: BigInt!
+  shareBalance: BigInt!
 }
 
 type VaultUpdate @entity {
@@ -91,8 +91,8 @@ type StrategyUpdate @entity {
   transaction: Transaction!
 
   strategy: Strategy!
-  strategyBalanceRaw: BigInt!
-  earningsRaw: BigInt!
+  strategyBalance: BigInt!
+  earnings: BigInt!
 }
 
 type Account @entity {
@@ -185,7 +185,7 @@ type Strategy @entity {
   id: ID!
   vault: Vault!
   controller: Controller!
-  totalEarningsRaw: BigInt!
+  totalEarnings: BigInt!
 
   harvests: [Harvest!]! @derivedFrom(field: "strategy")
   # TODO: (?) remove
