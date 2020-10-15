@@ -184,6 +184,8 @@ type Harvest @entity {
 type Strategy @entity {
   id: ID!
   vault: Vault!
+  # TODO: (?) add hardcode overwrite for names that are missing
+  name: String!
   controller: Controller!
   totalEarnings: BigInt!
 
