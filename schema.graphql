@@ -187,6 +187,8 @@ type Strategy @entity {
   controller: Controller!
   totalEarnings: BigInt!
 
+  strategyUpdate: [StrategyUpdate!]!
+
   harvests: [Harvest!]! @derivedFrom(field: "strategy")
   # TODO: (?) remove
   # activeOnVaults: [Vault!] @derivedFrom(field: "strategy")
