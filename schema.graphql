@@ -32,9 +32,11 @@ interface BalanceUpdate {
   id: ID!
   transaction: Transaction!
 
-  netDeposits: BigInt!
+  balance: BigInt!
   totalDeposits: BigInt!
   totalWithdrawals: BigInt!
+
+  shareBalance: BigInt!
   totalSharesMinted: BigInt!
   totalSharesBurned: BigInt!
 }
@@ -43,26 +45,31 @@ type VaultBalanceUpdate implements BalanceUpdate @entity {
   id: ID!
   transaction: Transaction!
 
-  netDeposits: BigInt!
+  balance: BigInt!
   totalDeposits: BigInt!
   totalWithdrawals: BigInt!
+
+  shareBalance: BigInt!
   totalSharesMinted: BigInt!
   totalSharesBurned: BigInt!
 
   vault: Vault!
 
-  totalActiveShares: BigInt!
+  # (?) drop in favor balance in VaultUpdate, looks the same as shareBalance, too
+  # totalActiveShares: BigInt!
   totalEarnings: BigInt!
-  totalHarvestCalls: BigInt!
+  totalHarvests: BigInt!
 }
 
 type AccountBalanceUpdate implements BalanceUpdate @entity {
   id: ID!
   transaction: Transaction!
 
-  netDeposits: BigInt!
+  balance: BigInt!
   totalDeposits: BigInt!
   totalWithdrawals: BigInt!
+
+  shareBalance: BigInt!
   totalSharesMinted: BigInt!
   totalSharesBurned: BigInt!
 
@@ -70,9 +77,10 @@ type AccountBalanceUpdate implements BalanceUpdate @entity {
 
   totalSharesSent: BigInt!
   totalSharesReceived: BigInt!
+  "Total (want) token sent"
   totalSent: BigInt!
+  "Total (want) token received"
   totalReceived: BigInt!
-  shareBalance: BigInt!
 }
 
 type VaultUpdate @entity {
@@ -81,7 +89,9 @@ type VaultUpdate @entity {
 
   vault: Vault!
   pricePerFullShare: BigInt!
-  vaultBalance: BigInt!
+  # (?) seems to be the same as balance in VaultBalanceUpdate
+  balance: BigInt!
+  # (?) seems to be the same as shareBalance in VaultBalanceUpdate
   totalSupply: BigInt!
   available: BigInt!
 }
@@ -129,10 +139,11 @@ type Transfer @entity {
   id: ID!
   from: Account!
   to: Account!
+  # TODO: (?) better naming for value/amount
   value: BigInt!
   amount: BigInt! # value normalized to base tokens
 
-# TODO: (?) replace with token: Token!
+  # TODO: (?) replace with token: Token!
   vault: Vault!
   transaction: Transaction!
 }
