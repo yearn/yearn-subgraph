@@ -28,7 +28,7 @@ type Vault @entity {
 }
 
 # used to track balance of both user and vault
-interface BalanceUpdate @entity {
+interface BalanceUpdate {
   id: ID!
   transaction: Transaction!
 
@@ -136,7 +136,7 @@ type Transfer @entity {
   transaction: Transaction!
 }
 
-interface Action @entity {
+interface Action {
   id: ID!
   vault: Vault!
   account: Account!
