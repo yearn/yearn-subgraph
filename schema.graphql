@@ -112,7 +112,7 @@ type AccountVaultBalance @entity {
   token: Token!
   shareToken: Token!
 
-  # add AccountBalanceUpdate
+  accountBalanceUpdate: [AccountBalanceUpdate!]!
 }
 
 type Token @entity {
@@ -123,6 +123,7 @@ type Token @entity {
   name: String!
   symbol: String!
 }
+
 
 type Transfer @entity {
   id: ID!
