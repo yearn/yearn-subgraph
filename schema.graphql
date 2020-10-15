@@ -181,6 +181,11 @@ type Harvest @entity {
   transaction: Transaction!
 }
 
+enum StrategyStatus {
+  Active
+  Retired
+}
+
 type Strategy @entity {
   id: ID!
   vault: Vault!
@@ -190,6 +195,7 @@ type Strategy @entity {
   totalEarnings: BigInt!
 
   strategyUpdate: [StrategyUpdate!]!
+  strategyStatus: StrategyStatus
 
   harvests: [Harvest!]! @derivedFrom(field: "strategy")
   # TODO: (?) remove
