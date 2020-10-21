@@ -2,6 +2,34 @@
 
 This subgraph is meant to be used to easily access data from the yVaults, allowing for easier querying of most of the core variables of the vaults, as well as some aggregated metrics, historical tracking, and much more.
 
+## Getting Setup
+
+This application uses [The Graph](https://thegraph.com/docs/quick-start#local-development):
+
+* Install the graph-cli 
+
+```
+yarn global add @graphprotocol/graph-cli
+```
+
+* [Create a Graph account](https://thegraph.com/docs/deploy-a-subgraph#create-a-graph-explorer-account) and obtain API key from Graph user dashboard
+
+* Run the below command to [store the Graph access token](https://thegraph.com/docs/deploy-a-subgraph#store-the-access-token) on your environment:
+
+```
+graph auth https://api.thegraph.com/deploy/<api_key>
+```
+
+* [Create a subgraph](https://thegraph.com/docs/deploy-a-subgraph#redeploying-a-subgraph) and fork the repository
+
+* Deploy the subgraph using the command below (change `<githubUsername/repo>` below)
+
+```
+  yarn install
+  yarn codegen
+  graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/<githubUsername/repo>
+```
+
 ## Entities
 
 ### Vault
