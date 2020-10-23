@@ -25,13 +25,15 @@ type Vault @entity {
   "Strategy stats"
   strategyUpdates: [StrategyUpdate!]! # TODO: to derive it I need vault field
 
-  # TODO: check if those are necessary
-  # derived fields
-  transfers: [Transfer!]! @derivedFrom(field: "vault")
-  deposits: [Deposit!]! @derivedFrom(field: "vault")
-  withdrawals: [Withdrawal!]! @derivedFrom(field: "vault")
-  harvests: [Harvest!]! @derivedFrom(field: "vault")
+  "Users balances"
   balances: [AccountVaultBalance!]! @derivedFrom(field: "vault")
+  "Users deposits"
+  deposits: [Deposit!]! @derivedFrom(field: "vault")
+  "Users withdrawals"
+  withdrawals: [Withdrawal!]! @derivedFrom(field: "vault")
+  "harvest() calls"
+  harvests: [Harvest!]! @derivedFrom(field: "vault")
+  "Previously active strategies"
   strategies: [Strategy!]! @derivedFrom(field: "vault")
 }
 
@@ -262,7 +264,7 @@ type Strategy @entity {
   "Active or retired"
   strategyStatus: StrategyStatus
 
-  "All harvest() calls"
+  "harvest() calls"
   harvests: [Harvest!]! @derivedFrom(field: "strategy")
 }
 
