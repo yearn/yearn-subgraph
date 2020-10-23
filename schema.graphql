@@ -20,7 +20,7 @@ type Vault @entity {
   "Creation transaction"
   transaction: Transaction!
 
-  vaultUpdates: [VaultBalanceUpdate!]! @derivedFrom(field: "vault")
+  vaultUpdates: [VaultUpdate!]! @derivedFrom(field: "vault")
   strategyUpdates: [StrategyUpdate!]!
 
   # TODO: check if those are necessary
@@ -49,7 +49,7 @@ interface BalanceUpdate {
   totalSharesBurned: BigInt!
 }
 
-type VaultBalanceUpdate implements BalanceUpdate @entity {
+type VaultUpdate implements BalanceUpdate @entity {
   id: ID!
   transaction: Transaction!
 
@@ -79,7 +79,7 @@ type VaultBalanceUpdate implements BalanceUpdate @entity {
   # available: BigInt!
 }
 
-type AccountBalanceUpdate implements BalanceUpdate @entity {
+type AccountUpdate implements BalanceUpdate @entity {
   id: ID!
   transaction: Transaction!
 
@@ -161,7 +161,7 @@ interface Action {
   amount: BigInt!
   "Share token (ytoken) amount"
   shares: BigInt!
-  vaultStats: VaultBalanceUpdate!
+  vaultStats: VaultUpdate!
   transaction: Transaction!
 }
 
@@ -173,7 +173,7 @@ type Deposit implements Action @entity {
   amount: BigInt!
   "Share token (ytoken) amount"
   shares: BigInt!
-  vaultStats: VaultBalanceUpdate!
+  vaultStats: VaultUpdate!
   transaction: Transaction!
 }
 
@@ -185,7 +185,7 @@ type Withdrawal implements Action @entity {
   amount: BigInt!
   "Share token (ytoken) amount"
   shares: BigInt!
-  vaultStats: VaultBalanceUpdate!
+  vaultStats: VaultUpdate!
   transaction: Transaction!
 }
 
@@ -210,7 +210,7 @@ type Harvest @entity {
   strategy: Strategy!
   harvester: Bytes!
 
-  vaultUpdate: VaultBalanceUpdate!
+  vaultUpdate: VaultUpdate!
   strategyUpdate: StrategyUpdate!
 
   transaction: Transaction!
