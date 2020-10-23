@@ -9,6 +9,7 @@
 # Note: performance fee, see: https://docs.yearn.finance/faq#can-you-explain-the-5-fee-on-additional-yield
 
 type Vault @entity {
+  "Vault address"
   id: ID!
   "Deposit (want) token info"
   token: Token!
@@ -60,6 +61,7 @@ interface BalanceUpdate {
 }
 
 type VaultUpdate implements BalanceUpdate @entity {
+  "Vault–Transaction–Log"
   id: ID!
   transaction: Transaction!
 
@@ -93,6 +95,7 @@ type VaultUpdate implements BalanceUpdate @entity {
 }
 
 type AccountUpdate implements BalanceUpdate @entity {
+  "Account–Transaction–Log"
   id: ID!
   transaction: Transaction!
 
@@ -124,6 +127,7 @@ type AccountUpdate implements BalanceUpdate @entity {
 }
 
 type Account @entity {
+  "Account address"
   id: ID!
 
   "Vault deposits"
@@ -164,6 +168,7 @@ type Token @entity {
 }
 
 type Transfer @entity {
+  "Transaction–Log"
   id: ID!
   "Sender"
   from: Account!
@@ -193,6 +198,7 @@ interface Action {
 }
 
 type Deposit implements Action @entity {
+  "Transaction–Log"
   id: ID!
   vault: Vault!
   account: Account!
@@ -207,6 +213,7 @@ type Deposit implements Action @entity {
 }
 
 type Withdrawal implements Action @entity {
+  "Transaction–Log"
   id: ID!
   vault: Vault!
   account: Account!
@@ -221,7 +228,7 @@ type Withdrawal implements Action @entity {
 }
 
 type StrategyUpdate @entity {
-  "Strategy + Transaction"
+  "Strategy–Transaction-Log"
   id: ID!
   transaction: Transaction!
 
@@ -234,6 +241,7 @@ type StrategyUpdate @entity {
 }
 
 type Harvest @entity {
+  "Strategy–Transaction-Log"
   id: ID!
   vault: Vault!
   strategy: Strategy!
@@ -254,6 +262,7 @@ enum StrategyStatus {
 }
 
 type Strategy @entity {
+  "Strategy address"
   id: ID!
   vault: Vault!
   # TODO: (?) add hardcode overwrite for names that are missing
