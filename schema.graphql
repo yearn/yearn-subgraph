@@ -169,9 +169,10 @@ type Transfer @entity {
   from: Account!
   "Receiver"
   to: Account!
-  # TODO: (?) better naming for value/amount
-  value: BigInt!
-  "Value normalized to (want) token"
+  # TODO: (?) rename value to shares in the code
+  "Share token (ytoken) amount"
+  shares: BigInt!
+  "Share token (ytoken) amount denominated to (want) token"
   amount: BigInt!
 
   token: Token!
@@ -187,7 +188,7 @@ interface Action {
   "Share token (ytoken) amount"
   shares: BigInt!
 
-  # (!) vault update is triggerd on Action
+  # (!) VaultUpdate is created on Action
   # vaultStats: VaultUpdate!
 }
 
@@ -201,7 +202,7 @@ type Deposit implements Action @entity {
   shares: BigInt!
   transaction: Transaction!
 
-  # (!) vault update is triggerd on Deposit
+  # (!) VaultUpdate is created on Deposit
   # vaultStats: VaultUpdate!
 }
 
@@ -215,7 +216,7 @@ type Withdrawal implements Action @entity {
   shares: BigInt!
   transaction: Transaction!
 
-  # (!) vault update is triggerd on Withdrawal
+  # (!) VaultUpdate is created on Withdrawal
   # vaultStats: VaultUpdate!
 }
 
@@ -227,10 +228,8 @@ type StrategyUpdate @entity {
   strategy: Strategy!
   "Deposit (want) token balance"
   balance: BigInt!
-
   # TODO: (?) denominated to
-  # additional-yield, see: https://docs.yearn.finance/faq#can-you-explain-the-5-fee-on-additional-yield
-  # essentially performance fee, this one essentially accumulates harvest operations
+  "Total performance fees"
   earnings: BigInt!
 }
 
@@ -283,14 +282,4 @@ type Transaction @entity {
   id: ID!
   timestamp: BigInt!
   blockNumber: BigInt!
-  # duplicated field to allow for byte search with transactionHash_contains
-  transactionHash: Bytes!
-
-
-  # deposits: [Deposit!]! @derivedFrom(field: "transaction")
-  # withdrawals: [Withdrawal!]! @derivedFrom(field: "transaction")
-  # transfers: [Transfer!]! @derivedFrom(field: "transaction")
-  # harvests: [Harvest!]! @derivedFrom(field: "transaction")
-  # # TODO: rename
-  # vaultsUpdated: [Vault!]! @derivedFrom(field: "transaction")
 }
