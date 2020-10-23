@@ -6,6 +6,8 @@
 # withdrawalFee
 # withdrawalRevenue
 
+# Note: performance fee, see: https://docs.yearn.finance/faq#can-you-explain-the-5-fee-on-additional-yield
+
 type Vault @entity {
   id: ID!
   "Deposit (want) token info"
@@ -37,7 +39,7 @@ type Vault @entity {
   strategies: [Strategy!]! @derivedFrom(field: "vault")
 }
 
-# tracks current balance of both user and vault
+# interface for user and vault balances
 interface BalanceUpdate {
   id: ID!
   transaction: Transaction!
@@ -68,7 +70,7 @@ type VaultUpdate implements BalanceUpdate @entity {
   "Total (want) token withdrawals"
   withdrawals: BigInt!
 
-  "Share token (ytoken) balance | totalSupply()"
+  "Share token (ytoken) balance – totalSupply()"
   shareBalance: BigInt!
   "Total share tokens (ytoken) minted"
   sharesMinted: BigInt!
@@ -77,16 +79,17 @@ type VaultUpdate implements BalanceUpdate @entity {
 
   vault: Vault!
 
-  # TODO: (?) denominated to
-  "Total (withdrawal + performance*) fees"
-  earnings: BigInt!
-  # TODO: (?) denominated to
-  withdrawalFees: BigInt!
-  # TODO: (?) denominated to
-  # additional-yield, see: https://docs.yearn.finance/faq#can-you-explain-the-5-fee-on-additional-yield
-  performanceFees: BigInt!
   "Share token (ytoken) price denominated to (want) token"
   pricePerFullShare: BigInt!
+  # TODO: (?) denominated to
+  "Total (withdrawal + performance) fees"
+  earnings: BigInt!
+  # TODO: (?) denominated to
+  "Total withdrawal fees"
+  withdrawalFees: BigInt!
+  # TODO: (?) denominated to
+  "Total performance fees"
+  performanceFees: BigInt!
 }
 
 type AccountUpdate implements BalanceUpdate @entity {
@@ -109,14 +112,14 @@ type AccountUpdate implements BalanceUpdate @entity {
 
   account: Account!
 
-  "Total (want) token sent"
+  "Total (want) tokens sent"
   sent: BigInt!
-  "Total (want) token received"
+  "Total (want) tokens received"
   received: BigInt!
 
-  "Total share token (ytoken) sent"
+  "Total share tokens (ytoken) sent"
   sharesSent: BigInt!
-  "Total share token (ytoken) received"
+  "Total share tokens (ytoken) received"
   sharesReceived: BigInt!
 }
 
