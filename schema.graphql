@@ -1,12 +1,4 @@
-# FIXME: add these fields
-# totalRevenue
-# performanceFee
-# tokenHolderRevenue
-# withdrawalVolume
-# withdrawalFee
-# withdrawalRevenue
-
-# Note: performance fee, see: https://docs.yearn.finance/faq#can-you-explain-the-5-fee-on-additional-yield
+# Note: For performance fee, see: https://docs.yearn.finance/faq#can-you-explain-the-5-fee-on-additional-yield
 
 type Vault @entity {
   "Vault address"
