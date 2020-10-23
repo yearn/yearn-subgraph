@@ -20,8 +20,10 @@ type Vault @entity {
   "Creation transaction"
   transaction: Transaction!
 
+  "Vault stats"
   vaultUpdates: [VaultUpdate!]! @derivedFrom(field: "vault")
-  strategyUpdates: [StrategyUpdate!]!
+  "Strategy stats"
+  strategyUpdates: [StrategyUpdate!]! # TODO: to derive it I need vault field
 
   # TODO: check if those are necessary
   # derived fields
@@ -33,20 +35,24 @@ type Vault @entity {
   strategies: [Strategy!]! @derivedFrom(field: "vault")
 }
 
-# used to track balance of both user and vault
+# tracks current balance of both user and vault
 interface BalanceUpdate {
   id: ID!
   transaction: Transaction!
 
   "Deposit (want) token balance"
   balance: BigInt!
-  totalDeposits: BigInt!
-  totalWithdrawals: BigInt!
+  "Total (want) token deposits"
+  deposits: BigInt!
+  "Total (want) token withdrawals"
+  withdrawals: BigInt!
 
   "Share token (ytoken) balance"
   shareBalance: BigInt!
-  totalSharesMinted: BigInt!
-  totalSharesBurned: BigInt!
+  "Total share tokens (ytoken) minted"
+  sharesMinted: BigInt!
+  "Total share tokens (ytoken) burnt"
+  sharesBurnt: BigInt!
 }
 
 type VaultUpdate implements BalanceUpdate @entity {
@@ -55,28 +61,30 @@ type VaultUpdate implements BalanceUpdate @entity {
 
   "Deposit (want) token balance"
   balance: BigInt!
-  totalDeposits: BigInt!
-  totalWithdrawals: BigInt!
+  "Total (want) token deposits"
+  deposits: BigInt!
+  "Total (want) token withdrawals"
+  withdrawals: BigInt!
 
-  # totalSupply() in code
-  "Share token (ytoken) balance"
+  "Share token (ytoken) balance | totalSupply()"
   shareBalance: BigInt!
-  totalSharesMinted: BigInt!
-  totalSharesBurned: BigInt!
+  "Total share tokens (ytoken) minted"
+  sharesMinted: BigInt!
+  "Total share tokens (ytoken) burnt"
+  sharesBurnt: BigInt!
 
   vault: Vault!
 
-  # should include both withdrawal and perfromance fees
-  totalEarnings: BigInt!
-  # replace by 2 fees below
-  # totalHarvests: BigInt!
-  totalWithdrawalFees: BigInt!
-  # this one essentially accumulates harvest operations
-  totalPerformanceFees: BigInt!
-
+  # TODO: (?) denominated to
+  "Total (withdrawal + performance*) fees"
+  earnings: BigInt!
+  # TODO: (?) denominated to
+  withdrawalFees: BigInt!
+  # TODO: (?) denominated to
+  # additional-yield, see: https://docs.yearn.finance/faq#can-you-explain-the-5-fee-on-additional-yield
+  performanceFees: BigInt!
+  "Share token (ytoken) price denominated to (want) token"
   pricePerFullShare: BigInt!
-  # TODO: do we need this one?
-  # available: BigInt!
 }
 
 type AccountUpdate implements BalanceUpdate @entity {
@@ -85,50 +93,62 @@ type AccountUpdate implements BalanceUpdate @entity {
 
   "Deposit (want) token balance"
   balance: BigInt!
-  totalDeposits: BigInt!
-  totalWithdrawals: BigInt!
+  "Total (want) token deposits"
+  deposits: BigInt!
+  "Total (want) token withdrawals"
+  withdrawals: BigInt!
 
   "Share token (ytoken) balance"
   shareBalance: BigInt!
-  totalSharesMinted: BigInt!
-  totalSharesBurned: BigInt!
+  "Total share tokens (ytoken) minted"
+  sharesMinted: BigInt!
+  "Total share tokens (ytoken) burnt"
+  sharesBurnt: BigInt!
 
   account: Account!
 
   "Total (want) token sent"
-  totalSent: BigInt!
+  sent: BigInt!
   "Total (want) token received"
-  totalReceived: BigInt!
+  received: BigInt!
 
   "Total share token (ytoken) sent"
-  totalSharesSent: BigInt!
+  sharesSent: BigInt!
   "Total share token (ytoken) received"
-  totalSharesReceived: BigInt!
+  sharesReceived: BigInt!
 }
 
 type Account @entity {
   id: ID!
 
+  "Vault deposits"
   deposits: [Deposit!]! @derivedFrom(field: "account")
-  withdrawals: [Deposit!]! @derivedFrom(field: "account")
+  "Vault withdrawals"
+  withdrawals: [Withdrawal!]! @derivedFrom(field: "account")
   vaultBalances: [AccountVaultBalance!]! @derivedFrom(field: "account")
 
-  receivedTransfers: [Transfer!]! @derivedFrom(field: "to")
-  sentTransfers: [Transfer!]! @derivedFrom(field: "from")
+  "Incoming transfers"
+  received: [Transfer!]! @derivedFrom(field: "to")
+  "Outgoing transfers"
+  sent: [Transfer!]! @derivedFrom(field: "from")
 }
 
 type AccountVaultBalance @entity {
+  "Vault-Account"
   id: ID!
   vault: Vault!
   account: Account!
   "Deposit (want) token info"
   token: Token!
+  "Share token (ytoken) info"
   shareToken: Token!
 
-  accountBalanceUpdate: [AccountBalanceUpdate!]!
+  "Account stats"
+  accountUpdate: [AccountUpdate!]!
 }
 
 type Token @entity {
+  "Token address"
   id: ID!
   address: Bytes!
   decimals: Int!
@@ -161,8 +181,9 @@ interface Action {
   amount: BigInt!
   "Share token (ytoken) amount"
   shares: BigInt!
-  vaultStats: VaultUpdate!
-  transaction: Transaction!
+
+  # (!) vault update is triggerd on Action
+  # vaultStats: VaultUpdate!
 }
 
 type Deposit implements Action @entity {
@@ -173,8 +194,10 @@ type Deposit implements Action @entity {
   amount: BigInt!
   "Share token (ytoken) amount"
   shares: BigInt!
-  vaultStats: VaultUpdate!
   transaction: Transaction!
+
+  # (!) vault update is triggerd on Deposit
+  # vaultStats: VaultUpdate!
 }
 
 type Withdrawal implements Action @entity {
@@ -185,32 +208,37 @@ type Withdrawal implements Action @entity {
   amount: BigInt!
   "Share token (ytoken) amount"
   shares: BigInt!
-  vaultStats: VaultUpdate!
   transaction: Transaction!
+
+  # (!) vault update is triggerd on Withdrawal
+  # vaultStats: VaultUpdate!
 }
 
 type StrategyUpdate @entity {
-  id: ID! # id + strategy
+  "Strategy + Transaction"
+  id: ID!
   transaction: Transaction!
 
   strategy: Strategy!
   "Deposit (want) token balance"
-  strategyBalance: BigInt!
+  balance: BigInt!
 
-  # cummulative sum of earnings
-  # basically *performance* fee
-  # TODO: add comment
-  # this one essentially accumulates harvest operations
-  totalPerformanceFees: BigInt!
+  # TODO: (?) denominated to
+  # additional-yield, see: https://docs.yearn.finance/faq#can-you-explain-the-5-fee-on-additional-yield
+  # essentially performance fee, this one essentially accumulates harvest operations
+  earnings: BigInt!
 }
 
 type Harvest @entity {
   id: ID!
   vault: Vault!
   strategy: Strategy!
+  "Function caller"
   harvester: Bytes!
 
+  "Vault stats"
   vaultUpdate: VaultUpdate!
+  "Strategy stats"
   strategyUpdate: StrategyUpdate!
 
   transaction: Transaction!
@@ -229,9 +257,12 @@ type Strategy @entity {
   "Current controller"
   controller: Controller!
 
+  "Strategy stats"
   strategyUpdate: [StrategyUpdate!]!
+  "Active or retired"
   strategyStatus: StrategyStatus
 
+  "All harvest() calls"
   harvests: [Harvest!]! @derivedFrom(field: "strategy")
 }
 
