@@ -5,27 +5,12 @@ This subgraph is meant to be used to easily access data from the yVaults, allowi
 ## Setup
 
 - Copy `.envrc.example` to `.envrc`
-- Set up your The Graph `ACCESS_TOKEN` and `GRAPH_PATH` (see _The Graph_ section for instructions)
-- Set network environment variables:
-
-Ropsten:
-
-```
-NETWORK="ropsten"
-GRAPH_PATH="iearn-finance/yearn-finance-dev"
-```
-
-Mainnet:
-
-```
-NETWORK="mainnet"
-GRAPH_PATH="iearn-finance/yearn-finance"
-```
+- Obtain The Graph `ACCESS_TOKEN` and `GRAPH_PATH` (see _The Graph_ section for instructions)
+- Update `.envrc`
 
 ## Running
 
 - `yarn` – install dependencies
-- `yarn prepare:network` - generate `subgraph.yaml` for specific network
 - `yarn codegen` – generate code
 - `yarn create` – allocate subgraph name in Graph Node
 - `yarn deploy` - deploy supgraph to Graph Node
