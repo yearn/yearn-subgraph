@@ -57,7 +57,7 @@ interface BalanceUpdate {
 }
 
 type VaultUpdate implements BalanceUpdate @entity {
-  "Vault–Transaction–Log"
+  "Vault-Transaction-Log"
   id: ID!
   timestamp: BigInt!
   blockNumber: BigInt!
@@ -69,7 +69,7 @@ type VaultUpdate implements BalanceUpdate @entity {
   "Total (want) token withdrawals"
   withdrawals: BigInt!
 
-  "Share token (ytoken) balance – totalSupply()"
+  "Share token (ytoken) balance - totalSupply()"
   shareBalance: BigInt!
   "Total share tokens (ytoken) minted"
   sharesMinted: BigInt!
@@ -92,7 +92,7 @@ type VaultUpdate implements BalanceUpdate @entity {
 }
 
 type AccountUpdate implements BalanceUpdate @entity {
-  "Account–Transaction–Log"
+  "Account-Transaction-Log"
   id: ID!
   timestamp: BigInt!
   blockNumber: BigInt!
@@ -141,7 +141,7 @@ type Account @entity {
 }
 
 type AccountVaultBalance @entity {
-  "Vault-Account"
+  "Account-Vault"
   id: ID!
   vault: Vault!
   account: Account!
@@ -166,7 +166,7 @@ type Token @entity {
 }
 
 type Transfer @entity {
-  "Transaction–Log"
+  "Transaction-Log"
   id: ID!
   "Sender"
   from: Account!
@@ -197,7 +197,7 @@ interface Action {
 }
 
 type Deposit implements Action @entity {
-  "Transaction–Log"
+  "Transaction-Log"
   id: ID!
   vault: Vault!
   account: Account!
@@ -213,7 +213,7 @@ type Deposit implements Action @entity {
 }
 
 type Withdrawal implements Action @entity {
-  "Transaction–Log"
+  "Transaction-Log"
   id: ID!
   vault: Vault!
   account: Account!
@@ -229,7 +229,7 @@ type Withdrawal implements Action @entity {
 }
 
 type StrategyUpdate @entity {
-  "Strategy–Transaction-Log"
+  "Strategy-Transaction-Log"
   id: ID!
   timestamp: BigInt!
   blockNumber: BigInt!
@@ -243,7 +243,7 @@ type StrategyUpdate @entity {
 }
 
 type Harvest @entity {
-  "Strategy–Transaction-Log"
+  "Strategy-Transaction-Log"
   id: ID!
   vault: Vault!
   strategy: Strategy!
