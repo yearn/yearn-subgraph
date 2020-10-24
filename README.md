@@ -1,34 +1,27 @@
-# Yearn vaults subgraph
+# Yearn Vaults Subgraph
 
-This subgraph is meant to be used to easily access data from the yVaults, allowing for easier querying of most of the core variables of the vaults, as well as some aggregated metrics, historical tracking, and much more.
+![License](https://img.shields.io/badge/license-MIT-green)
+![Build](https://github.com/iearn-finance/yearn-subgraph/workflows/Build/badge.svg)
+![Lint](https://github.com/iearn-finance/yearn-subgraph/workflows/Lint/badge.svg)
 
-## Getting Setup
+Subgraph to track yearn vaults metrics on Mainnet.
 
-This application uses [The Graph](https://thegraph.com/docs/quick-start#local-development):
+## Setup
 
-- Install the graph-cli
+- Copy `.envrc.example` to `.envrc`.
+- Set `ACCESS_TOKEN` to your The Graph [access token](https://thegraph.com/docs/deploy-a-subgraph#store-the-access-token).
+- Set `GRAPH_PATH` to `<github-username>/<subgraph-name>`.
+- Export `.envrc` variables.
 
-```
-yarn global add @graphprotocol/graph-cli
-```
+## Running
 
-- [Create a Graph account](https://thegraph.com/docs/deploy-a-subgraph#create-a-graph-explorer-account) and obtain API key from Graph user dashboard
+- `yarn` – install dependencies
+- `yarn codegen` – generate code
+- `yarn create` – allocate subgraph name in Graph Node
+- `yarn deploy` - deploy supgraph to Graph Node
+- `yarn publish-graph` – run all steps in one command
 
-- Run the below command to [store the Graph access token](https://thegraph.com/docs/deploy-a-subgraph#store-the-access-token) on your environment:
-
-```
-graph auth https://api.thegraph.com/deploy/<api_key>
-```
-
-- [Create a subgraph](https://thegraph.com/docs/deploy-a-subgraph#redeploying-a-subgraph) and fork the repository
-
-- Deploy the subgraph using the command below (change `<githubUsername/repo>` below)
-
-```
-  yarn install
-  yarn codegen
-  graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/<githubUsername/repo>
-```
+See `package.json` for local deployment.
 
 ## Entities
 

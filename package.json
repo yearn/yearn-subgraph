@@ -9,7 +9,7 @@
     "create-local": "graph create $GRAPH_PATH --node http://localhost:8020/",
     "remove-local": "graph remove $GRAPH_PATH --node http://localhost:8020/",
     "deploy-local": "graph deploy $GRAPH_PATH --node http://localhost:8020/ --ipfs http://localhost:5001",
-    "publish-graph": "yarn prepare:network && yarn codegen && yarn deploy",
+    "publish-graph": "yarn codegen && yarn deploy",
     "lint:check": "eslint src --rulesdir . && prettier --check **/*.json **/*.md",
     "lint:fix": "eslint src --rulesdir . --fix && prettier --config .prettierrc.json --write  **/*.js **/*.md"
   },
