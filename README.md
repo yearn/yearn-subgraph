@@ -2,9 +2,40 @@
 
 This subgraph is meant to be used to easily access data from the yVaults, allowing for easier querying of most of the core variables of the vaults, as well as some aggregated metrics, historical tracking, and much more.
 
-## Getting Setup
+## Setup
 
-This application uses [The Graph](https://thegraph.com/docs/quick-start#local-development):
+- Copy `.envrc.example` to `.envrc`
+- Set up your The Graph `ACCESS_TOKEN` and `GRAPH_PATH` (see _The Graph_ section for instructions)
+- Set network environment variables:
+
+Ropsten:
+
+```
+NETWORK="ropsten"
+GRAPH_PATH="iearn-finance/yearn-finance-dev"
+```
+
+Mainnet:
+
+```
+NETWORK="mainnet"
+GRAPH_PATH="iearn-finance/yearn-finance"
+```
+
+## Running
+
+- `yarn` – install dependencies
+- `yarn prepare:network` - generate `subgraph.yaml` for specific network
+- `yarn codegen` – generate code
+- `yarn create` – allocate subgraph name in Graph Node
+- `yarn deploy` - deploy supgraph to Graph Node
+- `yarn publish-graph` – run all steps in one command
+
+Feel free to check `package.json` for other commands including `-local` commands.
+
+## The Graph
+
+Yo will need to set up [The Graph](https://thegraph.com/docs/quick-start#local-development) as follows:
 
 - Install the graph-cli
 
@@ -22,13 +53,7 @@ graph auth https://api.thegraph.com/deploy/<api_key>
 
 - [Create a subgraph](https://thegraph.com/docs/deploy-a-subgraph#redeploying-a-subgraph) and fork the repository
 
-- Deploy the subgraph using the command below (change `<githubUsername/repo>` below)
-
-```
-  yarn install
-  yarn codegen
-  graph deploy --debug --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/<githubUsername/repo>
-```
+- Deploy the subgraph using `yarn deploy` (Remember to change `GRAPH_PATH` on `.envrc` with the repository `<githubUsername/repo>`)
 
 ## Entities
 
