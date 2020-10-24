@@ -1,12 +1,13 @@
-# Yearn vaults subgraph
+# Yearn Vaults Subgraph
 
-This subgraph is meant to be used to easily access data from the yVaults, allowing for easier querying of most of the core variables of the vaults, as well as some aggregated metrics, historical tracking, and much more.
+Subgraph to track yearn vaults metrics on Mainnet.
 
 ## Setup
 
-- Copy `.envrc.example` to `.envrc`
-- Obtain The Graph `ACCESS_TOKEN` and `GRAPH_PATH` (see _The Graph_ section for instructions)
-- Update `.envrc`
+- Copy `.envrc.example` to `.envrc`.
+- Set `ACCESS_TOKEN` to your The Graph [access token](https://thegraph.com/docs/deploy-a-subgraph#store-the-access-token).
+- Set `GRAPH_PATH` to `<github-username>/<subgraph-name>`.
+- Export `.envrc` variables.
 
 ## Running
 
@@ -16,29 +17,7 @@ This subgraph is meant to be used to easily access data from the yVaults, allowi
 - `yarn deploy` - deploy supgraph to Graph Node
 - `yarn publish-graph` – run all steps in one command
 
-Feel free to check `package.json` for other commands including `-local` commands.
-
-## The Graph
-
-Yo will need to set up [The Graph](https://thegraph.com/docs/quick-start#local-development) as follows:
-
-- Install the graph-cli
-
-```
-yarn global add @graphprotocol/graph-cli
-```
-
-- [Create a Graph account](https://thegraph.com/docs/deploy-a-subgraph#create-a-graph-explorer-account) and obtain API key from Graph user dashboard
-
-- Run the below command to [store the Graph access token](https://thegraph.com/docs/deploy-a-subgraph#store-the-access-token) on your environment:
-
-```
-graph auth https://api.thegraph.com/deploy/<api_key>
-```
-
-- [Create a subgraph](https://thegraph.com/docs/deploy-a-subgraph#redeploying-a-subgraph) and fork the repository
-
-- Deploy the subgraph using `yarn deploy` (Remember to change `GRAPH_PATH` on `.envrc` with the repository `<githubUsername/repo>`)
+See `package.json` for local deployment.
 
 ## Entities
 
