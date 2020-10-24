@@ -1,5 +1,9 @@
 # Yearn Vaults Subgraph
 
+![License](https://img.shields.io/badge/license-MIT-green)
+![Build](https://github.com/iearn-finance/yearn-subgraph/workflows/Build/badge.svg)
+![Lint](https://github.com/iearn-finance/yearn-subgraph/workflows/Lint/badge.svg)
+
 Subgraph to track yearn vaults metrics on Mainnet.
 
 ## Setup
