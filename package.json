@@ -3,7 +3,6 @@
   "license": "MIT",
   "scripts": {
     "codegen": "graph codegen",
-    "prepare:network": "mustache config/$NETWORK.json subgraph.template.yaml > subgraph.yaml",
     "build": "graph build",
     "deploy": "graph deploy $GRAPH_PATH --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ --access-token $ACCESS_TOKEN",
     "create": "graph create $GRAPH_PATH --node https://api.thegraph.com/deploy/",
