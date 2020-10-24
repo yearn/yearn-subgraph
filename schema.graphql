@@ -151,7 +151,7 @@ type AccountVaultBalance @entity {
   shareToken: Token!
 
   "Account stats"
-  accountUpdate: [AccountUpdate!]!
+  accountUpdates: [AccountUpdate!]!
 }
 
 type Token @entity {
@@ -274,7 +274,7 @@ type Strategy @entity {
   controller: Controller!
 
   "Strategy stats"
-  strategyUpdate: [StrategyUpdate!]!
+  strategyUpdates: [StrategyUpdate!]! @derivedFrom(field: "strategy")
   "Active or retired"
   strategyStatus: StrategyStatus
 
