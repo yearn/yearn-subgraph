@@ -5,30 +5,12 @@ on:
     branches:
       - master
 
-env:
-  ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-  GRAPH_PATH: ${{ secrets.GRAPH_PATH }}
-
 jobs:
 
   graph:
       runs-on: ubuntu-latest
 
       steps:
-
-        - name: Check ACCESS_TOKEN
-          run: |
-            if [ -z "$ACCESS_TOKEN" ] ; then
-              echo "Missing ENV variable ACCESS_TOKEN"
-              exit 1
-            fi
-
-        - name: Check GRAPH_PATH
-          run: |
-            if [ -z "$GRAPH_PATH" ] ; then
-              echo "Missing ENV variable GRAPH_PATH"
-              exit 1
-            fi
 
         - name: Check out github repository
           uses: actions/checkout@v2
