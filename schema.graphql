@@ -11,9 +11,12 @@ type Vault @entity {
   controller: Controller!
   "Current strategy"
   strategy: Strategy!
-  # TODO: replace with tx when was created
-  "Creation transaction"
-  transaction: Transaction!
+  # TODO: replace with timestamp when was created
+  "Creation timestamp"
+  timestamp: BigInt!
+  # TODO: replace with blockNumber when was created
+  "Creation block number"
+  blockNumber: BigInt!
 
   "Vault stats"
   vaultUpdates: [VaultUpdate!]! @derivedFrom(field: "vault")
@@ -35,7 +38,8 @@ type Vault @entity {
 # interface for user and vault balances
 interface BalanceUpdate {
   id: ID!
-  transaction: Transaction!
+  timestamp: BigInt!
+  blockNumber: BigInt!
 
   "Deposit (want) token balance"
   balance: BigInt!
@@ -55,7 +59,8 @@ interface BalanceUpdate {
 type VaultUpdate implements BalanceUpdate @entity {
   "Vault–Transaction–Log"
   id: ID!
-  transaction: Transaction!
+  timestamp: BigInt!
+  blockNumber: BigInt!
 
   "Deposit (want) token balance"
   balance: BigInt!
@@ -89,7 +94,8 @@ type VaultUpdate implements BalanceUpdate @entity {
 type AccountUpdate implements BalanceUpdate @entity {
   "Account–Transaction–Log"
   id: ID!
-  transaction: Transaction!
+  timestamp: BigInt!
+  blockNumber: BigInt!
 
   "Deposit (want) token balance"
   balance: BigInt!
@@ -173,7 +179,8 @@ type Transfer @entity {
   amount: BigInt!
 
   token: Token!
-  transaction: Transaction!
+  timestamp: BigInt!
+  blockNumber: BigInt!
 }
 
 interface Action {
@@ -198,7 +205,8 @@ type Deposit implements Action @entity {
   amount: BigInt!
   "Share token (ytoken) amount"
   shares: BigInt!
-  transaction: Transaction!
+  timestamp: BigInt!
+  blockNumber: BigInt!
 
   # (!) VaultUpdate is created on Deposit
   # vaultStats: VaultUpdate!
@@ -213,7 +221,8 @@ type Withdrawal implements Action @entity {
   amount: BigInt!
   "Share token (ytoken) amount"
   shares: BigInt!
-  transaction: Transaction!
+  timestamp: BigInt!
+  blockNumber: BigInt!
 
   # (!) VaultUpdate is created on Withdrawal
   # vaultStats: VaultUpdate!
@@ -222,7 +231,8 @@ type Withdrawal implements Action @entity {
 type StrategyUpdate @entity {
   "Strategy–Transaction-Log"
   id: ID!
-  transaction: Transaction!
+  timestamp: BigInt!
+  blockNumber: BigInt!
 
   strategy: Strategy!
   "Deposit (want) token balance"
@@ -245,7 +255,8 @@ type Harvest @entity {
   "Strategy stats"
   strategyUpdate: StrategyUpdate!
 
-  transaction: Transaction!
+  timestamp: BigInt!
+  blockNumber: BigInt!
 }
 
 enum StrategyStatus {
@@ -277,10 +288,4 @@ type Controller @entity {
   vaults: [Vault!]! @derivedFrom(field: "controller")
   "Active strategies"
   strategies: [Strategy!]! @derivedFrom(field: "controller")
-}
-
-type Transaction @entity {
-  id: ID!
-  timestamp: BigInt!
-  blockNumber: BigInt!
 }
