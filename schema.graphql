@@ -1,51 +1,51 @@
 # Note: For performance fee, see: https://docs.yearn.finance/faq#can-you-explain-the-5-fee-on-additional-yield
 
-type Vault @entity {
-  "Vault address"
-  id: ID!
-  "Share token (ytoken) price denominated to (want) token"
-  pricePerFullShare: BigInt!
-}
-
-
 # type Vault @entity {
 #   "Vault address"
 #   id: ID!
-#   "Deposit (want) token info"
-#   token: Token!
-#   "Share token (ytoken) info"
-#   shareToken: Token!
-#   "Current controller"
-#   controller: Controller!
-#   "Current strategy"
-#   strategy: Strategy!
 #   "Share token (ytoken) price denominated to (want) token"
 #   pricePerFullShare: BigInt!
-#   # TODO: replace with timestamp when was created
-#   "Creation timestamp"
-#   timestamp: BigInt!
-#   # TODO: replace with blockNumber when was created
-#   "Creation block number"
-#   blockNumber: BigInt!
-
-#   "Vault stats"
-#   vaultUpdates: [VaultUpdate!]! @derivedFrom(field: "vault")
-#   "Strategy stats"
-#   strategyUpdates: [StrategyUpdate!]! # TODO: to derive it I need vault field
-
-#   "Users balances"
-#   balances: [AccountVaultBalance!]! @derivedFrom(field: "vault")
-#   # FIXME: Uncomment
-#   # "Users deposits"
-#   # deposits: [Deposit!]! @derivedFrom(field: "vault")
-#   # FIXME: Uncomment
-#   # "Users withdrawals"
-#   # withdrawals: [Withdrawal!]! @derivedFrom(field: "vault")
-#   "harvest() calls"
-#   harvests: [Harvest!]! @derivedFrom(field: "vault")
-#   "Previously active strategies"
-#   strategies: [Strategy!]! @derivedFrom(field: "vault")
 # }
+
+
+type Vault @entity {
+  "Vault address"
+  id: ID!
+  "Deposit (want) token info"
+  token: Token!
+  "Share token (ytoken) info"
+  shareToken: Token!
+  "Current controller"
+  controller: Controller!
+  "Current strategy"
+  strategy: Strategy!
+  "Share token (ytoken) price denominated to (want) token"
+  pricePerFullShare: BigInt!
+  # TODO: replace with timestamp when was created
+  "Creation timestamp"
+  timestamp: BigInt!
+  # TODO: replace with blockNumber when was created
+  "Creation block number"
+  blockNumber: BigInt!
+
+  "Vault stats"
+  vaultUpdates: [VaultUpdate!]! @derivedFrom(field: "vault")
+  "Strategy stats"
+  strategyUpdates: [StrategyUpdate!]! # TODO: to derive it I need vault field
+
+  "Users balances"
+  balances: [AccountVaultBalance!]! @derivedFrom(field: "vault")
+  # FIXME: Uncomment
+  # "Users deposits"
+  # deposits: [Deposit!]! @derivedFrom(field: "vault")
+  # FIXME: Uncomment
+  # "Users withdrawals"
+  # withdrawals: [Withdrawal!]! @derivedFrom(field: "vault")
+  "harvest() calls"
+  harvests: [Harvest!]! @derivedFrom(field: "vault")
+  "Previously active strategies"
+  strategies: [Strategy!]! @derivedFrom(field: "vault")
+}
 
 # interface for user and vault balances
 interface BalanceUpdate {
