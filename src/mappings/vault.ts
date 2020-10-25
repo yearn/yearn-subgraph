@@ -1,6 +1,6 @@
 import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 
-import { Deposit, Transfer, Vault, Withdrawal } from '../../generated/schema';
+import { Account, Deposit, Transfer, Vault, Withdrawal } from '../../generated/schema';
 import { Vault as V1 } from '../../generated/yUSDVault/Vault';
 import {
   DepositCall,
@@ -10,14 +10,24 @@ import {
 import { BIGINT_ZERO, DEFAULT_DECIMALS } from '../utils/constants';
 import { createId } from '../utils/utils';
 
+function getOrCreateAccount(address: String): Account {
+  let account = Account.load(address);
+  if (account == null) {
+    account = new Account(address);
+    account.save();
+  }
+  return account as Account;
+}
+
 export function handleDeposit(call: DepositCall): void {
   let id = createId(call.transaction.hash, call.transaction.index);
 
+  let account = getOrCreateAccount(call.from.toHexString());
   let vaultContract = V1.bind(call.to);
 
   let deposit = new Deposit(id);
   deposit.vault = call.to;
-  deposit.account = call.from;
+  deposit.account = account.id;
   deposit.amount = call.inputs._amount;
 
   if (vaultContract.balance().equals(BIGINT_ZERO)) {
@@ -38,11 +48,12 @@ export function handleDeposit(call: DepositCall): void {
 export function handleWithdrawal(call: WithdrawCall): void {
   let id = createId(call.transaction.hash, call.transaction.index);
 
+  let account = getOrCreateAccount(call.from.toHexString());
   let vaultContract = V1.bind(call.to);
 
   let withdrawal = new Withdrawal(id);
   withdrawal.vault = call.to;
-  withdrawal.account = call.from;
+  withdrawal.account = account.id;
 
   withdrawal.amount = vaultContract
     .balance()
@@ -57,6 +68,25 @@ export function handleWithdrawal(call: WithdrawCall): void {
   withdrawal.save();
 }
 
-export function handleTransfer(_event: TransferEvent): void {
-  // TODO:
+export function handleTransfer(event: TransferEvent): void {
+  let id = createId(event.transaction.hash, event.transaction.index);
+
+  let vaultContract = V1.bind(event.address);
+
+  let sender = getOrCreateAccount(event.params.from.toHexString());
+  let receiver = getOrCreateAccount(event.params.from.toHexString());
+
+  let transfer = new Transfer(id);
+  transfer.from = sender.id;
+  transfer.to = receiver.id;
+
+  transfer.shares = event.params.value;
+  transfer.amount = vaultContract
+    .balance()
+    .times(event.params.value)
+    .div(vaultContract.totalSupply());
+
+  transfer.timestamp = event.block.timestamp;
+  transfer.blockNumber = event.block.number;
+  transfer.save();
 }
