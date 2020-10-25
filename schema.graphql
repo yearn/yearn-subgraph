@@ -3,37 +3,49 @@
 type Vault @entity {
   "Vault address"
   id: ID!
-  "Deposit (want) token info"
-  token: Token!
-  "Share token (ytoken) info"
-  shareToken: Token!
-  "Current controller"
-  controller: Controller!
-  "Current strategy"
-  strategy: Strategy!
-  # TODO: replace with timestamp when was created
-  "Creation timestamp"
-  timestamp: BigInt!
-  # TODO: replace with blockNumber when was created
-  "Creation block number"
-  blockNumber: BigInt!
-
-  "Vault stats"
-  vaultUpdates: [VaultUpdate!]! @derivedFrom(field: "vault")
-  "Strategy stats"
-  strategyUpdates: [StrategyUpdate!]! # TODO: to derive it I need vault field
-
-  "Users balances"
-  balances: [AccountVaultBalance!]! @derivedFrom(field: "vault")
-  "Users deposits"
-  deposits: [Deposit!]! @derivedFrom(field: "vault")
-  "Users withdrawals"
-  withdrawals: [Withdrawal!]! @derivedFrom(field: "vault")
-  "harvest() calls"
-  harvests: [Harvest!]! @derivedFrom(field: "vault")
-  "Previously active strategies"
-  strategies: [Strategy!]! @derivedFrom(field: "vault")
+  "Share token (ytoken) price denominated to (want) token"
+  pricePerFullShare: BigInt!
 }
+
+
+# type Vault @entity {
+#   "Vault address"
+#   id: ID!
+#   "Deposit (want) token info"
+#   token: Token!
+#   "Share token (ytoken) info"
+#   shareToken: Token!
+#   "Current controller"
+#   controller: Controller!
+#   "Current strategy"
+#   strategy: Strategy!
+#   "Share token (ytoken) price denominated to (want) token"
+#   pricePerFullShare: BigInt!
+#   # TODO: replace with timestamp when was created
+#   "Creation timestamp"
+#   timestamp: BigInt!
+#   # TODO: replace with blockNumber when was created
+#   "Creation block number"
+#   blockNumber: BigInt!
+
+#   "Vault stats"
+#   vaultUpdates: [VaultUpdate!]! @derivedFrom(field: "vault")
+#   "Strategy stats"
+#   strategyUpdates: [StrategyUpdate!]! # TODO: to derive it I need vault field
+
+#   "Users balances"
+#   balances: [AccountVaultBalance!]! @derivedFrom(field: "vault")
+#   # FIXME: Uncomment
+#   # "Users deposits"
+#   # deposits: [Deposit!]! @derivedFrom(field: "vault")
+#   # FIXME: Uncomment
+#   # "Users withdrawals"
+#   # withdrawals: [Withdrawal!]! @derivedFrom(field: "vault")
+#   "harvest() calls"
+#   harvests: [Harvest!]! @derivedFrom(field: "vault")
+#   "Previously active strategies"
+#   strategies: [Strategy!]! @derivedFrom(field: "vault")
+# }
 
 # interface for user and vault balances
 interface BalanceUpdate {
@@ -128,10 +140,12 @@ type Account @entity {
   "Account address"
   id: ID!
 
-  "Vault deposits"
-  deposits: [Deposit!]! @derivedFrom(field: "account")
-  "Vault withdrawals"
-  withdrawals: [Withdrawal!]! @derivedFrom(field: "account")
+  # FIXME: Uncomment
+  # "Vault deposits"
+  # deposits: [Deposit!]! @derivedFrom(field: "account")
+  # FIXME: Uncomment
+  # "Vault withdrawals"
+  # withdrawals: [Withdrawal!]! @derivedFrom(field: "account")
   vaultBalances: [AccountVaultBalance!]! @derivedFrom(field: "account")
 
   "Incoming transfers"
@@ -185,8 +199,8 @@ type Transfer @entity {
 
 interface Action {
   id: ID!
-  vault: Vault!
-  account: Account!
+  vault: Bytes! # FIXME: switch to Vault
+  account: Bytes! # FIXME: switch to Account!
   "Deposit (want) token amount"
   amount: BigInt!
   "Share token (ytoken) amount"
@@ -199,8 +213,8 @@ interface Action {
 type Deposit implements Action @entity {
   "Transaction-Log"
   id: ID!
-  vault: Vault!
-  account: Account!
+  vault: Bytes! # FIXME: switch to Vault
+  account: Bytes! # FIXME: switch to Account!
   "Deposit (want) token amount"
   amount: BigInt!
   "Share token (ytoken) amount"
@@ -215,8 +229,8 @@ type Deposit implements Action @entity {
 type Withdrawal implements Action @entity {
   "Transaction-Log"
   id: ID!
-  vault: Vault!
-  account: Account!
+  vault: Bytes! # FIXME: switch to Vault
+  account: Bytes! # FIXME: switch to Account!
   "Deposit (want) token amount"
   amount: BigInt!
   "Share token (ytoken) amount"
@@ -284,8 +298,9 @@ type Strategy @entity {
 
 type Controller @entity {
   id: ID!
-  "Active vaults"
-  vaults: [Vault!]! @derivedFrom(field: "controller")
+  # FIXME: Uncomment
+  # "Active vaults"
+  # vaults: [Vault!]! @derivedFrom(field: "controller")
   "Active strategies"
   strategies: [Strategy!]! @derivedFrom(field: "controller")
 }
