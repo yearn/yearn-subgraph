@@ -187,13 +187,12 @@ type Transfer @entity {
   from: Account!
   "Receiver"
   to: Account!
-  # TODO: (?) rename value to shares in the code
   "Share token (ytoken) amount"
   shares: BigInt!
   "Share token (ytoken) amount denominated to (want) token"
   amount: BigInt!
 
-  token: Token # FIXME: Add "!"
+  token: Token!
   timestamp: BigInt!
   blockNumber: BigInt!
 }

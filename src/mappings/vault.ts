@@ -8,21 +8,12 @@ import {
   WithdrawCall,
 } from '../../generated/yUSDVault/Vault';
 import { BIGINT_ZERO, DEFAULT_DECIMALS } from '../utils/constants';
-import { createId } from '../utils/utils';
-
-function getOrCreateAccount(address: String): Account {
-  let account = Account.load(address);
-  if (account == null) {
-    account = new Account(address);
-    account.save();
-  }
-  return account as Account;
-}
+import { createId, getOrCreateAccount, getOrCreateToken } from '../utils/utils';
 
 export function handleDeposit(call: DepositCall): void {
   let id = createId(call.transaction.hash, call.transaction.index);
 
-  let account = getOrCreateAccount(call.from.toHexString());
+  let account = getOrCreateAccount(call.from);
   let vaultContract = V1.bind(call.to);
 
   let deposit = new Deposit(id);
@@ -48,7 +39,7 @@ export function handleDeposit(call: DepositCall): void {
 export function handleWithdrawal(call: WithdrawCall): void {
   let id = createId(call.transaction.hash, call.transaction.index);
 
-  let account = getOrCreateAccount(call.from.toHexString());
+  let account = getOrCreateAccount(call.from);
   let vaultContract = V1.bind(call.to);
 
   let withdrawal = new Withdrawal(id);
@@ -73,13 +64,15 @@ export function handleTransfer(event: TransferEvent): void {
 
   let vaultContract = V1.bind(event.address);
 
-  let sender = getOrCreateAccount(event.params.from.toHexString());
-  let receiver = getOrCreateAccount(event.params.from.toHexString());
+  let token = getOrCreateToken(event.address);
+  let sender = getOrCreateAccount(event.params.from);
+  let receiver = getOrCreateAccount(event.params.from);
 
   let transfer = new Transfer(id);
   transfer.from = sender.id;
   transfer.to = receiver.id;
 
+  transfer.token = token.id;
   transfer.shares = event.params.value;
   transfer.amount = vaultContract
     .balance()
