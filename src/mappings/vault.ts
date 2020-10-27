@@ -19,13 +19,8 @@ import {
 } from '../utils/utils';
 
 // TODO:
-// - VaultUpdate
 // - AccountUpdate
 // - AccountVaultBalance
-
-// TODO: pass vault address id
-// vaultUpdateId
-// vaultId
 
 export function handleDeposit(call: DepositCall): void {
   let id = createId(call.transaction.hash, call.transaction.index);

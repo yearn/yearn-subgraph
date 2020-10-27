@@ -64,23 +64,6 @@ export function getOrCreateToken(address: Address): Token {
   return token as Token;
 }
 
-// export function createDummyVaultUpdate(id: String): vaultUpdateId {
-//   let vaultUpdate = new VaultUpdate(id);
-//   vaultUpdate.timestamp = BIGINT_ZERO;
-//   vaultUpdate.blockNumber = BIGINT_ZERO;
-
-//   vaultUpdate.balance = BIGINT_ZERO;
-//   vaultUpdate.deposits = BIGINT_ZERO;
-//   vaultUpdate.withdrawals = BIGINT_ZERO;
-
-//   vaultUpdate.shareBalance = BIGINT_ZERO;
-//   vaultUpdate.sharesMinted = BIGINT_ZERO;
-//   vaultUpdate.sharesBurnt = BIGINT_ZERO;
-
-//   vaultUpdate.vault = id;
-//   vaultUpdate.pricePerFullShare = BIGINT_ZERO;
-// }
-
 export function createOperation(
   id: String,
   vault: String,
@@ -202,48 +185,3 @@ export function createVaultUpdate(
 
   return vaultUpdate as VaultUpdate;
 }
-
-// export function getOrCreateVaultUpdate(
-//   vaultId: String,
-//   vaultUpdateId: String,
-//   call: DepositCall,
-// ): VaultUpdate {
-//   let vault = Vault.load(vaultId);
-//   let vaultUpdate = VaultUpdate.load(vaultUpdateId);
-
-//   if (vaultUpdate == null) {
-//     vaultUpdate = new VaultUpdate(vaultUpdateId);
-
-//     vaultUpdate.timestamp = call.block.timestamp;
-//     vaultUpdate.blockNumber = call.block.number;
-
-//     vaultUpdate.balance = call.inputs._amount;
-//     vaultUpdate.deposits = call.inputs._amount;
-//     // NOTE: don't update vaultUpdate.withdrawals
-
-//     vaultUpdate.shareBalance = shares;
-//     vaultUpdate.sharesMinted = shares;
-//     // NOTE: don't update vaultUpdate.sharesBurnt
-
-//     vaultUpdate.vault = vault.id;
-//     vaultUpdate.pricePerFullShare = vaultContract.getPricePerFullShare();
-
-//     let vaultUpdates = vault.vaultUpdates;
-//     if (vaultUpdates.length > 0) {
-//       let previousVaultUpdate = VaultUpdate.load(vaultUpdates[vaultUpdates.length - 1]);
-
-//       // TODO: add update algorithm
-//       vaultUpdate.withdrawalFees = previousVaultUpdate.withdrawalFees;
-//       vaultUpdate.performanceFees = previousVaultUpdate.performanceFees;
-//       vaultUpdate.earnings = vaultUpdate.withdrawalFees.plus(vaultUpdate.performanceFees);
-//     } else {
-//       vaultUpdate.withdrawalFees = BIGINT_ZERO;
-//       vaultUpdate.performanceFees = BIGINT_ZERO;
-//       vaultUpdate.earnings = BIGINT_ZERO;
-//     }
-
-//     vaultUpdate.save();
-//   }
-
-//   return vaultUpdate as VaultUpdate;
-// }
