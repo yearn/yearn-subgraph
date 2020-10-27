@@ -26,7 +26,7 @@ type Vault @entity {
   blockNumber: BigInt!
 
   "Vault stats"
-  vaultUpdates: [VaultUpdate!]! # TODO: check if derive is better here derivedFrom(field: "vault")
+  vaultUpdates: [VaultUpdate]! # TODO: check if derive is better here derivedFrom(field: "vault")
   # FIXME: Uncomment
   # "Strategy stats"
   # strategyUpdates: [StrategyUpdate!]! # TODO: to derive it I need vault field
@@ -205,18 +205,18 @@ enum Action {
   Deposit
 }
 
-type Operation  {
+type Operation @entity {
   "Transaction-Log"
   id: ID!
   vault: Vault!
   account: Account!
-  "Deposit (want) token amount"
+  "Deposit/Withdrawal (want) token amount"
   amount: BigInt!
   "Share token (ytoken) amount"
   shares: BigInt!
   timestamp: BigInt!
   blockNumber: BigInt!
-
+  "Deposit or Withdrawal"
   type: Action!
 
   # (!) VaultUpdate is created on Deposit

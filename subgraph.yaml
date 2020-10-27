@@ -16,8 +16,7 @@ dataSources:
       entities:
         - Vault
         - VaultUpdate
-        - Deposit
-        - Withdrawal
+        - Operation
         - Transfer
         - Account
         - AccountUpdate

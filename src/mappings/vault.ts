@@ -1,6 +1,6 @@
 import { Address, BigInt, Bytes } from '@graphprotocol/graph-ts';
 
-import { Account, Deposit, Transfer, Vault, Withdrawal } from '../../generated/schema';
+import { Account, Operation, Transfer, Vault, VaultUpdate } from '../../generated/schema';
 import { Vault as V1 } from '../../generated/yUSDVault/Vault';
 import {
   DepositCall,
@@ -8,55 +8,138 @@ import {
   WithdrawCall,
 } from '../../generated/yUSDVault/Vault';
 import { BIGINT_ZERO, DEFAULT_DECIMALS } from '../utils/constants';
-import { createId, getOrCreateAccount, getOrCreateToken } from '../utils/utils';
+import {
+  createId,
+  createOperation,
+  createUpdateId,
+  createVaultUpdate,
+  getOrCreateAccount,
+  getOrCreateToken,
+  getOrCreateVault,
+} from '../utils/utils';
+
+// TODO:
+// - VaultUpdate
+// - AccountUpdate
+// - AccountVaultBalance
+
+// TODO: pass vault address id
+// vaultUpdateId
+// vaultId
 
 export function handleDeposit(call: DepositCall): void {
   let id = createId(call.transaction.hash, call.transaction.index);
+  let vaultAddress = call.to;
 
   let account = getOrCreateAccount(call.from);
-  let vaultContract = V1.bind(call.to);
+  let vault = getOrCreateVault(vaultAddress);
+  let vaultContract = V1.bind(vaultAddress);
 
-  let deposit = new Deposit(id);
-  deposit.vault = call.to;
-  deposit.account = account.id;
-  deposit.amount = call.inputs._amount;
+  // TODO: link this line on contract
+  let shares = vaultContract.balance().equals(BIGINT_ZERO)
+    ? call.inputs._amount
+    : call.inputs._amount.times(vaultContract.totalSupply()).div(vaultContract.balance());
 
-  if (vaultContract.balance().equals(BIGINT_ZERO)) {
-    deposit.shares = call.inputs._amount;
-  } else {
-    // TODO: link this line on contract
-    // _amount.mul(totalSupply()).div(_pool);
-    deposit.shares = call.inputs._amount
-      .times(vaultContract.totalSupply())
-      .div(vaultContract.balance());
-  }
+  // this is not supported by AS, yet
+  // let params: IParams = {
+  //   id: id,
+  //   vault: vault.id,
+  //   account: account.id,
+  //   amount: call.inputs._amount,
+  //   shares: shares,
+  //   timestamp: call.block.timestamp,
+  //   blockNumber: call.block.number,
+  //   type: 'Withdrawal',
+  // };
 
-  deposit.timestamp = call.block.timestamp;
-  deposit.blockNumber = call.block.number;
-  deposit.save();
+  createOperation(
+    id,
+    vault.id,
+    account.id,
+    call.inputs._amount,
+    shares,
+    call.block.timestamp,
+    call.block.number,
+    'Deposit',
+  );
+
+  // TODO: vaultUpdate
+
+  let vaultUpdateId = createUpdateId(
+    vaultAddress,
+    call.transaction.hash,
+    call.transaction.index,
+  );
+
+  createVaultUpdate(
+    vaultUpdateId,
+    call.block.timestamp,
+    call.block.number,
+    // call.inputs._amount, // don't pass
+    call.inputs._amount,
+    BIGINT_ZERO, // withdrawal doesn't change
+    // shares, // don't pass
+    shares,
+    BIGINT_ZERO, // shares burnt don't change
+    vault.id,
+    vaultContract.getPricePerFullShare(),
+    // earnings, // don't pass
+    // withdrawalFees, // don't pass
+    // performanceFees, // don't pass
+  );
+
+  // TODO: accountUpdate
+  // deposit.save();
 }
 
 export function handleWithdrawal(call: WithdrawCall): void {
   let id = createId(call.transaction.hash, call.transaction.index);
+  let vaultAddress = call.to;
 
   let account = getOrCreateAccount(call.from);
-  let vaultContract = V1.bind(call.to);
+  let vault = getOrCreateVault(vaultAddress);
+  let vaultContract = V1.bind(vaultAddress);
 
-  let withdrawal = new Withdrawal(id);
-  withdrawal.vault = call.to;
-  withdrawal.account = account.id;
-
-  withdrawal.amount = vaultContract
+  let amount = vaultContract
     .balance()
     .times(call.inputs._shares)
     .div(vaultContract.totalSupply());
-  // TODO: code line
-  // balance().mul(_shares).div(totalSupply());
 
-  withdrawal.shares = call.inputs._shares;
-  withdrawal.timestamp = call.block.timestamp;
-  withdrawal.blockNumber = call.block.number;
-  withdrawal.save();
+  createOperation(
+    id,
+    vault.id,
+    account.id,
+    amount,
+    call.inputs._shares,
+    call.block.timestamp,
+    call.block.number,
+    'Withdrawal',
+  );
+
+  let vaultUpdateId = createUpdateId(
+    vaultAddress,
+    call.transaction.hash,
+    call.transaction.index,
+  );
+
+  createVaultUpdate(
+    vaultUpdateId,
+    call.block.timestamp,
+    call.block.number,
+    // call.inputs._amount, // don't pass
+    BIGINT_ZERO, // deposit doesn't change
+    amount,
+    // shares, // don't pass
+    BIGINT_ZERO, // shares minted don't change
+    call.inputs._shares,
+    vault.id,
+    vaultContract.getPricePerFullShare(),
+    // earnings, // don't pass
+    // withdrawalFees, // don't pass
+    // performanceFees, // don't pass
+  );
+
+  // TODO: accountUpdate
 }
 
 export function handleTransfer(event: TransferEvent): void {
@@ -81,5 +164,8 @@ export function handleTransfer(event: TransferEvent): void {
 
   transfer.timestamp = event.block.timestamp;
   transfer.blockNumber = event.block.number;
+
+  // TODO: accountUpdate
+
   transfer.save();
 }
