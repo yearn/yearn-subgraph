@@ -248,9 +248,7 @@
   },
   {
     "constant": true,
-    "inputs": [
-      { "internalType": "address", "name": "account", "type": "address" }
-    ],
+    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
     "name": "balanceOf",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "payable": false,
@@ -277,9 +275,7 @@
   },
   {
     "constant": true,
-    "inputs": [
-      { "internalType": "address", "name": "account", "type": "address" }
-    ],
+    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
     "name": "earned",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "payable": false,
@@ -391,9 +387,7 @@
   },
   {
     "constant": false,
-    "inputs": [
-      { "internalType": "uint256", "name": "reward", "type": "uint256" }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "reward", "type": "uint256" }],
     "name": "notifyRewardAmount",
     "outputs": [],
     "payable": false,
@@ -581,9 +575,7 @@
   },
   {
     "constant": false,
-    "inputs": [
-      { "internalType": "address", "name": "_governance", "type": "address" }
-    ],
+    "inputs": [{ "internalType": "address", "name": "_governance", "type": "address" }],
     "name": "setGovernance",
     "outputs": [],
     "payable": false,
@@ -592,9 +584,7 @@
   },
   {
     "constant": false,
-    "inputs": [
-      { "internalType": "uint256", "name": "_lock", "type": "uint256" }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_lock", "type": "uint256" }],
     "name": "setLock",
     "outputs": [],
     "payable": false,
@@ -603,9 +593,7 @@
   },
   {
     "constant": false,
-    "inputs": [
-      { "internalType": "uint256", "name": "_minimum", "type": "uint256" }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_minimum", "type": "uint256" }],
     "name": "setMinimum",
     "outputs": [],
     "payable": false,
@@ -614,9 +602,7 @@
   },
   {
     "constant": false,
-    "inputs": [
-      { "internalType": "uint256", "name": "_period", "type": "uint256" }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_period", "type": "uint256" }],
     "name": "setPeriod",
     "outputs": [],
     "payable": false,
@@ -625,9 +611,7 @@
   },
   {
     "constant": false,
-    "inputs": [
-      { "internalType": "uint256", "name": "_quorum", "type": "uint256" }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "_quorum", "type": "uint256" }],
     "name": "setQuorum",
     "outputs": [],
     "payable": false,
@@ -651,9 +635,7 @@
   },
   {
     "constant": false,
-    "inputs": [
-      { "internalType": "uint256", "name": "amount", "type": "uint256" }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "amount", "type": "uint256" }],
     "name": "stake",
     "outputs": [],
     "payable": false,
@@ -673,9 +655,7 @@
     "constant": true,
     "inputs": [],
     "name": "token",
-    "outputs": [
-      { "internalType": "contract IERC20", "name": "", "type": "address" }
-    ],
+    "outputs": [{ "internalType": "contract IERC20", "name": "", "type": "address" }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -700,9 +680,7 @@
   },
   {
     "constant": false,
-    "inputs": [
-      { "internalType": "address", "name": "newOwner", "type": "address" }
-    ],
+    "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
     "name": "transferOwnership",
     "outputs": [],
     "payable": false,
@@ -722,9 +700,7 @@
     "constant": true,
     "inputs": [],
     "name": "vote",
-    "outputs": [
-      { "internalType": "contract IERC20", "name": "", "type": "address" }
-    ],
+    "outputs": [{ "internalType": "contract IERC20", "name": "", "type": "address" }],
     "payable": false,
     "stateMutability": "view",
     "type": "function"
@@ -776,9 +752,7 @@
   },
   {
     "constant": true,
-    "inputs": [
-      { "internalType": "address", "name": "voter", "type": "address" }
-    ],
+    "inputs": [{ "internalType": "address", "name": "voter", "type": "address" }],
     "name": "votesOf",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "payable": false,
@@ -787,9 +761,7 @@
   },
   {
     "constant": false,
-    "inputs": [
-      { "internalType": "uint256", "name": "amount", "type": "uint256" }
-    ],
+    "inputs": [{ "internalType": "uint256", "name": "amount", "type": "uint256" }],
     "name": "withdraw",
     "outputs": [],
     "payable": false,
