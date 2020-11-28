@@ -70,6 +70,10 @@ type Account @entity {
   receivedTransfers: [Transfer!]! @derivedFrom(field: "to")
   "Outgoing transfers"
   sentTransfers: [Transfer!]! @derivedFrom(field: "from")
+  "Staked token amount"
+  stakedTokens: BigInt!
+  "Total governance paid rewards"
+  governanceRewards: BigInt!
 }
 
 type AccountVaultBalance @entity {
@@ -227,4 +231,20 @@ type Transaction @entity {
   # TODO: rename
   "List of Vaults that last updated on this transaction"
   vaultsUpdated: [Vault!]! @derivedFrom(field: "transaction")
+}
+
+type GovernanceRewards @entity {
+  id: ID!
+  "Reward tokens for the current period"
+  currentRewards: BigInt!
+  "Unclaimed reward tokens available"
+  pendingRewards: BigInt!
+  "Total historical paid reward tokens"
+  totalRewards: BigInt!
+  "Contract accepted staking token"
+  stakingToken: Token!
+  "Amount of staking tokens locked in contract"
+  stakedTokens: BigInt!
+  "Total supply of staking token"
+  stakingTokenTotalSupply: BigInt!
 }

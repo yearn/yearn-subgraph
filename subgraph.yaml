@@ -431,6 +431,36 @@ dataSources:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleShareTransfer
       file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: Governance
+    network: mainnet
+    source:
+      address: "0xBa37B002AbaFDd8E89a1995dA52740bbC013D992"
+      abi: Governance
+      startBlock: 10553531
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - Token
+        - Governance
+      abis:
+        - name: Governance
+          file: ./abis/Governance.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: RewardAdded(uint256)
+          handler: handleRewardAdded
+        - event: RewardPaid(indexed address,uint256)
+          handler: handleRewardPaid
+        - event: Staked(indexed address,uint256)
+          handler: handleStaked
+        - event: Withdrawn(indexed address,uint256)
+          handler: handleWithdrawn
+      file: ./src/mappings/reward.ts
 templates:
   - name: Strategy
     kind: ethereum/contract

@@ -11,6 +11,8 @@ export function getOrCreateAccount(
   if (account == null && createIfNotFound) {
     // @ts-ignore: assign wrapper object to primitive
     account = new Account(id);
+    account.governanceRewards = BIGINT_ZERO;
+    account.stakedTokens = BIGINT_ZERO;
   }
 
   return account as Account;
