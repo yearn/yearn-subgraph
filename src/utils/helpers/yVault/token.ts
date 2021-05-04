@@ -1,7 +1,7 @@
 import { Address } from '@graphprotocol/graph-ts';
 
 import { Token } from '../../../../generated/schema';
-import { ERC20 } from '../../../../generated/yBUSDVault/ERC20';
+import { ERC20 } from '../../../../generated/templates/VaultV1Template/ERC20';
 import { DEFAULT_DECIMALS } from '../../decimals';
 
 export function getOrCreateToken(tokenAddress: Address, persist: boolean = true): Token {
