@@ -11,9 +11,9 @@ import {
   Withdrawal,
 } from '../../../../generated/schema';
 import { Strategy as StrategyABI } from '../../../../generated/templates';
-import { Controller as ControllerContract } from '../../../../generated/yBUSDVault/Controller';
-import { Strategy as StrategyContract } from '../../../../generated/yBUSDVault/Strategy';
-import { V1Contract } from '../../../../generated/yBUSDVault/V1Contract';
+import { Controller as ControllerContract } from '../../../../generated/templates/VaultV1Template/Controller';
+import { Strategy as StrategyContract } from '../../../../generated/templates/VaultV1Template/Strategy';
+import { V1Contract } from '../../../../generated/templates/VaultV1Template/V1Contract';
 import { BIGDECIMAL_ZERO, BIGINT_ZERO } from '../../constants';
 import { toDecimal } from '../../decimals';
 import { getOrCreateToken } from './token';
@@ -23,14 +23,14 @@ export function getOrCreateVaultTransfer(
   createIfNotFound: boolean = true,
 ): Transfer {
   // @ts-ignore: assign wrapper object to primitive
-  let action = Transfer.load(id);
+  let transfer = Transfer.load(id);
 
-  if (action == null && createIfNotFound) {
+  if (transfer == null && createIfNotFound) {
     // @ts-ignore: assign wrapper object to primitive
-    action = new Transfer(id);
+    transfer = new Transfer(id);
   }
 
-  return action as Transfer;
+  return transfer as Transfer;
 }
 
 export function getOrCreateVaultDeposit(
@@ -38,14 +38,14 @@ export function getOrCreateVaultDeposit(
   createIfNotFound: boolean = true,
 ): Deposit {
   // @ts-ignore: assign wrapper object to primitive
-  let action = Deposit.load(id);
+  let deposit = Deposit.load(id);
 
-  if (action == null && createIfNotFound) {
+  if (deposit == null && createIfNotFound) {
     // @ts-ignore: assign wrapper object to primitive
-    action = new Deposit(id);
+    deposit = new Deposit(id);
   }
 
-  return action as Deposit;
+  return deposit as Deposit;
 }
 
 export function getOrCreateVaultWithdrawal(
@@ -53,14 +53,14 @@ export function getOrCreateVaultWithdrawal(
   createIfNotFound: boolean = true,
 ): Withdrawal {
   // @ts-ignore: assign wrapper object to primitive
-  let action = Withdrawal.load(id);
+  let withdrawal = Withdrawal.load(id);
 
-  if (action == null && createIfNotFound) {
+  if (withdrawal == null && createIfNotFound) {
     // @ts-ignore: assign wrapper object to primitive
-    action = new Withdrawal(id);
+    withdrawal = new Withdrawal(id);
   }
 
-  return action as Withdrawal;
+  return withdrawal as Withdrawal;
 }
 
 export function getOrCreateHarvest(
@@ -68,14 +68,14 @@ export function getOrCreateHarvest(
   createIfNotFound: boolean = true,
 ): Harvest {
   // @ts-ignore: assign wrapper object to primitive
-  let action = Harvest.load(id);
+  let harvest = Harvest.load(id);
 
-  if (action == null && createIfNotFound) {
+  if (harvest == null && createIfNotFound) {
     // @ts-ignore: assign wrapper object to primitive
-    action = new Harvest(id);
+    harvest = new Harvest(id);
   }
 
-  return action as Harvest;
+  return harvest as Harvest;
 }
 
 export function getOrCreateController(
