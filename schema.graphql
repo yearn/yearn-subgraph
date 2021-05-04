@@ -65,7 +65,7 @@ type Account @entity {
   "Account deposits"
   deposits: [Deposit!]! @derivedFrom(field: "account")
   "Account withdrawals"
-  withdrawals: [Deposit!]! @derivedFrom(field: "account")
+  withdrawals: [Withdrawal!]! @derivedFrom(field: "account")
   "Incoming transfers"
   receivedTransfers: [Transfer!]! @derivedFrom(field: "to")
   "Outgoing transfers"
@@ -135,7 +135,7 @@ type Transfer @entity {
   transaction: Transaction!
 }
 
-interface Action @entity {
+type Deposit @entity {
   id: ID!
   vault: Vault!
   account: Account!
@@ -148,20 +148,7 @@ interface Action @entity {
   transaction: Transaction!
 }
 
-type Deposit implements Action @entity {
-  id: ID!
-  vault: Vault!
-  account: Account!
-  amount: BigInt!
-  shares: BigInt!
-  pricePerFullShare: BigInt!
-  vaultBalance: BigInt!
-  totalSupply: BigInt!
-  available: BigInt!
-  transaction: Transaction!
-}
-
-type Withdrawal implements Action @entity {
+type Withdrawal @entity {
   id: ID!
   vault: Vault!
   account: Account!

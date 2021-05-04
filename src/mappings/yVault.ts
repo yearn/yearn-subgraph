@@ -1,7 +1,7 @@
 import { Address, BigInt } from '@graphprotocol/graph-ts';
 
 import { Vault } from '../../generated/schema';
-import { Transfer } from '../../generated/yUSDVault/V1Contract';
+import { Transfer } from '../../generated/templates/VaultV1Template/V1Contract';
 import { BIGINT_ZERO, ZERO_ADDRESS } from '../utils/constants';
 import { toDecimal } from '../utils/decimals';
 import {
@@ -88,6 +88,8 @@ function handleTransfer(
 }
 
 export function handleShareTransfer(event: Transfer): void {
+  let from = event.params.from.toHexString();
+  let to = event.params.to.toHexString();
   let transactionId = event.address
     .toHexString()
     .concat('-')
@@ -97,8 +99,8 @@ export function handleShareTransfer(event: Transfer): void {
 
   let vault = getOrCreateVault(event.address);
   // let vaultContract = V1Contract.bind(event.address);
-  let fromAccount = getOrCreateAccount(event.params.from.toHexString());
-  let toAccount = getOrCreateAccount(event.params.to.toHexString());
+  let fromAccount = getOrCreateAccount(from);
+  let toAccount = getOrCreateAccount(to);
   let underlyingToken = getOrCreateToken(Address.fromString(vault.underlyingToken));
   let shareToken = getOrCreateToken(Address.fromString(vault.shareToken));
 
@@ -127,10 +129,7 @@ export function handleShareTransfer(event: Transfer): void {
   vault.transaction = transaction.id;
 
   // Vault transfer between valid accounts
-  if (
-    event.params.from.toHexString() != ZERO_ADDRESS &&
-    event.params.to.toHexString() != ZERO_ADDRESS
-  ) {
+  if (from != ZERO_ADDRESS && to != ZERO_ADDRESS) {
     handleTransfer(event, amount, fromAccount.id, toAccount.id, vault, transactionId);
 
     // Update toAccount totals and balances
@@ -200,7 +199,7 @@ export function handleShareTransfer(event: Transfer): void {
   }
 
   // Vault deposit
-  if (event.params.from.toHexString() == ZERO_ADDRESS) {
+  else if (from == ZERO_ADDRESS && to != ZERO_ADDRESS) {
     handleDeposit(event, amount, toAccount.id, vault, transactionId);
     // We should fact check that the amount deposited is exactly the same as calculated
     // If it's not, we should use a callHandler for deposit(_amount)
@@ -245,11 +244,10 @@ export function handleShareTransfer(event: Transfer): void {
   }
 
   // Vault withdraw
-  if (event.params.to.toHexString() == ZERO_ADDRESS) {
+  else if (from != ZERO_ADDRESS && to == ZERO_ADDRESS) {
     handleWithdrawal(event, amount, fromAccount.id, vault, transactionId);
     // We should fact check that the amount withdrawn is exactly the same as calculated
     // If it's not, we should use a callHandler for withdraw(_amount)
-
     fromAccountBalance.account = fromAccount.id;
     fromAccountBalance.vault = vault.id;
     fromAccountBalance.shareToken = vault.id;
