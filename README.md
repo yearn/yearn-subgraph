@@ -23,6 +23,15 @@ Subgraph to track yearn vaults metrics on Mainnet.
 
 See `package.json` for local deployment.
 
+## Contributing
+
+In case you want to contribute to the project, you need two additional steps for your Pull Request to pass the gitlab-ci pipeline
+
+- Your commit message(s) need to adhere to conventional [commit message standards](https://www.conventionalcommits.org/en/v1.0.0/)
+- In github, you need to set the following variables under `Settings` -> `Secrets` of your forked repository:
+  - `ACCESS_TOKEN` to the value described under [Setup](#setup)
+  - `GRAPH_PATH` to the value described under [Setup](#setup)
+
 ## Entities
 
 ### Vault
